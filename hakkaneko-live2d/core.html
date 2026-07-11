@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/gif" href="data:image/gif;base64,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">
+    <meta name="description" content="阿卡貓 HakkaNeko 的 Live2D 專業建模委託網站。提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
+    <meta name="keywords" content="Live2D, VTuber, 建模, 委託, 阿卡貓, HakkaNeko, 動畫設計, 模型製作">
+    <meta name="author" content="阿卡貓 HakkaNeko">
+    <meta name="theme-color" content="#0a0118">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="阿卡貓 HakkaNeko · Live2D 專業建模">
+    <meta property="og:description" content="提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
+    <meta property="og:image" content="https://pbs.twimg.com/profile_banners/1903371671929528320/1748027809/1500x500">
+    <meta property="og:locale" content="zh_TW">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="阿卡貓 HakkaNeko · Live2D 專業建模">
+    <meta name="twitter:description" content="提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
+    <meta name="twitter:image" content="https://pbs.twimg.com/profile_banners/1903371671929528320/1748027809/1500x500">
+    <meta name="twitter:site" content="@HakkaNekoLive2D">
+    <title id="pageTitle">阿卡貓 HakkaNeko · Live2D 專業建模</title>
+    <!-- v32 修復記錄：
+         1. gif-hidden CSS 強化（transform3d移出可視區 + will-change + isolation）
+         2. carousel-card 補充 GPU compositing layer
+         3. 全語系 i18n 對齊：V皮設計/動畫設計/動態貼圖/動畫處理/標準/專業/頂級方案
+         4. svc_live2d→V皮設計, svc_anim→動畫設計（4語系全更新）
+         5. zh-CN 動態貼圖/動畫處理分類對齊；nav_anim→动画设计
+         6. en nav_core→V-Skin Design, en svc_live2d→V-Skin Design
+         7. ja nav_core→V皮デザイン
+         8. prices.specialFx=250 確認；fallback文字補強為'特效動畫'
+         9. copySummaryToClipboard 已完全 i18n 動態化（無中文死碼）
+         ── v32 新增修復 ──
+        10. 【估價計算機互斥】頂級方案(20000)選中時，自動 disabled+uncheck specialFx，
+            加入 ✦ 內含基礎特效 badge，防止重複計費漏洞。
+        11. 【一鍵複製格式優化】copySummaryToClipboard 改用 CRLF(\r\n) + lines 陣列架構，
+            確保 Discord / X (Twitter) / LINE 全平台換行完美呈現，不擠成一團。
+        12. 【Google Drive 作品集骨架屏】新增 .drive-skeleton-* CSS 體系（shimmer動畫、
+            spinner標題列、淡入效果），為 V皮/動態貼圖/動畫處理 區塊提供視覺緩衝。
+        13. 【Google Sites iframe 高度自動自適應】加入 ResizeObserver + postMessage 機制，
+            展開對照表等互動後自動計算 scrollHeight 並通知父層，消除雙滾動條與底部裁切。
+        14. 合作繪師「白(@BT871213)」卡片與結尾標籤完整閉合確認。
+    -->
+    
+
+
+    <script>
+    // Google Sites iframe 相容性偵測
+    (function() {
+        try {
+            const inIframe = window.self !== window.top;
+            if (inIframe) {
+                document.documentElement.classList.add('in-iframe');
+            }
+        } catch(e) {
+            document.documentElement.classList.add('in-iframe');
+        }
+    })();
+    </script>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+        <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//pbs.twimg.com">
+    <link rel="dns-prefetch" href="//static-cdn.jtvnw.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="common.css">
+</head>
+<body class="antialiased min-h-screen pb-12 loading">
+    <!-- ── RPG Loader ── -->
+    <div id="rpgLoader">
+        <img id="rpgCatImg" src="data:image/gif;base64,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" alt="HakkaNeko" style="width:64px;height:64px;image-rendering:pixelated;image-rendering:crisp-edges;">
+        <div class="rpg-title">HakkaNeko · Live2D</div>
+        <div class="rpg-bar-wrap">
+            <div class="rpg-bar-fill" id="rpgBarFill"></div>
+            <div class="rpg-bar-glow"></div>
+        </div>
+        <div class="rpg-status" id="rpgStatus">LOADING</div>
+        <div class="rpg-dots">
+            <div class="rpg-dot"></div>
+            <div class="rpg-dot"></div>
+            <div class="rpg-dot"></div>
+        </div>
+    </div>
+
+
+<canvas id="meteor-canvas"></canvas>
+
+    <header class="pt-16 pb-8 text-center relative z-10">
+        <div class="max-w-5xl mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-black mb-3 tracking-tight v2-title">
+                <img src="data:image/gif;base64,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" alt="阿卡貓" style="width:1em;height:1em;vertical-align:-0.15em;image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;" class="mr-2">
+                <span class="text-gradient" data-i18n="name_brand">阿卡貓</span><span data-i18n="header_title"> 的 Live2D 委託</span>
+            </h1>
+            <p class="text-base md:text-lg text-purple-300/70 font-medium tracking-widest mb-5" data-i18n="header_sub">
+                透明專業流程 <span class="deco-star">✦</span> 夢想角色躍然而生
+            </p>
+
+            <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
+        </div>
+    </header>
+
+        <!-- 固定右上角：日夜模式 -->
+    <button onclick="toggleTheme()" id="themeFixedBtn"
+        class="fixed top-4 right-[6.5rem] z-[999] w-10 h-10 rounded-full glass-panel flex items-center justify-center shadow-lg hover:scale-110 transition-transform border border-white/10"
+        title="切換白天/夜晚模式">
+        <i id="themeIcon" class="fa-solid fa-sun text-yellow-400 text-sm"></i>
+    </button>
+
+    <!-- 固定右上角：語言切換 -->
+    <div class="fixed top-4 right-4 z-[999]" id="langSwitcherWrap"><button onclick="toggleLangMenu()" id="langBtn"
+            class="h-9 px-2.5 rounded-full glass-panel flex items-center gap-1.5 shadow-lg hover:scale-105 transition-transform border border-white/10 text-purple-300 text-xs font-bold"
+            title="切換語言 / Language">
+            <span id="langFlag" class="text-base leading-none"></span>
+            <span id="langCode" class="text-[0.65rem] font-bold tracking-wide opacity-80">TW</span>
+        </button>
+        <div id="langMenu" class="hidden absolute top-12 glass-panel rounded-2xl p-2 shadow-2xl border border-purple-500/30" style="background:#120824; right:auto; left:50%; transform:translateX(-50%); min-width:160px; white-space:nowrap;">
+            <button onclick="setLang('zh-TW')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
+                <span class="text-base"><span class="fi fi-tw" aria-hidden="true"></span></span>
+                <span class="flex-1">繁體中文</span>
+                <span class="text-[0.6rem] opacity-50 font-mono">TW</span>
+            </button>
+            <button onclick="setLang('zh-CN')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
+                <span class="text-base"><span class="fi fi-cn" aria-hidden="true"></span></span>
+                <span class="flex-1">简体中文</span>
+                <span class="text-[0.6rem] opacity-50 font-mono">CN</span>
+            </button>
+            <button onclick="setLang('en')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
+                <span class="text-base"><span class="fi fi-us" aria-hidden="true"></span></span>
+                <span class="flex-1">English</span>
+                <span class="text-[0.6rem] opacity-50 font-mono">EN</span>
+            </button>
+            <button onclick="setLang('ja')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
+                <span class="text-base"><span class="fi fi-jp" aria-hidden="true"></span></span>
+                <span class="flex-1">日本語</span>
+                <span class="text-[0.6rem] opacity-50 font-mono">JP</span>
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div id="page-core" class="page-content flex flex-col lg:flex-row gap-8 items-start">
+            <div class="w-full lg:w-2/3 flex flex-col gap-6">
+
+                <!-- ── 1. 免責聲明（最頂）── -->
+                <div class="glass-panel rounded-2xl px-5 py-4 border border-amber-400/30 bg-amber-400/5 flex items-start gap-4">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-400 text-xl mt-0.5 shrink-0"></i>
+                    <div>
+                        <p class="font-bold text-amber-300 text-sm mb-1" data-i18n="disclaimer_title"><span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">assignment</span> 試算結果僅供參考</p>
+                        <p class="text-xs text-amber-200/75 leading-relaxed" data-i18n="disclaimer_core">
+                            此頁面所顯示的估價為<strong class="text-amber-200">初步參考數字</strong>，實際報價須依插圖的拆分數量、圖層複雜度與額外調整需求而定。
+                            建議在委託前提供完整 PSD 供確認拆分情況，以取得更準確的正式報價。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ── 2. 方案規格對照（可收合 Accordion）── -->
+                <div class="glass-panel rounded-2xl overflow-hidden border border-white/8">
+                    <!-- Accordion Header -->
+                    <button
+                        onclick="togglePlanCompare(this)"
+                        class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-white/5 transition-colors gap-3"
+                        aria-expanded="false"
+                        aria-controls="planCompareBody"
+                    >
+                        <span class="flex items-center gap-2 font-bold text-white text-sm">
+                            <span class="material-symbols-outlined text-purple-400" aria-hidden="true" style="font-size:1.15em;vertical-align:-0.15em">table_chart</span>
+                            <span data-i18n="plan_compare_title">方案規格對照表</span>
+                            <span class="text-xs font-normal text-purple-400/60 ml-1" data-i18n="plan_compare_hint">（點擊展開）</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-purple-400 shrink-0 transition-transform duration-300" id="planCompareArrow"></i>
+                    </button>
+                    <!-- Accordion Body -->
+                    <div id="planCompareBody" class="hidden">
+                        <div class="px-5 pb-5 pt-1">
+                            <div class="plan-table-wrap">
+                                <table class="plan-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:left;color:rgba(196,167,255,0.6);font-weight:700;" data-i18n="plan_compare_col_item">規格項目</th>
+                                            <th class="col-basic"><i class="fa-solid fa-seedling mr-1"></i><span data-i18n="plan_basic">標準方案</span></th>
+                                            <th class="col-pro"><i class="fa-solid fa-leaf mr-1"></i><span data-i18n="plan_pro">專業方案</span></th>
+                                            <th class="col-top"><i class="fa-solid fa-tree mr-1"></i><span data-i18n="plan_adv">頂級方案</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-i18n="plan_compare_face">面部捕捉</td>
+                                            <td data-i18n="plan_compare_face_basic">基礎九軸</td>
+                                            <td class="cell-yes" data-i18n="plan_compare_face_pro">XYZ 軸大幅度</td>
+                                            <td class="cell-incl" data-i18n="plan_compare_face_top">全功能精細捕捉</td>
+                                        </tr>
+                                        <tr>
+                                            <td data-i18n="plan_compare_mouth">口型動態</td>
+                                            <td data-i18n="plan_compare_mouth_basic">基礎口型</td>
+                                            <td class="cell-yes">
+                                                <span data-i18n="plan_compare_mouth_pro">進階口型</span><br>
+                                                <span style="font-size:0.7rem;color:rgba(255,255,255,0.45);" data-i18n="plan_compare_mouth_pro_sub">含特殊發音</span>
+                                            </td>
+                                            <td class="cell-incl">
+                                                <span data-i18n="plan_compare_mouth_top">頂級全口型</span><br>
+                                                <span style="font-size:0.7rem;color:rgba(255,255,255,0.45);" data-i18n="plan_compare_mouth_top_sub">含舌頭 / 細節</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td data-i18n="plan_compare_physics">物理晃動</td>
+                                            <td data-i18n="plan_compare_physics_basic">基礎物理</td>
+                                            <td class="cell-yes">
+                                                <span data-i18n="plan_compare_physics_pro">複雜物理</span><br>
+                                                <span style="font-size:0.7rem;color:rgba(255,255,255,0.45);" data-i18n="plan_compare_physics_pro_sub">多層衣服 / 長髮</span>
+                                            </td>
+                                            <td class="cell-incl">
+                                                <span data-i18n="plan_compare_physics_top">頂級物理</span><br>
+                                                <span style="font-size:0.7rem;color:rgba(255,255,255,0.45);" data-i18n="plan_compare_physics_top_sub">物理碰撞 / 細緻動態</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td data-i18n="plan_compare_fx">特效動畫</td>
+                                            <td class="cell-add" data-i18n="plan_compare_fx_addon">＋ 額外加購</td>
+                                            <td class="cell-add" data-i18n="plan_compare_fx_addon">＋ 額外加購</td>
+                                            <td class="cell-incl" data-i18n="plan_compare_fx_top">✦ 內含基礎特效</td>
+                                        </tr>
+                                        <tr class="price-row">
+                                            <td style="color:rgba(196,167,255,0.6);" data-i18n="plan_compare_price">起價</td>
+                                            <td class="col-basic-val">NT$ 10,000</td>
+                                            <td class="col-pro-val">NT$ 15,000</td>
+                                            <td class="col-top-val">NT$ 20,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-xs text-purple-400/40 text-center mt-3">
+                                <i class="fa-solid fa-circle-info mr-1"></i>
+                                <span data-i18n="plan_compare_note">以上為起跳參考金額，實際依插圖複雜度與拆分數量報價</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="glass-panel rounded-3xl p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">1</span>
+                        <span data-i18n="core_s1">方案選擇</span>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- 標準方案 -->
+                        <label class="option-card model-card rounded-2xl p-6 text-center border border-white/10 flex flex-col items-center justify-between h-full relative group">
+                            <input type="radio" name="baseModel" value="10000" onchange="calculate()" class="peer sr-only">
+                            <div class="model-icon text-4xl text-emerald-400 mb-4 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]"><i class="fa-solid fa-seedling"></i></div>
+                            <div class="font-black text-xl text-white mb-2" data-i18n="plan_basic">標準方案</div>
+                            <div class="text-xs text-purple-200/70 mb-6 flex-1" data-i18n="plan_basic_sub">頭部重點動態 + 身體簡單動態。</div>
+                            <div class="w-full py-2 rounded-xl bg-black/40 font-bold text-emerald-400">NT$ 10,000</div>
+                            <!-- Hover tooltip -->
+                            <div class="absolute inset-0 rounded-2xl bg-black/90 backdrop-blur-sm p-4 flex flex-col justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none text-left">
+                                <p class="text-emerald-400 font-bold text-sm mb-1" data-i18n="plan_basic_tip"><span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">inventory_2</span> 標準方案包含</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_basic_i1">・頭部動態（搖頭、點頭）</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_basic_i2">・眼睛眨眼 / 追蹤</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_basic_i3">・口型（開口動態）</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_basic_i4">・身體簡單搖擺</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_basic_i5">・呼吸物理效果</p>
+                                <p class="text-xs text-yellow-300/70 mt-2" data-i18n="plan_basic_note">※ 適合預算有限或簡單風格</p>
+                            </div>
+                        </label>
+                        <!-- 專業方案 -->
+                        <label class="option-card model-card rounded-2xl p-6 text-center border border-white/10 flex flex-col items-center justify-between h-full relative group">
+                            <input type="radio" name="baseModel" value="15000" onchange="calculate()" class="peer sr-only" checked>
+                            <div class="model-icon text-4xl text-blue-400 mb-4 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"><i class="fa-solid fa-leaf"></i></div>
+                            <div class="font-black text-xl text-white mb-2" data-i18n="plan_pro">專業方案</div>
+                            <div class="text-xs text-purple-200/70 mb-6 flex-1" data-i18n="plan_pro_sub">頭身完整動態 + 優秀物理效果。</div>
+                            <div class="w-full py-2 rounded-xl bg-black/40 font-bold text-blue-300">NT$ 15,000</div>
+                            <!-- Hover tooltip -->
+                            <div class="absolute inset-0 rounded-2xl bg-black/90 backdrop-blur-sm p-4 flex flex-col justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none text-left">
+                                <p class="text-blue-400 font-bold text-sm mb-1" data-i18n="plan_pro_tip"><span class="material-symbols-outlined" aria-hidden="true">inventory_2</span> 專業方案包含</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_pro_i1">・標準方案全部內容</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_pro_i2">・頭髮 / 飾品物理搖擺</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_pro_i3">・身體完整動態（含腰部）</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_pro_i4">・手部基本動態</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_pro_i5">・優化物理碰撞效果</p>
+                                <p class="text-xs text-yellow-300/70 mt-2" data-i18n="plan_pro_note">※ 最受歡迎的主流選擇</p>
+                            </div>
+                        </label>
+                        <!-- 頂級方案 -->
+                        <label class="option-card model-card rounded-2xl p-6 text-center border border-white/10 flex flex-col items-center justify-between h-full relative group">
+                            <input type="radio" name="baseModel" value="20000" onchange="calculate()" class="peer sr-only">
+                            <div class="model-icon text-4xl text-yellow-400 mb-4 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]"><i class="fa-solid fa-tree"></i></div>
+                            <div class="font-black text-xl text-white mb-2" data-i18n="plan_adv">頂級方案</div>
+                            <div class="text-xs text-purple-200/70 mb-6 flex-1" data-i18n="plan_adv_sub">全身高動態、極致物理，追求完美表現。</div>
+                            <div class="w-full py-2 rounded-xl bg-black/40 font-bold text-yellow-300">NT$ 20,000</div>
+                            <!-- Hover tooltip -->
+                            <div class="absolute inset-0 rounded-2xl bg-black/90 backdrop-blur-sm p-4 flex flex-col justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none text-left">
+                                <p class="text-yellow-400 font-bold text-sm mb-1" data-i18n="plan_adv_tip"><span class="material-symbols-outlined" aria-hidden="true">inventory_2</span> 頂級方案包含</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_adv_i1">・專業方案全部內容</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_adv_i2">・全身高精度動態</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_adv_i3">・極致物理 / 多層碰撞</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_adv_i4">・細部配件獨立物理</p>
+                                <p class="text-xs text-purple-200/80" data-i18n="plan_adv_i5">・面捕表情優化調整</p>
+                                <p class="text-xs text-yellow-300/70 mt-2" data-i18n="plan_adv_note">※ 追求頂級質感的首選</p>
+                            </div>
+                        </label>
+                    </div>
+                    <p class="text-xs text-purple-400/50 text-center mt-3"><i class="fa-solid fa-circle-info mr-1"></i><span data-i18n="plan_hover_tip">滑鼠移至方案卡片可查看詳細包含內容</span></p>
+                </section>
+
+                <section class="glass-panel rounded-3xl p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">2</span>
+                        <span data-i18n="core_s2">表情與配件</span>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="tongue" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 transition-colors shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_tongue">吐舌</div><div class="text-purple-400 text-sm mt-1">+ NT$ 1,000 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_tongue_desc">額外表情切換，需搭配表情開關觸發。</div></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="ear" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 transition-colors shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_ear">獸耳</div><div class="text-purple-400 text-sm mt-1">+ NT$ 1,000 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_ear_desc">動態獸耳搖擺，含物理彈性演算。</div></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="tail" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 transition-colors shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_tail">尾巴</div><div class="text-purple-400 text-sm mt-1">+ NT$ 500 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_tail_desc">含尾巴擺動與物理連動效果。</div></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="vowel" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 transition-colors shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_vowel">口型 (AIUEO)</div><div class="text-purple-400 text-sm mt-1">+ NT$ 800 / <span data-i18n="unit_set">組</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_vowel_desc">五種母音口型，需搭配語音軟體使用。</div></div>
+                        </label>
+
+                        <label class="option-card rounded-xl p-4 flex flex-col gap-3 border border-white/5 h-full justify-between">
+                            <div class="flex items-start gap-4 z-10 relative">
+                                <input type="checkbox" id="extraExpr" onchange="toggleQtyItem('extraExpr')" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_expr">額外表情差分</div><div class="text-purple-400 text-sm mt-1">+ NT$ 200 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_expr_desc">基礎表情外的追加切換（哭泣、驚訝等）。</div></div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 z-10" onclick="event.preventDefault();"><button onclick="changeQty('extraExpr', -1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-minus"></i></button><span id="extraExprQty" class="font-bold text-lg w-6 text-center text-white">0</span><button onclick="changeQty('extraExpr', 1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-plus"></i></button></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex flex-col gap-3 border border-white/5 h-full justify-between">
+                            <div class="flex items-start gap-4 z-10 relative">
+                                <input type="checkbox" id="smallAcc" onchange="toggleQtyItem('smallAcc')" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_acc">小配件切換</div><div class="text-purple-400 text-sm mt-1">+ NT$ 250 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_acc_desc">眼鏡、帽子、道具等可切換的小物件。</div></div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 z-10" onclick="event.preventDefault();"><button onclick="changeQty('smallAcc', -1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-minus"></i></button><span id="smallAccQty" class="font-bold text-lg w-6 text-center text-white">0</span><button onclick="changeQty('smallAcc', 1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-plus"></i></button></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex flex-col gap-3 border border-white/5 h-full justify-between">
+                            <div class="flex items-start gap-4 z-10 relative">
+                                <input type="checkbox" id="hairset" onchange="toggleQtyItem('hairset')" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_hair">額外髮型差分</div><div class="text-purple-400 text-sm mt-1">+ NT$ 1,500 / <span data-i18n="unit_outfit">套</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_hair_desc">不同綁法或長短的髮型切換，含物理演算。</div></div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 z-10" onclick="event.preventDefault();"><button onclick="changeQty('hairset', -1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-minus"></i></button><span id="hairsetQty" class="font-bold text-lg w-6 text-center text-white">0</span><button onclick="changeQty('hairset', 1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-plus"></i></button></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex flex-col gap-3 border border-white/5 h-full justify-between">
+                            <div class="flex items-start gap-4 z-10 relative">
+                                <input type="checkbox" id="clothes" onchange="toggleQtyItem('clothes')" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_clothes">額外服裝差分</div><div class="text-purple-400 text-sm mt-1">+ NT$ 2,000 / <span data-i18n="unit_outfit">套</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_clothes_desc">完整換裝方案，動態布料與配件一起調整。</div></div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 z-10" onclick="event.preventDefault();"><button onclick="changeQty('clothes', -1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-minus"></i></button><span id="clothesQty" class="font-bold text-lg w-6 text-center text-white">0</span><button onclick="changeQty('clothes', 1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-plus"></i></button></div>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="glass-panel rounded-3xl p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">3</span>
+                        <span data-i18n="core_s3">動態與特效</span>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="option-card rounded-xl p-4 flex flex-col gap-3 border border-white/5 h-full justify-between">
+                            <div class="flex items-start gap-4 z-10 relative">
+                                <input type="checkbox" id="gesture" onchange="toggleQtyItem('gesture')" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_gesture">特殊手勢動畫</div><div class="text-purple-400 text-sm mt-1">+ NT$ 1,200 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_gesture_desc">揮手、比愛心等觸發式互動動畫。</div></div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 z-10" onclick="event.preventDefault();"><button onclick="changeQty('gesture', -1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-minus"></i></button><span id="gestureQty" class="font-bold text-lg w-6 text-center text-white">0</span><button onclick="changeQty('gesture', 1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-plus"></i></button></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex flex-col gap-3 border border-white/5 h-full justify-between">
+                            <div class="flex items-start gap-4 z-10 relative">
+                                <input type="checkbox" id="pose" onchange="toggleQtyItem('pose')" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_pose">身體姿態切換</div><div class="text-purple-400 text-sm mt-1">+ NT$ 1,500 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_pose_desc">坐姿、站姿等不同角度姿態一鍵切換。</div></div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 z-10" onclick="event.preventDefault();"><button onclick="changeQty('pose', -1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-minus"></i></button><span id="poseQty" class="font-bold text-lg w-6 text-center text-white">0</span><button onclick="changeQty('pose', 1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-plus"></i></button></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex flex-col gap-3 border border-white/5 h-full justify-between">
+                            <div class="flex items-start gap-4 z-10 relative">
+                                <input type="checkbox" id="specialFx" onchange="toggleQtyItem('specialFx')" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_fx">特效動畫</div><div class="text-purple-400 text-sm mt-1">+ NT$ 250 / <span data-i18n="unit_each">個</span></div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_fx_desc">光暈、粒子、閃爍等視覺特效。</div></div>
+                            </div>
+                            <div class="flex items-center justify-end gap-3 z-10" onclick="event.preventDefault();"><button onclick="changeQty('specialFx', -1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-minus"></i></button><span id="specialFxQty" class="font-bold text-lg w-6 text-center text-white">0</span><button onclick="changeQty('specialFx', 1)" class="qty-btn w-8 h-8 rounded-full"><i class="fa-solid fa-plus"></i></button></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="trackingLoss" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_tracking">追蹤丟失動畫</div><div class="text-purple-400 text-sm mt-1">+ NT$ 600</div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_tracking_desc">臉部追蹤失效時自動播放的備用待機動畫，避免模型僵住。</div></div>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="glass-panel rounded-3xl p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">4</span>
+                        <span data-i18n="core_s4">特殊需求</span>
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="loli" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_chibi">人物 Q 版化</div><div class="text-purple-400 text-sm mt-1">+ NT$ 4,000</div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_chibi_desc">縮小頭身比例，打造可愛 Q 版造型，需重新分層。</div></div>
+                        </label>
+                        <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="vbridger" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1"><div class="font-bold text-white text-lg" data-i18n="opt_vbridger">VBridger 相容</div><div class="text-purple-400 text-sm mt-1">+ NT$ 3,500</div><div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_vbridger_desc">支援 iPhone 面捕插件，追蹤精度大幅提升。</div></div>
+                        </label>
+                        <label class="option-card md:col-span-2 rounded-xl p-4 flex items-start gap-4 border border-white/5">
+                            <input type="checkbox" id="projectFile" onchange="calculate()" class="peer sr-only">
+                            <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                            <div class="flex-1">
+                                <div class="font-bold text-white text-lg" data-i18n="opt_project">工程資料加購</div>
+                                <div class="text-sm text-purple-200/70 mt-1" data-i18n="opt_project_desc">買斷工程原始檔 (不含分期/加急費用的總金額)</div>
+                                <div class="text-purple-400 font-medium text-sm mt-2" data-i18n="opt_project_mult">+ 總金額 x1.5</div>
+                                <div class="text-xs text-purple-300/50 mt-1" data-i18n="opt_project_note">包含 Live2D Cubism 原始工程檔，可自行二次修改，僅限本人使用，禁止轉讓。</div>
+                            </div>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="glass-panel rounded-3xl p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">5</span>
+                        <span data-i18n="core_s5">結帳與細節設定</span>
+                    </h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block font-bold text-white mb-3" data-i18n="pay_method">選擇支付方式</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <label class="option-card rounded-xl p-4 flex flex-col items-center gap-2 border border-white/5 cursor-pointer">
+                                    <input type="checkbox" id="bank" onchange="selectPayment('bank')" class="peer sr-only" checked>
+                                    <div class="text-2xl text-purple-400"><i class="fa-solid fa-building-columns"></i></div>
+                                    <div class="font-bold text-white" data-i18n="pay_bank">銀行匯款</div>
+                                </label>
+                                <label class="option-card rounded-xl p-4 flex flex-col items-center gap-2 border border-white/5 cursor-pointer">
+                                    <input type="checkbox" id="paypal" onchange="selectPayment('paypal')" class="peer sr-only">
+                                    <div class="text-2xl text-blue-400"><i class="fa-brands fa-paypal"></i></div>
+                                    <div class="font-bold text-white">PayPal</div>
+                                    <div class="flex items-center text-xs text-purple-200/70" onclick="event.preventDefault();"><span data-i18n="pay_fee">手續費</span> <span class="mx-1 font-bold text-white">5.0</span> %<input type="hidden" id="paypalRate" value="5.0"></div>
+                                    <div class="text-[10px] text-blue-300/60 text-center" data-i18n="pay_foreign"><span class="deco-star">✦</span> 接受外幣委託</div>
+                                </label>
+                                <label class="option-card rounded-xl p-4 flex flex-col items-center gap-2 border border-white/5 cursor-pointer">
+                                    <input type="checkbox" id="ecpay" onchange="selectPayment('ecpay')" class="peer sr-only">
+                                    <div class="text-2xl text-green-400"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                                    <div class="font-bold text-white" data-i18n="pay_ecpay">綠界 / 超商</div>
+                                    <div class="flex items-center text-xs text-purple-200/70" onclick="event.preventDefault();"><span data-i18n="pay_fee">手續費</span> <span class="mx-1 font-bold text-white">2.9</span> %<input type="hidden" id="ecpayRate" value="2.9"></div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-white mb-3" data-i18n="pay_installment">分期付款方式</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <label class="option-card rounded-xl p-4 flex flex-col items-center gap-2 border border-white/5 cursor-pointer"><input type="radio" name="paymentPlan" value="one" onchange="updatePaymentFields(); calculate()" class="peer sr-only" checked><div class="font-bold text-white" data-i18n="pay_one">一次付清</div></label>
+                                <label class="option-card rounded-xl p-4 flex flex-col items-center gap-2 border border-white/5 cursor-pointer"><input type="radio" name="paymentPlan" value="two" onchange="updatePaymentFields(); calculate()" class="peer sr-only"><div class="font-bold text-white" data-i18n="pay_two">兩期分款</div><div class="text-[10px] text-purple-300/70" data-i18n="pay_two_note">總價 +3%</div></label>
+                                <label class="option-card rounded-xl p-4 flex flex-col items-center gap-2 border border-white/5 cursor-pointer"><input type="radio" name="paymentPlan" value="three" onchange="updatePaymentFields(); calculate()" class="peer sr-only"><div class="font-bold text-white" data-i18n="pay_three">三期分款</div><div class="text-[10px] text-purple-300/70" data-i18n="pay_three_note">總價 +5%</div></label>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-white/10">
+                            <label class="option-card rounded-xl p-4 flex items-start gap-4 border border-white/5 cursor-pointer">
+                                <input type="checkbox" id="rush" onchange="toggleRushField(); calculate()" class="peer sr-only">
+                                <div class="w-6 h-6 rounded border-2 border-purple-500/50 flex items-center justify-center mt-0.5 peer-checked:bg-purple-500 shrink-0"><i class="fa-solid fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i></div>
+                                <div class="flex-1 z-10 relative">
+                                    <div class="font-bold text-white text-lg flex items-center justify-between">
+                                        <span data-i18n="opt_rush">加急趕工</span>
+                                        <div class="flex items-center gap-1"><span class="text-xs text-red-400">起跳 NT$ </span><input type="number" id="rushPrice" value="3500" class="w-20 bg-black/50 text-white text-center rounded border border-white/10 focus:outline-none" onchange="calculate()" readonly title="此為起跳參考金額，實際以溝通確認為準"></div>
+                                    </div>
+                                    <div class="mt-2 space-y-1.5 text-xs text-purple-300/70 leading-relaxed">
+                                        <p data-i18n="opt_rush_desc1"><i class="fa-solid fa-bolt text-red-400 mr-1"></i>加急費用依截止日期距離與工程複雜度而定，最終金額以溝通確認為準。</p>
+                                        <p data-i18n="opt_rush_desc2"><i class="fa-solid fa-calendar-xmark text-orange-400 mr-1"></i><span class="text-orange-300 font-bold">截止日在 14 天以內</span>：視為高度加急，費用起跳 NT$ 3,500 以上。</p>
+                                        <p data-i18n="opt_rush_desc3"><i class="fa-solid fa-calendar-days text-yellow-400 mr-1"></i><span class="text-yellow-300 font-bold">截止日在 14–30 天</span>：一般加急，費用依工作量協調。</p>
+                                        <p data-i18n="opt_rush_desc4"><i class="fa-solid fa-circle-exclamation text-red-400/80 mr-1"></i>加急期間不接受大幅修改需求，請於委託前確認設計稿。</p>
+                                    </div>
+                                </div>
+                            </label>
+                            <div id="rushContainer" class="hidden mt-3 pl-10"><textarea id="rushInfo" placeholder="請說明截止日期與加急原因，例如：活動日期、直播首播日等⋯" data-i18n-ph="rush_ph" class="w-full bg-black/40 border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-red-400" oninput="calculateDebounced()"></textarea></div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-white mb-3" data-i18n="opt_supplement">想要補充的資訊</label>
+                            <textarea id="supplementInfo" placeholder="例如：希望加上特定動作、參考圖片連結..." data-i18n-ph="supp_ph_core" class="w-full bg-black/40 border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 min-h-[120px]" oninput="calculateDebounced()"></textarea>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="w-full lg:w-1/3">
+                <div class="sticky-summary">
+                    <div id="quoteSummaryPanel" class="glass-panel rounded-3xl p-6 border-t-4 border-t-purple-500 shadow-2xl relative overflow-hidden">
+                        <div class="relative z-10">
+                            <!-- 委託編號：勾選同意後才顯示，固定在預估總金額上方 -->
+                            <div id="orderBadgeVP" style="display:none; margin-bottom:0.6rem;">
+                                <div style="padding:7px 12px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(168,85,247,0.10);border:1px solid rgba(168,85,247,0.25);">
+                                    <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;color:rgba(192,132,252,0.7);" data-i18n="order_badge_label">委託編號</span>
+                                    <span id="orderIdVP" style="font-family:monospace;font-size:0.82rem;font-weight:900;color:#e9d5ff;letter-spacing:0.05em;">—</span>
+                                </div>
+                            </div>
+                            <h2 class="text-lg font-bold text-purple-300 mb-1" data-i18n="sidebar_total">預估總金額</h2>
+                            <div class="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight" id="totalPrice">NT$ 15,000</div>
+                            <div class="mb-6 pb-4 border-b border-white/10"><div class="text-sm text-purple-200/90" id="depositInfo"></div></div>
+                            <div class="mb-4 flex justify-between"><h3 class="font-bold text-white text-sm" data-i18n="sidebar_breakdown">報價明細</h3><button onclick="resetForm()" class="text-xs text-purple-400"><i class="fa-solid fa-rotate-right"></i> <span data-i18n="sidebar_reset">重置</span></button></div>
+                            <div class="mb-6 space-y-2 text-sm" id="detailList"></div>
+                            <!-- 加急說明（有勾選加急時顯示） -->
+                            <div id="quoteRushSummary" class="hidden mb-3 p-3 bg-red-500/10 rounded-xl border border-red-500/20 text-xs text-red-200">
+                                <p class="font-bold text-red-300 mb-1"><i class="fa-solid fa-bolt mr-1"></i><span data-i18n="sidebar_rush_label">加急趕工說明</span></p>
+                                <p id="quoteRushSummaryText" class="text-red-200/80 leading-relaxed whitespace-pre-wrap"></p>
+                            </div>
+                            <!-- 補充資訊 -->
+                            <div id="quoteSuppSummary" class="hidden mb-4 p-3 bg-purple-500/10 rounded-xl border border-purple-500/20 text-xs text-purple-200">
+                                <p class="font-bold text-purple-300 mb-1"><i class="fa-solid fa-note-sticky mr-1"></i><span data-i18n="sidebar_supp_label">補充資訊</span></p>
+                                <p id="quoteSuppSummaryText" class="text-purple-200/80 leading-relaxed whitespace-pre-wrap"></p>
+                            </div>
+                            <div data-html2canvas-ignore class="bg-black/40 rounded-xl p-4 mb-3 border border-purple-500/30">
+                                <label class="flex items-start gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="agreeTerms" onchange="toggleSubmitButton()" class="mt-1 w-4 h-4 rounded text-purple-500 shrink-0">
+                                    <span class="text-xs text-purple-100 group-hover:text-white transition-colors" data-i18n="sidebar_agree">我已閱讀並同意「流程與規範」內的所有條款。</span>
+                                </label>
+                            </div>
+                            <button data-html2canvas-ignore id="copyBtn" disabled onclick="screenshotQuote('quoteSummaryPanel','vp')" class="btn-copy-summary mb-0" style="background:linear-gradient(135deg,rgba(139,92,246,0.22) 0%,rgba(59,130,246,0.16) 100%);border-color:rgba(99,102,241,0.45);">
+                                <i class="fa-solid fa-camera"></i>
+                                <span data-i18n="sidebar_screenshot">一鍵截圖預估金額</span>
+                            </button>
+                            <!-- ── v29 一鍵複製委託清單 ── -->
+                            <button data-html2canvas-ignore id="btn-copy-summary-vp" class="btn-copy-summary mt-3" onclick="copySummaryToClipboard('vp')" disabled style="opacity:0.45;cursor:not-allowed;">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                                <span data-i18n="sidebar_copy_summary">一鍵複製委託需求清單</span>
+                            </button>
+                            <!-- ── v29 規範錨點連結 ── -->
+                            <button data-html2canvas-ignore class="anchor-rules-link w-full mt-2" onclick="scrollToRules()">
+                                <i class="fa-solid fa-book-open-reader text-purple-400/60"></i>
+                                <span data-i18n="sidebar_rules_link">查看授權與委託須知</span>
+                                <i class="fa-solid fa-arrow-right text-[0.65rem] opacity-60"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- ── 截圖範圍外的按鈕 ── -->
+                    <div class="mt-4 space-y-3">
+                        <button onclick="location.href='portfolio.html'" class="w-full py-3 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 text-purple-300 hover:text-white border border-white/10 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-photo-film text-emerald-400"></i> <span data-i18n="sidebar_port_btn">前往作品展示查看參考範例</span>
+                        </button>
+                        <div class="pt-3 border-t border-white/10 space-y-3">
+                            <a href="https://forms.gle/4C5KzcuAiEAndyMf6" data-form-key="commission_vp" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30">
+                                <i class="fa-solid fa-file-pen"></i> <span data-i18n="sidebar_send_btn">填寫委託項目表單</span>
+                            </a>
+
+                            <!-- ── 交付格式說明（摺疊） ── -->
+                            <div class="border-t border-white/10 pt-3">
+                                <button onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('i.arrow').classList.toggle('rotate-180')"
+                                    class="w-full flex items-center justify-between text-xs text-purple-300/70 hover:text-purple-200 transition-colors py-1">
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-box-open text-emerald-400"></i> <span data-i18n="sidebar_delivery_toggle">查看交付格式說明</span></span>
+                                    <i class="fa-solid fa-chevron-down arrow transition-transform duration-200"></i>
+                                </button>
+                                <div class="hidden mt-3 space-y-2 text-xs">
+                                    <div class="grid grid-cols-1 gap-2">
+                                        <div class="flex items-start gap-2 p-2.5 bg-black/20 rounded-xl border border-white/5">
+                                            <i class="fa-solid fa-check-circle text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <div><span class="font-bold text-white">moc3 模型檔</span><span class="text-purple-200/60 ml-1" data-i18n="del_moc3">— 主要執行檔，可在 VTubeStudio 等軟體使用</span></div>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2.5 bg-black/20 rounded-xl border border-white/5">
+                                            <i class="fa-solid fa-check-circle text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <div><span class="font-bold text-white">貼圖資料夾</span><span class="text-purple-200/60 ml-1" data-i18n="del_textures">— 模型所需全部材質貼圖（PNG）</span></div>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2.5 bg-black/20 rounded-xl border border-white/5">
+                                            <i class="fa-solid fa-check-circle text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <div><span class="font-bold text-white">physics3.json</span><span class="text-purple-200/60 ml-1" data-i18n="del_physics">— 物理設定檔（頭髮、飾品物理效果）</span></div>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2.5 bg-black/20 rounded-xl border border-white/5">
+                                            <i class="fa-solid fa-check-circle text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <div><span class="font-bold text-white">model3.json</span><span class="text-purple-200/60 ml-1" data-i18n="del_model3">— 模型描述檔，整合所有元件路徑</span></div>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2.5 bg-black/20 rounded-xl border border-white/5">
+                                            <i class="fa-solid fa-check-circle text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <div><span class="font-bold text-white">expressions3.json</span><span class="text-purple-200/60 ml-1" data-i18n="del_expr">— 表情切換設定（如有追加表情）</span></div>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2.5 bg-black/20 rounded-xl border border-white/5">
+                                            <i class="fa-solid fa-check-circle text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <div><span class="font-bold text-white">motions 資料夾</span><span class="text-purple-200/60 ml-1" data-i18n="del_motions">— 動作資料（閒置動畫等）</span></div>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2.5 bg-yellow-400/5 rounded-xl border border-yellow-400/20">
+                                            <i class="fa-solid fa-file-code text-yellow-400 mt-0.5 shrink-0"></i>
+                                            <div><span class="font-bold text-yellow-300">Cubism 工程原始檔（.cmo3）</span><span class="text-purple-200/60 ml-1" data-i18n="del_cmo3">— 需另行加購「工程資料加購」才包含，保留 4 個月</span></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-purple-400/50 pt-1" data-i18n="del_cloud"><i class="fa-solid fa-circle-info mr-1"></i>所有檔案以壓縮包形式透過 Google Drive 或其他雲端連結交付。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <footer class="relative z-10 mt-16 border-t border-white/5 bg-black/20 backdrop-blur-sm">
+        <div class="max-w-5xl mx-auto px-4 py-10 text-center space-y-3">
+            <!-- 名字 & 身份 -->
+            <div class="flex items-center justify-center gap-3 mb-2">
+                <span class="font-black text-lg tracking-wide text-gradient" data-i18n="name_short">阿卡貓 HakkaNeko</span>
+            </div>
+            <p class="text-xs text-purple-400/60" data-i18n="footer_role">Live2D 建模師 · 個人接案建模師</p>
+
+            <!-- 社群連結 -->
+            <div class="flex flex-wrap justify-center gap-5 text-purple-400/50 text-sm my-2">
+                <a href="mailto:n47993802@gmail.com" class="hover:text-white transition flex items-center gap-1"><i class="fa-solid fa-envelope mr-1"></i>n47993802@gmail.com</a>
+                <a href="https://x.com/HakkaNekoLive2D" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-x-twitter mr-1"></i>@HakkaNekoLive2D</a>
+                <a href="https://www.twitch.tv/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-twitch mr-1"></i>hakkanekolive2d</a>
+                <a href="https://discord.gg/sXeKwm4Bkz" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-discord mr-1"></i>阿卡貓聊天窩</a>
+            </div>
+
+            <!-- Ko-fi 贊助 -->
+            <div class="pt-3 border-t border-white/5">
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <a href="https://ko-fi.com/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="kofi-btn"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/></svg><span data-i18n="kofi_btn">請我喝杯咖啡</span></a>
+                    <span class="text-purple-500/30 hidden sm:inline">·</span>
+                    <span id="supportersList" class="text-[0.65rem] text-purple-400/40 italic" data-i18n="kofi_supporters_empty">成為第一位贊助者！</span>
+                </div>
+            </div>
+
+            <!-- 版權（最底部，最小最淡） -->
+            <div class="border-t border-white/5 pt-4 space-y-1">
+                <p class="text-xs text-purple-500/40">© <span id="footerYear"></span> <span class="text-purple-300/70" data-i18n="name_short">阿卡貓 HakkaNeko</span> · All Rights Reserved</p>
+                <p class="text-xs text-purple-500/30" data-i18n="footer_credit">本網站由 阿卡貓 HakkaNeko 企劃，介面設計與互動效果均由 AI 輔助生成、迭代優化，並經本人審定後發布。</p>
+            </div>
+        </div>
+    </footer>
+    </main>
+
+    <div id="unifiedLightbox" role="dialog" aria-modal="true">
+        <!-- 背景點擊關閉 -->
+        <div class="absolute inset-0" onclick="ulbClose()"></div>
+
+        <!-- 關閉鈕 -->
+        <button onclick="ulbClose()" style="position:absolute;top:16px;right:20px;background:transparent;border:none;color:rgba(255,255,255,0.5);font-size:1.6rem;cursor:pointer;z-index:20;line-height:1;" aria-label="關閉"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+
+        <!-- 左箭頭 -->
+        <button class="ulb-arrow" id="ulbPrev" onclick="ulbNav(-1)" aria-label="上一張">‹</button>
+
+        <!-- 中央內容 -->
+        <div style="position:relative;display:flex;flex-direction:column;align-items:center;max-width:min(88vw,720px);">
+            <!-- v28：點擊圖片本身在純覆蓋模式（stickers/logos）也關閉燈箱 -->
+            <img width="1500" height="500" loading="lazy" id="ulbImg" src="" alt=""
+                 onclick="if(ulbCurrent&&(ulbCurrent.group==='stickers'||ulbCurrent.group==='logos'))ulbClose()">
+            <p id="ulbLabel">點圖或旁邊關閉 ／ ESC</p>
+            <div id="ulbDots"></div>
+        </div>
+
+        <!-- 右箭頭 -->
+        <button class="ulb-arrow" id="ulbNext" onclick="ulbNav(1)" aria-label="下一張">›</button>
+    </div>
+
+    <!-- 導覽列共用設定：務必在 common.js 之前載入 -->
+    <script src="nav-config.js"></script>
+    <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
+    <script src="locales/zh-TW.js"></script>
+    <script src="locales/zh-CN.js"></script>
+    <script src="locales/en.js"></script>
+    <script src="locales/ja.js"></script>
+    <script src="common.js"></script>
+</body>
+</html>

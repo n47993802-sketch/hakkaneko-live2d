@@ -102,11 +102,17 @@
             }
         }
 
-        window.renderMainNav = renderMainNav;
+        // 備援用途：正常情況下，導覽列已經由 nav-render.js（放在 <nav> 容器
+        // 緊接著的地方，同步、非 defer 載入）提前渲染完成了，這裡不需要再做一次。
+        // 只有當某個頁面漏放 nav-render.js，或該檔案載入失敗時，才會用到這份備援。
+        if (typeof window.renderMainNav !== 'function') {
+            window.renderMainNav = renderMainNav;
+        }
 
-        // common.js 執行時 DOM 中的 #mainNav 容器通常已存在（腳本置於 body 底部，
-        // 或使用 defer），因此直接渲染；若尚未就緒則退而使用 DOMContentLoaded。
-        if (document.getElementById('mainNav')) {
+        var _navAlreadyRendered = document.getElementById('mainNav') && document.getElementById('mainNav').children.length > 0;
+        if (_navAlreadyRendered) {
+            // nav-render.js 已經渲染過，跳過，避免重複操作 DOM
+        } else if (document.getElementById('mainNav')) {
             renderMainNav();
         } else if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', renderMainNav);

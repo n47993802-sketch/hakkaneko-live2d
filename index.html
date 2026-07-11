@@ -115,6 +115,10 @@
             </p>
 
             <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
+            <!-- 導覽列設定＋渲染：緊跟在 <nav> 容器後面、同步載入，
+                 讓按鈕在畫面第一次繪製前就已經填好，避免空白容器閃爍 -->
+            <script src="nav-config.js"></script>
+            <script src="nav-render.js"></script>
         </div>
     </header>
 
@@ -327,8 +331,6 @@
         <button class="ulb-arrow" id="ulbNext" onclick="ulbNav(1)" aria-label="下一張">›</button>
     </div>
 
-    <!-- 導覽列共用設定：務必在 common.js 之前載入 -->
-    <script src="nav-config.js" defer></script>
     <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
     <script src="locales/zh-TW.js" defer></script>
     <script src="locales/zh-CN.js" defer></script>

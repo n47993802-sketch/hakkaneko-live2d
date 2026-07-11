@@ -880,6 +880,12 @@
         }
 
         /* ── RPG Loader ── */
+        /* 同一瀏覽階段內非第一次進站：html 標籤最一開始就會被行內腳本
+           加上 hakka-skip-loader（見各 html <head> 最上方），
+           讓 Loader 從「第一次繪製畫面」開始就直接不顯示，
+           避免『先閃一下 Loading 才消失』的卡頓感。 */
+        html.hakka-skip-loader #rpgLoader { display: none !important; }
+        html.hakka-skip-loader body.loading { overflow: visible; }
         #rpgLoader {
             position: fixed; inset: 0; z-index: 99999;
             background: #07010f;

@@ -25,6 +25,94 @@
     const I18N = window.I18N;
     let currentLang = 'zh-TW';
 
+/* ── 導覽列（Nav）動態渲染 ──
+   所有頁面的導覽列都改由這裡依 nav-config.js 的 window.NAV_CONFIG
+   自動產生，因此「隱藏／顯示某個分頁」只需要改 nav-config.js 一個檔案，
+   不用再進到 10 個 html 檔裡一個一個手動修改。
+   同時這裡也會自動判斷「目前在哪一頁」並套用 active 高亮，
+   修掉舊版每個頁面都寫死 tab-intro 為 active 的問題。 */
+    (function() {
+        function currentPageId() {
+            var file = (location.pathname.split('/').pop() || 'index.html');
+            if (file === '' || file === 'index.html') return 'intro';
+            return file.replace(/\.html$/, '');
+        }
+
+        function escAttr(s) { return String(s == null ? '' : s); }
+
+        function buildChildItem(item) {
+            var iconHtml = item.icon
+                ? '<i class="fa-solid ' + escAttr(item.icon) + (item.color ? ' ' + escAttr(item.color) : '') + ' w-4"></i> '
+                : '';
+            return '<button onclick="location.href=\'' + escAttr(item.href) + '\'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">'
+                + iconHtml + '<span data-i18n="' + escAttr(item.label) + '">' + escAttr(item.text) + '</span></button>';
+        }
+
+        function buildTopButton(item) {
+            return '<button onclick="location.href=\'' + escAttr(item.href) + '\'" id="tab-' + escAttr(item.id) + '" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">'
+                + '<i class="fa-solid ' + escAttr(item.icon) + '"></i><span class="inline" data-i18n="' + escAttr(item.label) + '">' + escAttr(item.text) + '</span></button>';
+        }
+
+        function buildDropdown(group) {
+            var enabledItems = (group.items || []).filter(function(it) { return it.enabled !== false; });
+            if (!enabledItems.length) return ''; // 整組都關閉時，連下拉選單按鈕本身也不顯示
+            var itemsHtml = enabledItems.map(buildChildItem).join('');
+            return '<div class="relative" id="' + escAttr(group.id) + 'DropdownWrap">'
+                + '<button onclick="toggleNavDropdown(event,\'' + escAttr(group.id) + '\')" id="tab-' + escAttr(group.id) + '-trigger" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">'
+                + '<i class="fa-solid ' + escAttr(group.icon) + '"></i><span class="inline" data-i18n="' + escAttr(group.label) + '">' + escAttr(group.text) + '</span>'
+                + '<i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" id="' + escAttr(group.id) + 'Arrow"></i></button>'
+                + '<div id="' + escAttr(group.id) + 'Dropdown" class="hidden absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 bg-[#120824] border border-purple-500/40 rounded-2xl p-2 shadow-2xl z-[300] min-w-[170px]">'
+                + itemsHtml + '</div></div>';
+        }
+
+        function renderMainNav() {
+            var nav = document.getElementById('mainNav');
+            var config = window.NAV_CONFIG;
+            if (!nav) return;
+            if (!config) {
+                console.error('[nav] window.NAV_CONFIG 尚未定義，請確認 nav-config.js 有在 common.js 之前載入');
+                return;
+            }
+
+            var html = '';
+            var groupOfChild = {}; // 子分頁 id -> 所屬下拉選單 id（用來做 active 高亮）
+
+            config.forEach(function(entry) {
+                if (entry.enabled === false) return;
+                if (entry.dropdown) {
+                    var frag = buildDropdown(entry);
+                    if (frag) html += frag;
+                    (entry.items || []).forEach(function(it) {
+                        if (it.enabled !== false) groupOfChild[it.id] = entry.id;
+                    });
+                } else {
+                    html += buildTopButton(entry);
+                }
+            });
+
+            nav.innerHTML = html;
+
+            // 依目前所在頁面高亮對應分頁（或其所屬下拉選單觸發按鈕）
+            var pageId = currentPageId();
+            var activeBtn = document.getElementById('tab-' + pageId)
+                || (groupOfChild[pageId] ? document.getElementById('tab-' + groupOfChild[pageId] + '-trigger') : null);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'text-white');
+                activeBtn.classList.remove('text-purple-300');
+            }
+        }
+
+        window.renderMainNav = renderMainNav;
+
+        // common.js 執行時 DOM 中的 #mainNav 容器通常已存在（腳本置於 body 底部，
+        // 或使用 defer），因此直接渲染；若尚未就緒則退而使用 DOMContentLoaded。
+        if (document.getElementById('mainNav')) {
+            renderMainNav();
+        } else if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderMainNav);
+        }
+    })();
+
 /* ── 聯名模板頁互動邏輯 ── */
     (function(){
         // ══ 衣裝類型清單（30 款，後續 src 換成實際預覽圖 URL）══
@@ -2708,6 +2796,12 @@
     (function() {
         var _loaderDone = false;
 
+        // 是否為「本次瀏覽階段」第一次進站：用 sessionStorage 記錄。
+        // sessionStorage 只在同一個分頁/瀏覽階段內有效，關閉分頁或瀏覽器
+        // 就會重置，符合「只有一開始點入網站時才跑一次 Loading」的需求。
+        var _skipAnimation = false;
+        try { _skipAnimation = sessionStorage.getItem('hakka_visited') === '1'; } catch (e) {}
+
         function detectLang() {
             var savedLang = null;
             try { savedLang = localStorage.getItem('hakka_lang'); } catch(e) {}
@@ -2730,6 +2824,17 @@
             if (!bar || !status || !loader) return;
 
             var targetLang = detectLang();
+
+            try { sessionStorage.setItem('hakka_visited', '1'); } catch (e) {}
+
+            // 同一瀏覽階段內，非第一次進站的分頁：直接套用語言、立即隱藏 Loading，
+            // 不再跑逐步動畫，滿足「切換分頁不用每次都看 Loading」的需求。
+            if (_skipAnimation) {
+                if (typeof setLang === 'function') setLang(targetLang);
+                loader.style.display = 'none';
+                document.body.classList.remove('loading');
+                return;
+            }
 
             var msgs = {
                 'zh-TW': ['初始化中…','載入語言包…','套用介面…','準備完畢！'],

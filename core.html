@@ -105,61 +105,7 @@
                 透明專業流程 <span class="deco-star">✦</span> 夢想角色躍然而生
             </p>
 
-            <nav class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50">
-                <button onclick="location.href='intro.html'" id="tab-intro" class="tab-btn active px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">
-                    <i class="fa-solid fa-user"></i><span class="inline" data-i18n="nav_intro">自我介紹</span>
-                </button>
-                <button onclick="location.href='artists.html'" id="tab-artists" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">
-                    <i class="fa-solid fa-palette"></i><span class="inline" data-i18n="nav_artists">合作繪師</span>
-                </button>
-
-                <!-- Live2D 委託 下拉 -->
-                <div class="relative" id="commDropdownWrap">
-                    <button onclick="toggleNavDropdown(event,'comm')" id="tab-comm-trigger" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">
-                        <i class="fa-solid fa-file-contract"></i>
-                        <span class="inline" data-i18n="nav_commission">委託資訊</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" id="commArrow"></i>
-                    </button>
-                    <div id="commDropdown" class="hidden absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 bg-[#120824] border border-purple-500/40 rounded-2xl p-2 shadow-2xl z-[300] min-w-[170px]">
-                        <button onclick="location.href='rules.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-book-open text-blue-400 w-4"></i> <span data-i18n="nav_rules">流程與規範</span>
-                        </button>
-                        <button onclick="location.href='core.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-wand-magic-sparkles text-purple-400 w-4"></i> <span data-i18n="nav_core">V皮設計</span>
-                        </button>
-                        <button onclick="location.href='anim.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-film text-pink-400 w-4"></i> <span data-i18n="nav_anim">動畫設計</span>
-                        </button>
-                        <button onclick="location.href='template.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-shirt text-fuchsia-400 w-4"></i> <span data-i18n="nav_template">聯名模板</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 創作空間 下拉 -->
-                <div class="relative" id="creativeDropdownWrap">
-                    <button onclick="toggleNavDropdown(event,'creative')" id="tab-creative-trigger" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">
-                        <i class="fa-solid fa-star"></i>
-                        <span class="inline" data-i18n="nav_creative">創作空間</span>
-                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" id="creativeArrow"></i>
-                    </button>
-                    <div id="creativeDropdown" class="hidden absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 bg-[#120824] border border-purple-500/40 rounded-2xl p-2 shadow-2xl z-[300] min-w-[170px]">
-                        <!-- live2d-demo 暫時關閉
-                        <button onclick="location.href='live2d-demo.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-person-rays text-blue-400 w-4"></i> 角色互動
-                        </button> -->
-                        <button onclick="location.href='portfolio.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-photo-film text-emerald-400 w-4"></i> <span data-i18n="nav_portfolio">作品展示</span>
-                        </button>
-                        <button onclick="location.href='channels.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-heart text-pink-400 w-4"></i> <span data-i18n="nav_channels">推薦頻道</span>
-                        </button>
-                        <button onclick="location.href='fanart.html'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">
-                            <i class="fa-solid fa-star text-yellow-400 w-4"></i> <span data-i18n="nav_fanart">二創展示</span>
-                        </button>
-                    </div>
-                </div>
-            </nav>
+            <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
         </div>
     </header>
 
@@ -724,6 +670,13 @@
         <button class="ulb-arrow" id="ulbNext" onclick="ulbNav(1)" aria-label="下一張">›</button>
     </div>
 
+    <!-- 導覽列共用設定：務必在 common.js 之前載入 -->
+    <script src="nav-config.js"></script>
+    <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
+    <script src="locales/zh-TW.js"></script>
+    <script src="locales/zh-CN.js"></script>
+    <script src="locales/en.js"></script>
+    <script src="locales/ja.js"></script>
     <script src="common.js"></script>
 </body>
 </html>

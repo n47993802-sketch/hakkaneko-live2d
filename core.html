@@ -86,17 +86,20 @@
 </head>
 <body class="antialiased min-h-screen pb-12 loading">
     <script>
-    // 在 body 任何內容真正繪製前，就先依使用者上次選擇（localStorage）或作業系統色彩偏好
-    // 套用日/夜模式的 class，避免「先用預設暗色畫面繪出，等 common.js 載入完才整頁變色」
-    // 這種明顯的閃爍。common.js 之後仍會再跑一次同樣的判斷邏輯，
-    // 但屆時只是把圖示（太陽/月亮）和背景星空效果同步好，class 本身已經是對的，不會再閃。
-    (function () {
+    // 提早套用日夜模式，避免「切換分頁時先閃一下深色、才變回淺色」的問題。
+    // 原本這段邏輯放在 common.js 裡，但 common.js 要等到 <body> 最底部
+    // 才會執行，使用者會先看到預設的深色畫面，過一瞬間才變成淺色。
+    // 這裡搬到 <body> 最開頭、任何畫面內容之前同步執行，
+    // 就能在瀏覽器第一次繪製前就決定好主題，不會有閃爍。
+    // （common.js 裡仍保留同一段邏輯作為備援，兩邊重複執行是安全的。）
+    (function(){
         try {
             var saved = localStorage.getItem('hakka_theme');
-            var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-            var shouldLight = saved === 'light' || (saved === null && prefersLight);
-            if (shouldLight) document.body.classList.add('light-mode');
-        } catch (e) {}
+            var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            if (saved === 'light' || (saved === null && prefersLight)) {
+                document.body.classList.add('light-mode');
+            }
+        } catch(e) {}
     })();
     </script>
     <!-- ── RPG Loader ── -->
@@ -702,6 +705,7 @@
     <script src="locales/zh-CN.js"></script>
     <script src="locales/en.js"></script>
     <script src="locales/ja.js"></script>
+    <script src="effects/meteor-bg.js"></script>
     <script src="common.js"></script>
 </body>
 </html>

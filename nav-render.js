@@ -1,22 +1,23 @@
 /* ============================================================
-   阿卡貓 HakkaNeko 網站 — 導覽列「立即渲染」腳本
-   ------------------------------------------------------------
-   這支檔案是從 common.js 抽出來的導覽列渲染邏輯，故意獨立成一個
-   很小的檔案，並且用「不加 defer / async」的一般 <script> 標籤，
-   直接放在 <nav id="mainNav"></nav> 容器後面：
+   阿卡貓 HakkaNeko 網站 — 導覽列「同步」渲染器
+   ============================================================
+   為什麼需要這個檔案？
+   - common.js 是在 <body> 最底部才載入（部分頁面甚至還有 defer），
+     所以它產生導覽列按鈕的時間點，是在瀏覽器已經畫出一次畫面「之後」。
+   - 結果就是：使用者會先看到 <nav id="mainNav"> 是空的一小段時間，
+     接著按鈕才「突然」全部跑出來 —— 這就是切換分頁時感覺「閃一下」
+     的主要原因之一。
+   - 解法：在 <nav> 容器「緊接著」的地方，用一支不延遲（沒有 defer/async）
+     的 <script> 立刻把按鈕內容畫出來，讓瀏覽器在第一次繪製畫面時，
+     導覽列就已經是完整的，不會有「先空白、後出現」的跳動。
 
-       <nav id="mainNav" ...></nav>
-       <script src="nav-config.js"></script>
-       <script src="nav-render.js"></script>
+   這個檔案的內容刻意跟 common.js 內建的備援渲染邏輯（renderMainNav）
+   保持一模一樣，這樣不管是這支檔案先執行、還是 common.js 的備援
+   先執行，畫出來的結果都完全相同，不會有兩邊邏輯不同步的問題。
 
-   瀏覽器解析 HTML 到這裡時會「立刻」同步執行這兩支小檔案，
-   所以 #mainNav 在還沒被畫面看到之前就已經被填好按鈕了 ——
-   不用再等到頁面最底部、168KB 的 common.js 下載＋解析完才冒出來。
-
-   這解決的是「連續閃兩下」問題裡的第二下閃爍（導覽列從空白
-   容器突然冒出按鈕）。common.js 仍然會在檔案最上方保留一份
-   一樣的渲染邏輯做為備援（例如萬一某個頁面忘記引入這支檔案），
-   但只要偵測到 #mainNav 已經有內容，就會直接跳過、不重複渲染。
+   載入順序要求（每個頁面都已經照這個順序寫好）：
+       <script src="nav-config.js"></script>   ← 先提供 window.NAV_CONFIG
+       <script src="nav-render.js"></script>   ← 再用這份設定畫出導覽列
    ============================================================ */
 (function () {
     function currentPageId() {
@@ -57,7 +58,7 @@
         var config = window.NAV_CONFIG;
         if (!nav) return;
         if (!config) {
-            console.error('[nav] window.NAV_CONFIG 尚未定義，請確認 nav-config.js 有在 nav-render.js 之前載入');
+            console.error('[nav-render] window.NAV_CONFIG 尚未定義，請確認 nav-config.js 有在 nav-render.js 之前載入');
             return;
         }
 
@@ -89,24 +90,11 @@
         }
     }
 
-    // 下拉選單開合：提前定義在這裡（而非等 common.js），
-    // 避免使用者在 common.js 載入完成前就點到下拉選單按鈕而報錯。
-    // common.js 稍後仍會定義一份一模一樣的版本，屬無害的重複覆寫。
-    if (typeof window.toggleNavDropdown !== 'function') {
-        window.toggleNavDropdown = function toggleNavDropdown(e, key) {
-            e.stopPropagation();
-            var dd = document.getElementById(key + 'Dropdown');
-            var other = key === 'comm' ? 'creativeDropdown' : 'commDropdown';
-            var otherEl = document.getElementById(other);
-            if (otherEl) otherEl.classList.add('hidden');
-            if (dd) dd.classList.toggle('hidden');
-        };
-    }
-
-    window.renderMainNav = renderMainNav;
-
-    // 此檔案本身就是同步、非 defer 載入，執行到這一行時
-    // <nav id="mainNav"></nav> 一定已經在 DOM 中（因為它在 HTML 原始碼中排在本 script 標籤前面），
-    // 所以直接渲染即可，不需要等待 DOMContentLoaded。
+    // 立即執行（此檔案沒有 defer/async，瀏覽器解析到這裡就會馬上跑，
+    // 此時 <nav id="mainNav"> 早已存在於 DOM 中，可以放心操作）。
     renderMainNav();
+
+    // 同時掛到 window，讓 common.js 裡的備援邏輯偵測到「已經渲染過」而跳過，
+    // 避免重複操作 DOM、也維持兩邊渲染邏輯合而為一。
+    window.renderMainNav = renderMainNav;
 })();

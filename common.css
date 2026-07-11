@@ -36,14 +36,11 @@
             vertical-align: -0.1em;
             display: inline-block;
         }
-        /* 頁面切換淡入 */
-        .page-content {
-            animation: pageFadeIn 0.25s ease-out;
-        }
-        @keyframes pageFadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        /* 頁面切換淡入
+           注意：.page-content 的實際淡入動畫定義在後面（fadeIn，約行 481），
+           這裡原本有第二份重複定義（pageFadeIn），因為 CSS 選擇器優先度
+           相同、後者覆蓋前者，前者從未真正生效過，屬於死碼，已移除，
+           避免以後誤以為改了這裡動畫就會生效。 */
 
         /* ── GIF 安全隱藏：page-portfolio 永不用 display:none ──
            display:none 會讓瀏覽器釋放 GIF 解碼狀態，切回來必定閃爍重置。

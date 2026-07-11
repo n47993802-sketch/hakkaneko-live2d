@@ -19,6 +19,7 @@
    - enabled   : false = 從導覽列隱藏該分頁（頁面檔案本身不會被刪除，
                  直接輸入網址仍可以開啟）
    - dropdown  : true 代表這是一個下拉選單群組，內含 items 陣列
+   - 範例：想暫時關閉「聯名模板」分頁，只要把下面這行改成 enabled: false
    ============================================================ */
 window.NAV_CONFIG = [
     { id: 'intro',   href: 'index.html',   icon: 'fa-user',    label: 'nav_intro',   text: '自我介紹', enabled: true },
@@ -31,8 +32,7 @@ window.NAV_CONFIG = [
             { id: 'rules',    href: 'rules.html',    icon: 'fa-book-open',           color: 'text-blue-400',    label: 'nav_rules',    text: '流程與規範', enabled: true },
             { id: 'core',     href: 'core.html',      icon: 'fa-wand-magic-sparkles', color: 'text-purple-400',  label: 'nav_core',     text: 'V皮設計',    enabled: true },
             { id: 'anim',     href: 'anim.html',      icon: 'fa-film',                color: 'text-pink-400',    label: 'nav_anim',     text: '動畫設計',    enabled: true },
-            // 範例：想暫時關閉「聯名模板」分頁，只要把下面這行改成 enabled: false
-            { id: 'template', href: 'template.html',  icon: 'fa-shirt',               color: 'text-fuchsia-400', label: 'nav_template', text: '聯名模板',    enabled: true },
+            { id: 'template', href: 'template.html',  icon: 'fa-shirt',               color: 'text-fuchsia-400', label: 'nav_template', text: '聯名模板',    enabled: false },
         ]
     },
 
@@ -40,7 +40,6 @@ window.NAV_CONFIG = [
     {
         id: 'creative', dropdown: true, icon: 'fa-star', label: 'nav_creative', text: '創作空間', enabled: true,
         items: [
-            // live2d-demo 目前暫時關閉（沿用原本的設定）
             { id: 'live2d-demo', href: 'live2d-demo.html', icon: 'fa-person-rays', color: 'text-blue-400',   label: 'nav_live2d_demo', text: '角色互動', enabled: false },
             { id: 'portfolio',   href: 'portfolio.html',   icon: 'fa-photo-film',  color: 'text-emerald-400', label: 'nav_portfolio',   text: '作品展示', enabled: true },
             { id: 'channels',    href: 'channels.html',    icon: 'fa-heart',       color: 'text-pink-400',    label: 'nav_channels',    text: '推薦頻道', enabled: true },

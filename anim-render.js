@@ -1,0 +1,185 @@
+/* ============================================================
+   阿卡貓 HakkaNeko 網站 — 動畫設計頁 報價計算機邏輯
+   ============================================================
+   從 common.js 拆分出來，只有 anim.html 會載入這個檔案。
+
+   跟 core.html 不一樣，動畫設計目前沒有另外拆一份 anim-config.js：
+   這裡的價格都是直接讀取 anim.html 上 <input value="..."> 的數值
+   （例如加急費 animRushPrice），本來就沒有一個獨立的 JS 價格物件
+   可以拆分，之後如果想比照 core-config.js 做法把價格集中管理，
+   需要先調整 anim.html 的表單結構，可以之後再一起討論。
+   ============================================================ */
+        function updateAnimFields() {
+            const isSticker = document.querySelector('input[name="animBaseType"]:checked').value === 'sticker';
+            const stickerEl = document.getElementById('animStickerFields');
+            const processEl = document.getElementById('animProcessFields');
+            if (isSticker) {
+                stickerEl.style.display = 'grid';
+                processEl.style.display = 'none';
+            } else {
+                stickerEl.style.display = 'none';
+                processEl.style.display = 'grid';
+            }
+        }
+
+        function sanitizeNumberInput(el, min, max) {
+            var raw = String(el.value).replace(/[^0-9]/g, '');
+            var val = parseInt(raw, 10);
+            if (isNaN(val) || val < min) val = min;
+            if (max !== undefined && val > max) val = max;
+            el.value = val;
+        }
+
+        function calculateAnim() {
+            const _d2 = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang]:I18N['zh-TW'];
+            const isSticker = document.querySelector('input[name="animBaseType"]:checked').value === 'sticker';
+            let extra = 0; let details = [];
+
+            if (isSticker) {
+                let qty = Math.min(99, Math.max(1, parseInt(document.getElementById('stickerQty').value) || 1));
+                let physics = parseInt(document.getElementById('stickerPhysics').value) || 0;
+                let time = Math.min(60, Math.max(1, parseInt(document.getElementById('stickerTime').value) || 3));
+                let baseSticker = 400;
+                details.push({name: `${_d2.anim_type_sticker||'動態貼圖'} x${qty}`, price: baseSticker * qty});
+                if(physics > 0) details.push({name: _d2.physics_high_200||'高精細度', price: physics * qty});
+                if(time > 3) details.push({name: `${_d2.field_duration||'動態時間'} +${time-3}s x${qty}`, price: (time-3)*50*qty});
+                extra += (baseSticker + physics + (time > 3 ? (time-3)*50 : 0)) * qty;
+            } else {
+                let physics = parseInt(document.getElementById('processPhysics').value) || 0;
+                let time = Math.min(600, Math.max(1, parseInt(document.getElementById('processTime').value) || 5));
+                let chars = Math.min(20, Math.max(1, parseInt(document.getElementById('processChars').value) || 1));
+                let baseCost = 2500;
+                details.push({name: `${_d2.anim_type_process||'動畫處理'}`, price: baseCost});
+                if(physics > 0) {
+                    const physicsLabel = physics===1000 ? (_d2.physics_high_1000||'高精細度') : physics===2000 ? (_d2.physics_ultra||'極致精細') : `+${physics}`;
+                    details.push({name: physicsLabel, price: physics});
+                }
+                if(time > 5) details.push({name: `${_d2.field_duration||'動畫時長'} +${time-5}s`, price: (time-5)*200});
+                if(chars > 1) details.push({name: `${_d2.field_chars||'人物數量'} x${chars}`, price: (chars-1)*1000});
+                if(document.getElementById('processPerformance').checked) details.push({name: _d2.field_performance||'表演設計', price: 1000});
+                if(document.getElementById('processBg').checked) details.push({name: _d2.field_bg||'背景動畫', price: 500});
+                let cost = baseCost + physics + (time>5?(time-5)*200:0) + (chars>1?(chars-1)*1000:0);
+                if(document.getElementById('processPerformance').checked) cost += 1000;
+                if(document.getElementById('processBg').checked) cost += 500;
+                extra += cost;
+            }
+
+            if (document.getElementById('animRush') && document.getElementById('animRush').checked) {
+                let rPrice = parseInt(document.getElementById('animRushPrice').value) || 1000;
+                extra += rPrice; details.push({name: _d2.opt_rush||'加急趕工', price: rPrice});
+            }
+
+            let subtotal = extra; let fee = 0; let paymentMethod = _d2.pay_bank||'銀行匯款';
+            if (document.getElementById('animPaypal').checked) {
+                let r = parseFloat(document.getElementById('animPaypalRate').value)||0;
+                fee += Math.round(subtotal*(r/100)); paymentMethod = 'PayPal';
+                if(fee>0) details.push({name:`PayPal ${_d2.pay_fee||'手續費'} (${r}%)`, price: fee});
+            } else if (document.getElementById('animEcpay').checked) {
+                let r = parseFloat(document.getElementById('animEcpayRate').value)||0;
+                fee += Math.round(subtotal*(r/100)); paymentMethod = _d2.pay_ecpay||'綠界/超商';
+                if(fee>0) details.push({name:`${_d2.pay_ecpay||'綠界'} ${_d2.pay_fee||'手續費'} (${r}%)`, price: fee});
+            }
+
+            let finalTotal = subtotal + fee;
+            const plan = document.querySelector('input[name="animPaymentPlan"]:checked').value;
+            if(plan==='two') { let f=Math.round(finalTotal*0.03); finalTotal+=f; details.push({name:`${_d2.pay_two||'兩期'} ${_d2.pay_fee||'手續費'} (3%)`, price:f}); }
+            else if(plan==='three') { let f=Math.round(finalTotal*0.05); finalTotal+=f; details.push({name:`${_d2.pay_three||'三期'} ${_d2.pay_fee||'手續費'} (5%)`, price:f}); }
+
+            const animPlan = plan;
+            let animPayHtml = '';
+            if(animPlan==='one') { animPayHtml = `${_d2.pay_one||'一次付清'}：<strong class="text-emerald-400">${getCurrencyPrefix()}${formatMoney(finalTotal)}</strong>`; }
+            else { animPayHtml = `${_d2.pay_installment||'分期付款'}：<strong class="text-blue-400">${_d2.deposit_label||'頭款'} ${getCurrencyPrefix()}${formatMoney(Math.ceil(finalTotal/(animPlan==='two'?2:3)))}</strong>`; }
+            
+            document.getElementById('animDepositInfo').innerHTML = animPayHtml;
+            document.getElementById('animTotalPrice').textContent = `${getCurrencyPrefix()}${formatMoney(finalTotal)}`;
+            document.getElementById('animDetailList').innerHTML = details.map(i => `<div class="flex justify-between py-1 border-b border-white/5"><span>${i.name}</span><span>${getCurrencyPrefix()}${formatMoney(i.price)}</span></div>`).join('');
+            
+            window.currentAnimDetails = details; window.currentAnimTotal = finalTotal; window.currentAnimPayment = paymentMethod; window.currentAnimPlan = plan;
+            // 同步加急說明 & 補充資訊到截圖面板
+            const animRushText = document.getElementById('animRushInfo')?.value || '';
+            const animSuppText = document.getElementById('animSupplementInfo')?.value || '';
+            const animRushBlock = document.getElementById('animQuoteRushSummary');
+            const animSuppBlock = document.getElementById('animQuoteSuppSummary');
+            if (animRushBlock) { animRushBlock.classList.toggle('hidden', !animRushText.trim()); document.getElementById('animQuoteRushSummaryText').textContent = animRushText; }
+            if (animSuppBlock) { animSuppBlock.classList.toggle('hidden', !animSuppText.trim()); document.getElementById('animQuoteSuppSummaryText').textContent = animSuppText; }
+            syncCheckboxVisuals();
+            // 委託編號：第一次報價時生成，之後固定不變
+            const animOrderEl = document.getElementById('orderIdAnim');
+            if (animOrderEl && animOrderEl.textContent === '—') {
+                animOrderEl.textContent = generateOrderNumber('anim');
+            }
+        }
+
+        function getAnimQuoteText() {
+            const _qna = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].name_short||'阿卡貓 HakkaNeko':'阿卡貓 HakkaNeko';
+            let text = `💜 ${_qna} Live2D 動畫設計 💜\n================================\n`;
+            window.currentAnimDetails.forEach(item => { text += `${item.name}：${getCurrencyPrefix()}${formatMoney(item.price)}\n`; });
+            text += `--------------------------------\n總金額：${getCurrencyPrefix()}${formatMoney(window.currentAnimTotal)}\n`;
+            return text;
+        }
+
+        function copyAnimQuote() { if(document.getElementById('animAgreeTerms').checked) { copyToClipboardFallback(getAnimQuoteText()); } }
+
+        function resetAnimForm() {
+            document.querySelectorAll('#page-anim input[type="checkbox"]').forEach(i => i.checked = false);
+            // Reset anim type to sticker (default)
+            const defaultType = document.querySelector('#page-anim input[name="animBaseType"][value="sticker"]');
+            if (defaultType) defaultType.checked = true;
+            const defaultPlan = document.querySelector('#page-anim input[name="animPaymentPlan"][value="one"]');
+            if (defaultPlan) defaultPlan.checked = true;
+            // Reset numeric fields to defaults
+            ['stickerQty','stickerPhysics','stickerTime','processPhysics','processTime','processChars'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const defaults = { stickerQty: 1, stickerPhysics: 0, stickerTime: 3, processPhysics: 0, processTime: 5, processChars: 1 };
+                el.value = defaults[id] ?? el.defaultValue;
+            });
+            // Hide rush container and clear text fields
+            const animRushContainer = document.getElementById('animRushContainer');
+            if (animRushContainer) animRushContainer.classList.add('hidden');
+            const animRushInfo = document.getElementById('animRushInfo');
+            if (animRushInfo) animRushInfo.value = '';
+            const animSuppInfo = document.getElementById('animSupplementInfo');
+            if (animSuppInfo) animSuppInfo.value = '';
+            updateAnimFields();
+            // 重置時清空編號，下次報價重新生成新號碼
+            const animOrd = document.getElementById('orderIdAnim');
+            if (animOrd) animOrd.textContent = '—';
+            calculateAnim();
+            syncCheckboxVisuals();
+        }
+
+        const calculateAnimDebounced = debounce(function() { if (typeof calculateAnim === 'function') calculateAnim(); }, 150);
+
+        function selectPaymentAnim(s) { ['bank', 'paypal', 'ecpay'].forEach(p => document.getElementById('anim'+p.charAt(0).toUpperCase()+p.slice(1)).checked = (p === s)); calculateAnim(); syncCheckboxVisuals();
+            // 委託編號：第一次報價時生成，之後固定不變
+            const vpOrderEl = document.getElementById('orderIdVP');
+            if (vpOrderEl && vpOrderEl.textContent.trim() === '\u2014') {
+                vpOrderEl.textContent = generateOrderNumber('vp');
+            }
+        }
+
+        function toggleAnimSubmitButton() {
+            const checked = document.getElementById('animAgreeTerms').checked;
+            // 截圖按鈕
+            document.getElementById('animCopyBtn').disabled = !checked;
+            // 委託編號 badge：勾選後展開，並確保編號已生成
+            const badge = document.getElementById('orderBadgeAnim');
+            if (badge) badge.style.display = checked ? '' : 'none';
+            if (checked) {
+                const orderEl = document.getElementById('orderIdAnim');
+                if (orderEl && (!orderEl.textContent.trim() || orderEl.textContent.trim() === '—')) {
+                    orderEl.textContent = generateOrderNumber('anim');
+                }
+            }
+            // 一鍵複製：勾選後解鎖
+            const copyBtn = document.getElementById('btn-copy-summary-anim');
+            if (copyBtn) {
+                copyBtn.disabled = !checked;
+                copyBtn.style.opacity = checked ? '1' : '0.45';
+                copyBtn.style.cursor  = checked ? 'pointer' : 'not-allowed';
+            }
+        }
+
+        function toggleAnimRushField() { document.getElementById('animRushContainer').classList.toggle('hidden', !document.getElementById('animRush').checked); calculateAnim(); }
+

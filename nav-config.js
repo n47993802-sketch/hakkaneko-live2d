@@ -32,7 +32,7 @@ window.NAV_CONFIG = [
             { id: 'core',     href: 'core.html',      icon: 'fa-wand-magic-sparkles', color: 'text-purple-400',  label: 'nav_core',     text: 'V皮設計',    enabled: true },
             { id: 'anim',     href: 'anim.html',      icon: 'fa-film',                color: 'text-pink-400',    label: 'nav_anim',     text: '動畫設計',    enabled: true },
             // 範例：想暫時關閉「聯名模板」分頁，只要把下面這行改成 enabled: false
-            { id: 'template', href: 'template.html',  icon: 'fa-shirt',               color: 'text-fuchsia-400', label: 'nav_template', text: '聯名模板',    enabled: true },
+            { id: 'template', href: 'template.html',  icon: 'fa-shirt',               color: 'text-fuchsia-400', label: 'nav_template', text: '聯名模板',   enabled: false },
         ]
     },
 

@@ -425,5 +425,10 @@
     <script src="locales/ja.js"></script>
     <script src="effects/meteor-bg.js"></script>
     <script src="common.js"></script>
+    <!-- 推薦頻道清單＋直播狀態偵測：只有這一頁需要，載入順序要在 common.js 之後
+         （需要用到 common.js 的 I18N/currentLang，也會覆寫 common.js 裡的
+         checkAllChannels 空殼函式）。 -->
+    <script src="channels-config.js"></script>
+    <script src="channels-render.js"></script>
 </body>
 </html>

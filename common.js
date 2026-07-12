@@ -880,62 +880,48 @@
         function switchTab(tabId) {
             if (tabId === undefined) return;
             closeDropdowns();
-            // 隱藏所有頁面：page-portfolio 用 gif-hidden（visibility 方案）避免 display:none 重置 GIF 幀
-            document.querySelectorAll('.page-content').forEach(el => {
-                if (el.id === 'page-portfolio') {
-                    el.classList.add('gif-hidden');
-                    el.classList.remove('flex', 'block');
-                } else {
-                    el.classList.add('hidden');
-                    el.classList.remove('flex', 'block');
-                }
-            });
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('active');
-                el.classList.remove('text-white');
-                el.classList.add('text-purple-300');
-            });
+
+            // v34 修復（切換分頁後又閃一下 / 內容跳動的成因之一）：
+            // 現在每個頁面都是各自獨立的 html，只剩「自己」這一個 .page-content，
+            // 不會再有「同一頁裡有好幾個分頁互相切換」的情況了。這個函式是
+            // 從「一體式版本」留下來的，那時候它的工作是：把其他分頁隱藏、
+            // 把目標分頁顯示出來、並強制重播一次淡入動畫。
+            // 但現在 window.onload 只會用「目前這一頁自己的 id」呼叫它一次
+            // （目的只是要觸發下面 calculate()/loadFanart() 這類一次性初始化），
+            // 如果照舊整個跑一次「隱藏→重新淡入」，等於畫面在使用者已經開始
+            // 閱讀之後，於 window.onload 這個較晚的時間點又無意義地重播一次
+            // 淡入動畫——這正是切換分頁後過一下子又閃一下、或內容突然跳動的
+            // 原因之一。現在改成：不再做任何隱藏/顯示/重播動畫/捲動置頂，
+            // 只保留 portfolio 的 port-reveal 首次顯示（見下方說明），以及
+            // 各分頁真正需要的一次性初始化呼叫。
             const targetPage = document.getElementById('page-' + tabId);
-            if (!targetPage) return;
-            if(tabId === 'core' || tabId === 'anim') {
-                targetPage.classList.remove('hidden');
-                targetPage.classList.add('flex');
-                targetPage.style.animation = 'none';
-                targetPage.offsetHeight;
-                targetPage.style.animation = '';
-            } else if(tabId === 'portfolio') {
-                // portfolio：移除 gif-hidden，不加任何 animation，保持 GIF 持續播放
-                targetPage.classList.remove('gif-hidden', 'hidden');
-                targetPage.classList.add('block');
-                targetPage.style.animation = 'none';
-                // 每次切入都重新觸發 port-reveal 緩入動畫（用雙 rAF 確保佈局完成後才 transition）
-                (function triggerPortReveal() {
+
+            // portfolio 比較特別：.port-reveal 元素預設 opacity:0（見 common.css），
+            // 目前「唯一」讓它們顯示出來的地方就是這裡，不是單純的重播特效，
+            // 所以仍保留，但只在「還沒顯示過」時才觸發一次。
+            if (tabId === 'portfolio' && targetPage) {
+                const firstPortEl = targetPage.querySelector('.port-reveal');
+                if (firstPortEl && !firstPortEl.classList.contains('visible')) {
                     const portEls = targetPage.querySelectorAll('.port-reveal');
-                    portEls.forEach(function(el) {
-                        el.classList.remove('visible');
-                        el.style.transition = 'none';
-                    });
                     requestAnimationFrame(function() {
                         requestAnimationFrame(function() {
                             portEls.forEach(function(el, i) {
-                                el.style.transition = '';
                                 setTimeout(function() { el.classList.add('visible'); }, i * 70);
                             });
                         });
                     });
-                })();
-            } else if (tabId === 'template') {
-                targetPage.classList.remove('hidden');
-                targetPage.classList.add('flex');
-                targetPage.style.animation = 'none';
-                targetPage.offsetHeight;
-                targetPage.style.animation = '';
-            } else {
-                targetPage.classList.remove('hidden');
-                targetPage.classList.add('block');
+                }
+                targetPage.classList.remove('gif-hidden', 'hidden');
             }
-            // Highlight parent dropdown trigger if child tab active
+
+            // 分頁按鈕的高亮，nav-render.js 在畫面第一次繪製前就已經處理過一次，
+            // 這裡再做一次是安全的（同一個結果），保留是為了不影響其他呼叫點
+            // （例如 scrollToRules() 內部仍會呼叫到這裡）。
             (function() {
+                document.querySelectorAll('.tab-btn').forEach(el => {
+                    el.classList.remove('active', 'text-white');
+                    el.classList.add('text-purple-300');
+                });
                 var activeBtn = null;
                 if (['rules','core','anim','template'].includes(tabId)) {
                     activeBtn = document.getElementById('tab-comm-trigger');
@@ -945,11 +931,11 @@
                     activeBtn = document.getElementById('tab-' + tabId);
                 }
                 if (activeBtn) {
-                    activeBtn.classList.add('active');
+                    activeBtn.classList.add('active', 'text-white');
                     activeBtn.classList.remove('text-purple-300');
-                    activeBtn.classList.add('text-white');
                 }
             })();
+
             if(tabId === 'core') calculate();
             else if(tabId === 'anim') calculateAnim();
             else if(tabId === 'template') { /* tmplCalculate called by interceptor */ }
@@ -960,7 +946,6 @@
                 // 首次進入時才初始化 GIF 展示（lazy init，防止 hidden 狀態下 GIF decode 閃爍）
                 gifEnsureInit();
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // --- Google Sites 剪貼簿繞過方案 (Fallback) ---
@@ -1723,74 +1708,12 @@
         if(fyEl) fyEl.textContent = new Date().getFullYear();
 
         // ==================== 推薦頻道直播狀態 ====================
-        // Twitch Helix API 需要 Client-ID + OAuth Token，瀏覽器端直接呼叫會被 CORS 擋住。
-        // 這裡使用 free proxy workaround via twitch-status.vercel.app (若失效請改用後端方案)
-        // 每次載入時嘗試查詢，失敗則靜默保持「離線」顯示，不影響其他功能。
-        const TWITCH_CHANNELS = ['bunny0422', 'yazawaribii', 'shinyuki2511', 'yukina_nya_026', 'darkmeyaya'];
+        // 已拆分至 channels-config.js（頻道清單）+ channels-render.js（偵測邏輯），
+        // 只有 channels.html 會載入這兩個檔案。這裡保留一個空殼 checkAllChannels，
+        // 讓下面 setLang() 的呼叫在其他頁面上不會噴錯（channels-render.js 載入時
+        // 會覆寫成真正的實作）。
+        function checkAllChannels() {}
 
-        async function checkTwitchLive(channel) {
-            try {
-                // 使用 decapi.me 的免費 Twitch 狀態查詢
-                const res = await fetch(`https://decapi.me/twitch/uptime/${channel}`, { signal: AbortSignal.timeout(4000) });
-                const text = await res.text();
-                // decapi returns uptime string if live, or error message if offline
-                const isLive = !text.includes('offline') && !text.includes('error') && text.trim().length > 0;
-                updateChannelBadge(channel, isLive);
-            } catch(e) {
-                // silently fail - stays "離線"
-            }
-        }
-
-        function updateChannelBadge(channel, isLive) {
-            // 更新按鈕內的 .btn-status
-            const statusEl = document.getElementById(`live-${channel}`);
-            if (!statusEl) return;
-            const _ll = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].ch_live:'直播中';
-            const _ol = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].ch_offline:'離線';
-            if (isLive) {
-                statusEl.className = 'btn-status online';
-                statusEl.innerHTML = `<span class="status-dot"></span>${_ll}`;
-            } else {
-                statusEl.className = 'btn-status offline';
-                statusEl.innerHTML = `<span class="status-dot"></span>${_ol}`;
-            }
-        }
-
-        // YouTube 直播狀態（利用 oEmbed 間接偵測）
-        const YOUTUBE_CHANNELS = [
-            { id: 'yt-live-MurichanChannel', handle: 'MurichanChannel' },
-            { id: 'yt-live-darkmeyaya',      handle: 'darkmeyaya' }
-        ];
-
-        async function checkYoutubeLive(entry) {
-            const badge = document.getElementById(entry.id);
-            if (!badge) return;
-            const _ll = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].ch_live:'直播中';
-            const _ol = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].ch_offline:'離線';
-            try {
-                // YouTube oEmbed 可判斷頻道是否存在，但無法直接取得直播狀態
-                // 使用 yt.lemnoslife.com 免費 no-key API 查詢 isLive
-                const url = `https://yt.lemnoslife.com/noKey/search?part=snippet&q=${encodeURIComponent(entry.handle)}&type=video&eventType=live`;
-                const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-                const data = await res.json();
-                const isLive = data.items && data.items.length > 0;
-                if (isLive) {
-                    badge.className = 'btn-status online';
-                    badge.innerHTML = `<span class="status-dot"></span>${_ll}`;
-                } else {
-                    badge.className = 'btn-status offline';
-                    badge.innerHTML = `<span class="status-dot"></span>${_ol}`;
-                }
-            } catch(e) {
-                badge.className = 'btn-status offline';
-                badge.innerHTML = `<span class="status-dot"></span>${_ol}`;
-            }
-        }
-
-        function checkAllChannels() {
-            TWITCH_CHANNELS.forEach(ch => checkTwitchLive(ch));
-            YOUTUBE_CHANNELS.forEach(ch => checkYoutubeLive(ch));
-        }
 
         // ── GIF 閃爍修復：視窗重新獲得焦點時同步 GPU 幀快取 ──
         // 原因：Chromium 在 Window Blur 時可能釋放 compositing layer 快取，
@@ -1811,78 +1734,26 @@
             _safe(updateAnimFields);
             _safe(bindCheckboxSync);
             _safe(syncCheckboxVisuals);
-            _safe(setLiveStatus);
 
-            // ── 直播狀態查詢：錯開發送，避免同時佔滿瀏覽器並發連線配額 ──
-            // checkMyLiveStatus 只在這裡呼叫一次（移除了頁面頂層的重複呼叫）
-            setTimeout(() => checkMyLiveStatus(), 0);
-            // 各外部頻道每隔 350ms 依序發出，共 9 個請求不再同時競搶
-            const allChannelChecks = [
-                ...TWITCH_CHANNELS.map(ch => () => checkTwitchLive(ch)),
-                ...YOUTUBE_CHANNELS.map(ch => () => checkYoutubeLive(ch)),
-            ];
-            allChannelChecks.forEach((fn, i) => setTimeout(fn, 800 + i * 350));
-
-            // Re-check every 3 minutes while page is open
-            setInterval(checkMyLiveStatus, 3 * 60 * 1000);
+            // v34：checkMyLiveStatus／setLiveStatus 是查「阿卡貓自己」的直播狀態，
+            // 對應的徽章（#twitterLiveBadge）目前只有 index.html 有，
+            // 之前這裡沒有先判斷徽章存不存在，導致其他 9 個頁面每次載入
+            // 都會偷偷對外發一次一樣的查詢請求、卻找不到地方顯示結果，
+            // 白白浪費一次網路請求。現在改成先確認頁面上真的有這個徽章才查詢。
+            // （推薦頻道的直播狀態查詢已搬到 channels-render.js，只有
+            //   channels.html 會執行，這裡不用再管。）
+            if (document.getElementById('twitterLiveBadge')) {
+                _safe(setLiveStatus);
+                setTimeout(() => checkMyLiveStatus(), 0);
+                setInterval(checkMyLiveStatus, 3 * 60 * 1000);
+            }
         };
 		
-        const FANART_API = 'https://api.github.com/repos/n47993802-sketch/Live2D-/contents/HakkaNeko/Second%20creation%20drawing';
-        const FANART_RAW  = 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/Second%20creation%20drawing/';
-        let fanartLoaded = false;
+        // ==================== 二創展示載入 ====================
+        // 已拆分至 fanart-render.js（FANART_API/FANART_RAW/loadFanart()），
+        // 只有 fanart.html 會載入這個檔案。下面 switchTab() 裡 tabId==='fanart'
+        // 時呼叫的 loadFanart()，就是由那個檔案提供。
 
-        async function loadFanart() {
-            if (fanartLoaded) return;
-            const grid = document.getElementById('fanartGrid');
-            if (!grid) return;
-            try {
-                // 使用瀏覽器預設快取，避免每次都消耗 GitHub unauthenticated rate limit (60 req/hr)
-                const res = await fetch(FANART_API, { cache: 'default' });
-                if (res.status === 403 || res.status === 429) {
-                    { const _d=(typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang]:I18N['zh-TW']; throw new Error((_d.github_rate||'GitHub API 速率限制，請稍後再試')+' (Rate limit)'); }
-                }
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const files = await res.json();
-                // files could be an object with a message property if rate limited
-                if (!Array.isArray(files)) {
-                    throw new Error(files.message || '回應格式錯誤');
-                }
-                const imgs = files.filter(f => /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name));
-                if (!imgs.length) throw new Error('資料夾內沒有圖片');
-                fanartLoaded = true;
-
-                // 填入統一燈箱的 fanart 群組
-                ulbGroups.fanart = imgs.map(f => FANART_RAW + encodeURIComponent(f.name));
-
-                grid.innerHTML = imgs.map((f, idx) => {
-                    const url = FANART_RAW + encodeURIComponent(f.name);
-                    const label = f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-                    return `<div onclick="ulbOpen('fanart',${idx})"
-                        class="glass-panel overflow-hidden rounded-2xl border border-pink-500/20 hover:border-pink-400/50 hover:scale-[1.02] transition-all duration-300 cursor-pointer group">
-                        <div class="aspect-square bg-black/30 overflow-hidden flex items-center justify-center">
-                            <img src="${url}" alt="${label}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                 loading="lazy"
-                                 onerror="this.parentElement.innerHTML='<i class=\\'fa-solid fa-image-slash text-3xl text-purple-400/20\\'></i>'">
-                        </div>
-                    </div>`;
-                }).join('') + `<div class="glass-panel overflow-hidden rounded-2xl border border-dashed border-purple-500/20 flex flex-col items-center justify-center aspect-square opacity-40">
-                    <i class="fa-solid fa-plus text-3xl text-purple-400/50 mb-2"></i>
-                    <p class="text-xs font-bold text-purple-200">等待更多寶物</p>
-                </div>`;
-            } catch(e) {
-                const isRateLimit = e.message.includes('Rate limit') || e.message.includes('rate limit') || e.message.includes('API rate limit exceeded');
-                grid.innerHTML = `<div class="col-span-full glass-panel p-8 text-center border border-dashed border-pink-500/20">
-                    <i class="fa-brands fa-github text-3xl text-purple-400/40 mb-3 block"></i>
-                    <p class="text-purple-300/60 text-sm font-bold mb-2">${isRateLimit ? ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].github_rate_short||'GitHub 請求次數已達上限':'GitHub 請求次數已達上限') : ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].badge_fail||'載入失敗':'載入失敗')}</p>
-                    <p class="text-xs text-purple-400/40 mb-4">${isRateLimit ? ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].github_rate_tip||'每小時最多 60 次請求，請稍後再重試。':'每小時最多 60 次請求，請稍後再重試。') : ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].error_prefix||'錯誤：':'錯誤：') + e.message}</p>
-                    <button onclick="fanartLoaded=false;document.getElementById('fanartGrid').innerHTML='<div class=\'col-span-full glass-panel p-8 text-center\'><i class=\'fa-solid fa-spinner fa-spin text-purple-400 text-2xl mb-3 block\'></i><p class=\'text-purple-200/60 text-sm\'>重新載入中⋯</p></div>';loadFanart();"
-                        class="px-4 py-2 bg-purple-600/40 hover:bg-purple-600/60 text-purple-200 text-xs font-bold rounded-xl border border-purple-500/30 transition-all">
-                        <i class="fa-solid fa-rotate-right mr-1"></i> 重新載入
-                    </button>
-                </div>`;
-            }
-        }
 
         // ==================== 動態貼圖 / Logo GIF 展示 ====================
         // 零閃爍核心原則：
@@ -1891,30 +1762,10 @@
         //   3. 無任何 opacity/visibility transition 作用在 GIF 的父層上
         //   4. 每個 img 用 transform:translateZ(0) 放入獨立 GPU compositing layer
 
-        const GIF_DATA = {
-            stickers: [
-                { src: 'https://drive.google.com/file/d/1QTFcN7bVfYEKJcBu29ZiB7Voi8aVA6EW/view?usp=drive_link',  label: '殘光不在',        sub: '繪師：殘光',    tags: ['動態貼圖', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicStickers/815418_750290.gif',  label: '紅妻戰鬥姿態',    sub: '繪師：紅妻',    tags: ['動態貼圖', '含特效動畫 +NT$250'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicStickers/240931_341304.gif',  label: '搖晃的莉比',      sub: '繪師：莉比Ribi', tags: ['動態貼圖', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicStickers/411719_225934.gif',  label: '羊毛團搖晃',      sub: '繪師：紅妻',    tags: ['動態貼圖', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicStickers/73214_46903.gif',   label: '生日快樂！楷KAI', sub: '繪師：馬恩斯',  tags: ['動態貼圖', '含特效動畫 +NT$250'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicStickers/798671_652807.gif',  label: '金穗偷看',        sub: '繪師：曉緋',    tags: ['動態貼圖', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicStickers/80740_176251.gif',   label: '潔諾搖晃',        sub: '繪師：潔諾',    tags: ['動態貼圖', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicStickers/399928_890637.gif',  label: '阿卡貓奔跑',      sub: '繪師：赤兔芽',  tags: ['動態貼圖', '含特效動畫 +NT$250'] },
-            ],
-            logos: [
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/725598_179142.gif',  label: '阿卡貓用 Logo',   sub: '', tags: ['動態 Logo', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/842497_993032.gif',  label: '花咲小春用 Logo', sub: '', tags: ['動態 Logo', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/506386_489301.gif',  label: '祤兒用 Logo',     sub: '', tags: ['動態 Logo', '含特效動畫 +NT$250'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/499991_926064.gif',  label: '緋奈用 Logo',     sub: '', tags: ['動態 Logo', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/332415_991716.gif',  label: '嘎冰用 Logo',     sub: '', tags: ['動態 Logo', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/182500_354262.gif',  label: '姆莉醬用 Logo',   sub: '', tags: ['動態 Logo', '含特效動畫 +NT$250'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/108371_241418.gif',  label: '音羽米奈用 Logo', sub: '', tags: ['動態 Logo', '標準方案'] },
-                { src: 'https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/HakkaNeko/DynamicLogo/SnowCatLogo.gif',    label: '雪奈喵用 Logo',   sub: '', tags: ['動態 Logo', '標準方案'] },
-            ]
-        };
-        const GIF_PER_PAGE = 4;
-        const gifPage = { stickers: 0, logos: 0 };
+        // ==================== 動態貼圖 / Logo GIF 展示：資料 ====================
+        // 已拆分至 portfolio-config.js（GIF_DATA/GIF_PER_PAGE），只有 portfolio.html
+        // 會載入這個檔案；gifPage（目前分頁狀態）搬到 portfolio-render.js 裡。
+
 
         // ==================== v29 功能一：一鍵複製委託需求清單 ====================
         /**
@@ -2112,186 +1963,10 @@
             });
         });
 
-        // ==================== v28 效能：GIF IntersectionObserver 視窗外凍結 ====================
-        // 當 GIF 卡片離開視窗時，清除 img.src（暫停 GIF 解碼佔用記憶體）
-        // 重新進入視窗時，復原 src 並顯示骨架屏直到載入完畢
-        // v30 修正：停用 GIF src 清除邏輯（會導致 GIF 在滾動時變空白）
-        // 改為僅保留骨架屏顯示，不清空 src
-        function initGifFreezeObserver() {
-            // 已停用：src 凍結會導致視窗外的 GIF 重新進入時短暫空白
-            // 直接使用 img.src + loading="lazy" 搭配 GPU layer 即可
-        }
+        // ==================== 動態貼圖 / Logo GIF 展示：渲染邏輯 ====================
+        // 已拆分至 portfolio-render.js（gifBuildAll/gifRenderPage/gifNav/gifEnsureInit），
+        // 只有 portfolio.html 會載入這個檔案。資料本身在 portfolio-config.js。
 
-        // 一次性建立所有卡片 DOM，img.src 只設一次
-        function gifBuildAll() {
-            // v27：初始化 IntersectionObserver
-            initGifFreezeObserver();
-
-            ['stickers', 'logos'].forEach(function(key) {
-                var grid  = document.getElementById('gif-grid-' + key);
-                if (!grid || grid.children.length > 0) return; // 已建立則跳過
-                var items = GIF_DATA[key];
-                var isS   = key === 'stickers';
-                var borderActive = isS ? 'rgba(52,211,153,0.35)' : 'rgba(251,191,36,0.35)';
-                var badgeBg = isS ? 'rgba(52,211,153,0.15)' : 'rgba(251,191,36,0.15)';
-
-                items.forEach(function(item, idx) {
-                    var card = document.createElement('div');
-                    card.style.cssText = [
-                        'background:#0f0720',
-                        'border:1px solid rgba(255,255,255,0.07)',
-                        'border-radius:1rem',
-                        'overflow:hidden',
-                        'cursor:default',
-                        'transition:border-color .25s,box-shadow .25s',
-                    ].join(';');
-                    card.onmouseenter = function() {
-                        this.style.borderColor = borderActive;
-                        this.style.boxShadow = '0 0 16px ' + (isS ? 'rgba(52,211,153,.12)' : 'rgba(251,191,36,.12)');
-                    };
-                    card.onmouseleave = function() {
-                        this.style.borderColor = 'rgba(255,255,255,0.07)';
-                        this.style.boxShadow = '';
-                    };
-                    // v28 燈箱回歸：點擊 GIF 卡片開啟純覆蓋燈箱（不含導覽點與箭頭）
-                    card.style.cursor = 'pointer';
-                    (function(captureKey, captureIdx) {
-                        card.onclick = function() { ulbOpen(captureKey, captureIdx); };
-                    })(key, idx);
-
-                    // ── v27 骨架屏容器 ──
-                    // 加入 gif-skeleton class 顯示微光，載入完成後移除
-                    var wrap = document.createElement('div');
-                    wrap.style.cssText = 'width:100%;aspect-ratio:1;background:#0c0618;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;';
-                    wrap.classList.add('gif-skeleton'); // 初始顯示骨架屏
-
-                    var img = document.createElement('img');
-                    img.alt = item.label;
-                    // v27：改用 loading="lazy"（原本是 eager）
-                    img.loading = 'lazy';
-                    // v27：新增 gif-img-fade class，初始透明，載入後淡入
-                    img.className = 'gif-img-fade';
-                    // 獨立 GPU layer：防止外層 scroll/repaint 干擾 GIF 解碼時序
-                    img.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;transform:translateZ(0);-webkit-transform:translateZ(0);position:relative;z-index:1;';
-                    img.onerror = function() {
-                        this.style.display = 'none';
-                        var p = this.parentElement;
-                        if (p) {
-                            p.classList.remove('gif-skeleton');
-                            p.innerHTML += '<i class="fa-solid fa-image" style="font-size:2rem;color:rgba(168,85,247,.25);position:absolute;"></i>';
-                        }
-                    };
-                    // v27：載入完成 → 移除骨架屏 + 淡入顯示
-                    img.onload = function() {
-                        this.classList.add('loaded');
-                        var p = this.parentElement;
-                        if (p) p.classList.remove('gif-skeleton');
-                    };
-                    // v33 修正：本頁作品展示以前一次會把「所有」貼圖/Logo 的 <img src>
-                    // 都設定好（即使當下分頁只顯示 GIF_PER_PAGE 張），導致一進頁面就
-                    // 同時對 GitHub 發出 stickers+logos 全部張數的圖片請求，
-                    // 這也是這個頁面明顯比其他頁面慢一步「還在補圖」的主因。
-                    // 現在改成：只有「目前分頁」內的圖片會立刻設定 src 開始下載，
-                    // 其餘分頁的圖片先存進 data-src，等使用者真的翻到那一頁
-                    // （gifRenderPage 內）才臨時補上 src，網路請求量從一次全部
-                    // 變成跟其他頁面一樣「每次只載入看得到的量」。
-                    if (idx < GIF_PER_PAGE) {
-                        img.src = item.src;
-                        img.dataset.loaded = '1';
-                    } else {
-                        img.dataset.src = item.src;
-                    }
-
-                    wrap.appendChild(img);
-
-                    // 文字標籤
-                    var info = document.createElement('div');
-                    info.style.cssText = 'padding:.55rem .7rem .65rem;text-align:center;';
-                    var labelEl = document.createElement('p');
-                    labelEl.textContent = item.label;
-                    labelEl.style.cssText = 'font-size:.72rem;font-weight:700;color:#e9d5ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:' + badgeBg + ';border-radius:.4rem;padding:.15rem .45rem;text-align:center;';
-                    info.appendChild(labelEl);
-                    if (item.sub) {
-                        var subEl = document.createElement('p');
-                        subEl.textContent = item.sub;
-                        subEl.style.cssText = 'font-size:.62rem;color:rgba(196,167,255,.45);margin-top:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;';
-                        info.appendChild(subEl);
-                    }
-                    // v30：移除「作品規格」標籤區塊，僅保留作品名稱與繪師資訊
-
-                    card.appendChild(wrap);
-                    card.appendChild(info);
-                    grid.appendChild(card);
-                });
-
-                // 初次顯示第 0 頁
-                gifRenderPage(key);
-            });
-        }
-
-        // 只改 display，絕不碰 img.src
-        function gifRenderPage(key) {
-            var grid    = document.getElementById('gif-grid-' + key);
-            var dotsEl  = document.getElementById('gif-dots-' + key);
-            if (!grid) return;
-            var cards   = grid.children;
-            var total   = GIF_DATA[key].length;
-            var pages   = Math.ceil(total / GIF_PER_PAGE);
-            var page    = gifPage[key];
-            var start   = page * GIF_PER_PAGE;
-            var end     = start + GIF_PER_PAGE;
-            var isS     = key === 'stickers';
-            var dotActive = isS ? '#34d399' : '#fbbf24';
-
-            for (var i = 0; i < cards.length; i++) {
-                var isVisible = (i >= start && i < end);
-                cards[i].style.display = isVisible ? '' : 'none';
-                // v33：翻頁翻到這一頁時才補上還沒載入的圖片 src（見 gifBuildAll 的說明）
-                if (isVisible) {
-                    var lazyImg = cards[i].querySelector('img');
-                    if (lazyImg && !lazyImg.dataset.loaded && lazyImg.dataset.src) {
-                        lazyImg.src = lazyImg.dataset.src;
-                        lazyImg.dataset.loaded = '1';
-                    }
-                }
-            }
-
-            // 圓點分頁
-            dotsEl.innerHTML = '';
-            for (var p = 0; p < pages; p++) {
-                (function(pi) {
-                    var dot = document.createElement('span');
-                    dot.style.cssText = 'display:inline-block;width:8px;height:8px;border-radius:50%;cursor:pointer;transition:background .2s,transform .2s;background:' +
-                        (pi === page ? dotActive : 'rgba(255,255,255,.2)') + ';' +
-                        (pi === page ? 'transform:scale(1.3);' : '');
-                    dot.onclick = function() { gifPage[key] = pi; gifRenderPage(key); };
-                    dotsEl.appendChild(dot);
-                })(p);
-            }
-        }
-
-        function gifNav(key, dir) {
-            var pages = Math.ceil(GIF_DATA[key].length / GIF_PER_PAGE);
-            var next  = gifPage[key] + dir;
-            if (next < 0 || next >= pages) return;
-            gifPage[key] = next;
-            gifRenderPage(key);
-        }
-
-        // GIF 立即初始化：page-portfolio 從頁面載入就在 DOM 中渲染（gif-hidden 只用 visibility 隱藏）
-        // 提早建立 img 讓 GIF 開始解碼，切換到 portfolio 時已在持續播放，不會閃爍
-        var _gifBuilt = false;
-        function gifEnsureInit() {
-            if (_gifBuilt) return;
-            _gifBuilt = true;
-            gifBuildAll();
-        }
-        // 頁面 DOMContentLoaded 後立刻 init，使 GIF 在背景持續解碼
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() { gifEnsureInit(); });
-        } else {
-            gifEnsureInit();
-        }
 
         // ==================== 回到頂部 (v28 rAF 節流) ====================
         // 原本的 scroll listener 每幀觸發 60-120 次，改用 requestAnimationFrame 節流

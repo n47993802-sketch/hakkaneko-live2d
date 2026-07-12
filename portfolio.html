@@ -506,5 +506,9 @@
     <script src="locales/ja.js"></script>
     <script src="effects/meteor-bg.js"></script>
     <script src="common.js"></script>
+    <!-- 作品展示（動態貼圖／動態Logo）資料＋渲染邏輯：只有這一頁需要，
+         載入順序要在 common.js 之後（需要用到 common.js 的 ulbOpen 燈箱系統）。 -->
+    <script src="portfolio-config.js"></script>
+    <script src="portfolio-render.js"></script>
 </body>
 </html>

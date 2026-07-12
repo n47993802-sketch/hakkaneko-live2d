@@ -347,5 +347,8 @@
     <script src="locales/ja.js"></script>
     <script src="effects/meteor-bg.js"></script>
     <script src="common.js"></script>
+    <!-- 二創展示載入邏輯：只有這一頁需要，載入順序要在 common.js 之後
+         （需要用到 common.js 的 ulbGroups/ulbOpen 燈箱系統與 I18N 字典）。 -->
+    <script src="fanart-render.js"></script>
 </body>
 </html>

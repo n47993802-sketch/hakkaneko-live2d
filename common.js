@@ -2187,10 +2187,20 @@
                         var p = this.parentElement;
                         if (p) p.classList.remove('gif-skeleton');
                     };
-                    // v30 修正：直接設定 src，搭配 loading="lazy" 與 GPU 加速
-                    // （移除 data-gif-src + IntersectionObserver 凍結邏輯，避免 gif-hidden 初始狀態時
-                    //   Observer 永不觸發導致 src 始終為空的問題）
-                    img.src = item.src;
+                    // v33 修正：本頁作品展示以前一次會把「所有」貼圖/Logo 的 <img src>
+                    // 都設定好（即使當下分頁只顯示 GIF_PER_PAGE 張），導致一進頁面就
+                    // 同時對 GitHub 發出 stickers+logos 全部張數的圖片請求，
+                    // 這也是這個頁面明顯比其他頁面慢一步「還在補圖」的主因。
+                    // 現在改成：只有「目前分頁」內的圖片會立刻設定 src 開始下載，
+                    // 其餘分頁的圖片先存進 data-src，等使用者真的翻到那一頁
+                    // （gifRenderPage 內）才臨時補上 src，網路請求量從一次全部
+                    // 變成跟其他頁面一樣「每次只載入看得到的量」。
+                    if (idx < GIF_PER_PAGE) {
+                        img.src = item.src;
+                        img.dataset.loaded = '1';
+                    } else {
+                        img.dataset.src = item.src;
+                    }
 
                     wrap.appendChild(img);
 
@@ -2234,7 +2244,16 @@
             var dotActive = isS ? '#34d399' : '#fbbf24';
 
             for (var i = 0; i < cards.length; i++) {
-                cards[i].style.display = (i >= start && i < end) ? '' : 'none';
+                var isVisible = (i >= start && i < end);
+                cards[i].style.display = isVisible ? '' : 'none';
+                // v33：翻頁翻到這一頁時才補上還沒載入的圖片 src（見 gifBuildAll 的說明）
+                if (isVisible) {
+                    var lazyImg = cards[i].querySelector('img');
+                    if (lazyImg && !lazyImg.dataset.loaded && lazyImg.dataset.src) {
+                        lazyImg.src = lazyImg.dataset.src;
+                        lazyImg.dataset.loaded = '1';
+                    }
+                }
             }
 
             // 圓點分頁

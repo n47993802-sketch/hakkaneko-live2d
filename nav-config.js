@@ -11,13 +11,19 @@
 
    欄位說明：
    - id        : 對應頁面檔名（不含 .html），也用來判斷目前所在分頁
-   - href      : 點擊後要跳轉的頁面檔名
+   - href      : 點擊後要跳轉的頁面路徑，一律用「從網站根目錄算起」的
+                 路徑寫（例如 'commission/rules/rules.html'），
+                 不要自己加 ../ 之類的相對符號——nav-render.js 會自動
+                 依照目前頁面所在的深度，補上正確的 ../ 前綴
+                 （靠每個頁面 <body> 開頭的 window.SITE_BASE 變數判斷）。
    - icon      : Font Awesome icon class（不含 fa-solid）
    - label     : 對應 locales/*.js 裡的翻譯 key（data-i18n）
    - text      : 語言包尚未套用前的預設顯示文字（繁中，避免閃爍空白）
    - color     : （僅下拉選單子項目使用）icon 顏色 class
    - enabled   : false = 從導覽列隱藏該分頁（頁面檔案本身不會被刪除，
-                 直接輸入網址仍可以開啟）
+                 直接輸入網址仍可以開啟；如果想連直接輸入網址都一併
+                 擋掉，nav-render.js 也會在頁面載入時檢查這個開關，
+                 是 false 的話會自動導回首頁，見該檔案內的說明）
    - dropdown  : true 代表這是一個下拉選單群組，內含 items 陣列
    ============================================================ */
 window.NAV_CONFIG = [
@@ -28,11 +34,11 @@ window.NAV_CONFIG = [
     {
         id: 'comm', dropdown: true, icon: 'fa-file-contract', label: 'nav_commission', text: '委託資訊', enabled: true,
         items: [
-            { id: 'rules',    href: 'rules.html',    icon: 'fa-book-open',           color: 'text-blue-400',    label: 'nav_rules',    text: '流程與規範', enabled: true },
-            { id: 'core',     href: 'core.html',      icon: 'fa-wand-magic-sparkles', color: 'text-purple-400',  label: 'nav_core',     text: 'V皮設計',    enabled: true },
-            { id: 'anim',     href: 'anim.html',      icon: 'fa-film',                color: 'text-pink-400',    label: 'nav_anim',     text: '動畫設計',    enabled: true },
+            { id: 'rules',    href: 'commission/rules/rules.html',       icon: 'fa-book-open',           color: 'text-blue-400',    label: 'nav_rules',    text: '流程與規範', enabled: true },
+            { id: 'core',     href: 'commission/core/core.html',         icon: 'fa-wand-magic-sparkles', color: 'text-purple-400',  label: 'nav_core',     text: 'V皮設計',    enabled: true },
+            { id: 'anim',     href: 'commission/anim/anim.html',         icon: 'fa-film',                color: 'text-pink-400',    label: 'nav_anim',     text: '動畫設計',    enabled: true },
             // 範例：想暫時關閉「聯名模板」分頁，只要把下面這行改成 enabled: false
-            { id: 'template', href: 'template.html',  icon: 'fa-shirt',               color: 'text-fuchsia-400', label: 'nav_template', text: '聯名模板',   enabled: false },
+            { id: 'template', href: 'commission/template/template.html', icon: 'fa-shirt',               color: 'text-fuchsia-400', label: 'nav_template', text: '聯名模板',   enabled: false },
         ]
     },
 
@@ -41,10 +47,10 @@ window.NAV_CONFIG = [
         id: 'creative', dropdown: true, icon: 'fa-star', label: 'nav_creative', text: '創作空間', enabled: true,
         items: [
             // live2d-demo 目前暫時關閉（沿用原本的設定）
-            { id: 'live2d-demo', href: 'live2d-demo.html', icon: 'fa-person-rays', color: 'text-blue-400',   label: 'nav_live2d_demo', text: '角色互動', enabled: false },
-            { id: 'portfolio',   href: 'portfolio.html',   icon: 'fa-photo-film',  color: 'text-emerald-400', label: 'nav_portfolio',   text: '作品展示', enabled: true },
-            { id: 'channels',    href: 'channels.html',    icon: 'fa-heart',       color: 'text-pink-400',    label: 'nav_channels',    text: '推薦頻道', enabled: true },
-            { id: 'fanart',      href: 'fanart.html',      icon: 'fa-star',        color: 'text-yellow-400',  label: 'nav_fanart',      text: '二創展示', enabled: true },
+            { id: 'live2d-demo', href: 'creative/live2d-demo/live2d-demo.html', icon: 'fa-person-rays', color: 'text-blue-400',   label: 'nav_live2d_demo', text: '角色互動', enabled: false },
+            { id: 'portfolio',   href: 'creative/portfolio/portfolio.html',     icon: 'fa-photo-film',  color: 'text-emerald-400', label: 'nav_portfolio',   text: '作品展示', enabled: true },
+            { id: 'channels',    href: 'creative/channels/channels.html',      icon: 'fa-heart',       color: 'text-pink-400',    label: 'nav_channels',    text: '推薦頻道', enabled: true },
+            { id: 'fanart',      href: 'creative/fanart/fanart.html',          icon: 'fa-star',        color: 'text-yellow-400',  label: 'nav_fanart',      text: '二創展示', enabled: true },
         ]
     },
 ];

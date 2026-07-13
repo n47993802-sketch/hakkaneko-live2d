@@ -16,8 +16,21 @@
    先執行，畫出來的結果都完全相同，不會有兩邊邏輯不同步的問題。
 
    載入順序要求（每個頁面都已經照這個順序寫好）：
-       <script src="nav-config.js"></script>   ← 先提供 window.NAV_CONFIG
-       <script src="nav-render.js"></script>   ← 再用這份設定畫出導覽列
+       <script>window.SITE_BASE = '...';</script>  ← 見下方說明
+       <script src="nav-config.js"></script>       ← 先提供 window.NAV_CONFIG
+       <script src="nav-render.js"></script>       ← 再用這份設定畫出導覽列
+
+   關於 window.SITE_BASE（資料夾重新分類後新增）：
+   - nav-config.js 裡的 href 都是「從網站根目錄算起」的路徑，例如
+     'commission/rules/rules.html'。但頁面實際上有兩種深度：
+     index.html／artists.html 在根目錄，其餘 8 個頁面都在
+     commission/xxx/ 或 creative/xxx/ 底下（多兩層）。
+   - 每個頁面的 <body> 一開頭都寫了 window.SITE_BASE：根目錄頁面是
+     ''，其餘頁面是 '../../'。這裡產生連結時，一律讀取這個值
+     當作前綴，這樣同一份 nav-config.js／nav-render.js 才能讓
+     「所有頁面」都連到正確的相對路徑，不用為每個深度各寫一份。
+   - 之後如果又新增更深一層的資料夾，切記要同步在該頁面補上
+     正確的 window.SITE_BASE（例如三層深就是 '../../../'）。
    ============================================================ */
 (function () {
     function currentPageId() {
@@ -28,16 +41,22 @@
 
     function escAttr(s) { return String(s == null ? '' : s); }
 
+    // 把 nav-config.js 裡「根目錄算起」的 href，補上目前頁面對應的
+    // ../ 前綴，變成瀏覽器可以直接使用的相對路徑。
+    function withBase(href) {
+        return (window.SITE_BASE || '') + escAttr(href);
+    }
+
     function buildChildItem(item) {
         var iconHtml = item.icon
             ? '<i class="fa-solid ' + escAttr(item.icon) + (item.color ? ' ' + escAttr(item.color) : '') + ' w-4"></i> '
             : '';
-        return '<button onclick="location.href=\'' + escAttr(item.href) + '\'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">'
+        return '<button onclick="location.href=\'' + withBase(item.href) + '\'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">'
             + iconHtml + '<span data-i18n="' + escAttr(item.label) + '">' + escAttr(item.text) + '</span></button>';
     }
 
     function buildTopButton(item) {
-        return '<button onclick="location.href=\'' + escAttr(item.href) + '\'" id="tab-' + escAttr(item.id) + '" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">'
+        return '<button onclick="location.href=\'' + withBase(item.href) + '\'" id="tab-' + escAttr(item.id) + '" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">'
             + '<i class="fa-solid ' + escAttr(item.icon) + '"></i><span class="inline" data-i18n="' + escAttr(item.label) + '">' + escAttr(item.text) + '</span></button>';
     }
 
@@ -53,6 +72,39 @@
             + itemsHtml + '</div></div>';
     }
 
+    // 找出目前頁面在 NAV_CONFIG 裡對應的那個項目（不論是頂層項目，
+    // 還是某個下拉選單裡的子項目），找不到就回傳 null。
+    function findCurrentEntry(config, pageId) {
+        for (var i = 0; i < config.length; i++) {
+            var entry = config[i];
+            if (entry.dropdown) {
+                var items = entry.items || [];
+                for (var j = 0; j < items.length; j++) {
+                    if (items[j].id === pageId) return items[j];
+                }
+            } else if (entry.id === pageId) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    // v35 新增：頁面本身的隱藏保護。
+    // 之前 enabled:false 只讓分頁「不出現在導覽列」，但直接輸入網址
+    // 還是打得開（例如 live2d-demo.html）。現在改成：頁面載入時
+    // 也會檢查自己在 nav-config.js 裡是不是 enabled:false，如果是，
+    // 就直接導回首頁，不會讓人看到還沒做完、不打算公開的頁面內容。
+    // 想暫時繼續測試某個關閉中的頁面，把 nav-config.js 對應項目的
+    // enabled 暫時改回 true 即可（跟原本「恢復顯示」的做法一致）。
+    function enforceDisabledPageGuard(config) {
+        var pageId = currentPageId();
+        if (pageId === 'intro') return; // 首頁必定開放，不需要檢查
+        var entry = findCurrentEntry(config, pageId);
+        if (entry && entry.enabled === false) {
+            location.replace((window.SITE_BASE || '') + 'index.html');
+        }
+    }
+
     function renderMainNav() {
         var nav = document.getElementById('mainNav');
         var config = window.NAV_CONFIG;
@@ -61,6 +113,8 @@
             console.error('[nav-render] window.NAV_CONFIG 尚未定義，請確認 nav-config.js 有在 nav-render.js 之前載入');
             return;
         }
+
+        enforceDisabledPageGuard(config);
 
         var html = '';
         var groupOfChild = {}; // 子分頁 id -> 所屬下拉選單 id（用來做 active 高亮）

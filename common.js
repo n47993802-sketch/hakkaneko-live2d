@@ -40,16 +40,22 @@
 
         function escAttr(s) { return String(s == null ? '' : s); }
 
+        // 跟 nav-render.js 一樣：把 nav-config.js 裡「根目錄算起」的 href
+        // 補上目前頁面對應的 ../ 前綴（見 nav-render.js 開頭的說明）。
+        function withBase(href) {
+            return (window.SITE_BASE || '') + escAttr(href);
+        }
+
         function buildChildItem(item) {
             var iconHtml = item.icon
                 ? '<i class="fa-solid ' + escAttr(item.icon) + (item.color ? ' ' + escAttr(item.color) : '') + ' w-4"></i> '
                 : '';
-            return '<button onclick="location.href=\'' + escAttr(item.href) + '\'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">'
+            return '<button onclick="location.href=\'' + withBase(item.href) + '\'" class="w-full text-left px-4 py-2.5 rounded-xl text-sm text-purple-200 hover:bg-white/8 hover:text-white flex items-center gap-2 transition-colors">'
                 + iconHtml + '<span data-i18n="' + escAttr(item.label) + '">' + escAttr(item.text) + '</span></button>';
         }
 
         function buildTopButton(item) {
-            return '<button onclick="location.href=\'' + escAttr(item.href) + '\'" id="tab-' + escAttr(item.id) + '" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">'
+            return '<button onclick="location.href=\'' + withBase(item.href) + '\'" id="tab-' + escAttr(item.id) + '" class="tab-btn px-4 py-2 md:px-5 md:py-2.5 rounded-xl font-bold text-sm text-purple-300 hover:bg-white/5 flex items-center gap-2">'
                 + '<i class="fa-solid ' + escAttr(item.icon) + '"></i><span class="inline" data-i18n="' + escAttr(item.label) + '">' + escAttr(item.text) + '</span></button>';
         }
 
@@ -65,6 +71,30 @@
                 + itemsHtml + '</div></div>';
         }
 
+        function findCurrentEntry(config, pageId) {
+            for (var i = 0; i < config.length; i++) {
+                var entry = config[i];
+                if (entry.dropdown) {
+                    var items = entry.items || [];
+                    for (var j = 0; j < items.length; j++) {
+                        if (items[j].id === pageId) return items[j];
+                    }
+                } else if (entry.id === pageId) {
+                    return entry;
+                }
+            }
+            return null;
+        }
+
+        function enforceDisabledPageGuard(config) {
+            var pageId = currentPageId();
+            if (pageId === 'intro') return;
+            var entry = findCurrentEntry(config, pageId);
+            if (entry && entry.enabled === false) {
+                location.replace((window.SITE_BASE || '') + 'index.html');
+            }
+        }
+
         function renderMainNav() {
             var nav = document.getElementById('mainNav');
             var config = window.NAV_CONFIG;
@@ -73,6 +103,8 @@
                 console.error('[nav] window.NAV_CONFIG 尚未定義，請確認 nav-config.js 有在 common.js 之前載入');
                 return;
             }
+
+            enforceDisabledPageGuard(config);
 
             var html = '';
             var groupOfChild = {}; // 子分頁 id -> 所屬下拉選單 id（用來做 active 高亮）
@@ -416,20 +448,8 @@
 
         // ---- FAQ Accordion ----
 
-        function toggleFaq(btn) {
-            const body = btn.nextElementSibling;
-            const arrow = btn.querySelector('.faq-arrow');
-            const isOpen = !body.classList.contains('hidden');
-            // 關閉所有已開啟的項目
-            document.querySelectorAll('.faq-body').forEach(b => b.classList.add('hidden'));
-            document.querySelectorAll('.faq-arrow').forEach(a => a.style.transform = '');
-            // 若點擊的是已關閉的，才展開它
-            if (!isOpen) {
-                body.classList.remove('hidden');
-                arrow.style.transform = 'rotate(180deg)';
-                setTimeout(() => body.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
-            }
-        }
+        // toggleFaq() 已拆分至 rules-render.js，只有 rules.html 會載入這個檔案。
+
 
         function switchTab(tabId) {
             if (tabId === undefined) return;
@@ -1053,7 +1073,7 @@
          * 若當前已在 rules 頁，則直接平滑捲動到頁面頂端。
          */
         function scrollToRules() {
-            if (!document.getElementById('page-rules')) { window.location.href = 'rules.html'; return; }
+            if (!document.getElementById('page-rules')) { window.location.href = (window.SITE_BASE || '') + 'commission/rules/rules.html'; return; }
             switchTab('rules');
             // switchTab 已呼叫 window.scrollTo({top:0}), 此處再補一次確保動畫
             setTimeout(function() {

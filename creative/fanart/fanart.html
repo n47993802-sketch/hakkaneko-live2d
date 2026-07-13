@@ -15,7 +15,7 @@
     </script>
         <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/gif" href="images/common/hakkaneko-pixel.gif">
+    <link rel="icon" type="image/gif" href="../../images/common/hakkaneko-pixel.gif">
     <meta name="description" content="阿卡貓 HakkaNeko 的 Live2D 專業建模委託網站。提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
     <meta name="keywords" content="Live2D, VTuber, 建模, 委託, 阿卡貓, HakkaNeko, 動畫設計, 模型製作">
     <meta name="author" content="阿卡貓 HakkaNeko">
@@ -69,7 +69,7 @@
         }
     })();
     </script>
-    <link rel="stylesheet" href="tailwind.min.css">
+    <link rel="stylesheet" href="../../tailwind.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
         <!-- DNS prefetch for external resources -->
@@ -82,10 +82,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="../../common.css">
 </head>
 <body class="antialiased min-h-screen pb-12 loading">
-    <script>window.SITE_BASE = '';</script>
+    <script>window.SITE_BASE = '../../';</script>
     <script>
     // 提早套用日夜模式，避免「切換分頁時先閃一下深色、才變回淺色」的問題。
     // 原本這段邏輯放在 common.js 裡，但 common.js 要等到 <body> 最底部
@@ -105,7 +105,7 @@
     </script>
     <!-- ── RPG Loader ── -->
     <div id="rpgLoader">
-        <img id="rpgCatImg" src="images/common/hakkaneko-pixel.gif" alt="HakkaNeko" style="width:64px;height:64px;image-rendering:pixelated;image-rendering:crisp-edges;">
+        <img id="rpgCatImg" src="../../images/common/hakkaneko-pixel.gif" alt="HakkaNeko" style="width:64px;height:64px;image-rendering:pixelated;image-rendering:crisp-edges;">
         <div class="rpg-title">HakkaNeko · Live2D</div>
         <div class="rpg-bar-wrap">
             <div class="rpg-bar-fill" id="rpgBarFill"></div>
@@ -125,7 +125,7 @@
     <header class="pt-16 pb-8 text-center relative z-10">
         <div class="max-w-5xl mx-auto px-4">
             <h1 class="text-4xl md:text-5xl font-black mb-3 tracking-tight v2-title">
-                <img src="images/common/hakkaneko-pixel.gif" alt="阿卡貓" style="width:1em;height:1em;vertical-align:-0.15em;image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;" class="mr-2">
+                <img src="../../images/common/hakkaneko-pixel.gif" alt="阿卡貓" style="width:1em;height:1em;vertical-align:-0.15em;image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;" class="mr-2">
                 <span class="text-gradient" data-i18n="name_brand">阿卡貓</span><span data-i18n="header_title"> 的 Live2D 委託</span>
             </h1>
             <p class="text-base md:text-lg text-purple-300/70 font-medium tracking-widest mb-5" data-i18n="header_sub">
@@ -135,9 +135,9 @@
             <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
             <!-- 導覽列設定＋渲染：緊跟在 <nav> 容器後面、同步載入，
                  讓按鈕在畫面第一次繪製前就已經填好，避免空白容器閃爍 -->
-            <script src="site-config.js"></script>
-            <script src="nav-config.js"></script>
-            <script src="nav-render.js"></script>
+            <script src="../../site-config.js"></script>
+            <script src="../../nav-config.js"></script>
+            <script src="../../nav-render.js"></script>
         </div>
     </header>
 
@@ -181,117 +181,109 @@
 
     <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div id="page-intro" class="page-content block max-w-5xl mx-auto space-y-12">
-            <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                <div class="md:col-span-4 text-center">
-                    <div class="relative inline-block">
-                        <img loading="lazy" src="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png" alt="阿卡貓"
-                            class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-purple-500/30 object-cover shadow-2xl mx-auto avatar-click"
-                            onclick="showBubble(this, 'intro'); playIntroSound()" id="introAvatar">
-                        <div class="absolute -bottom-2 right-4 bg-purple-600 px-4 py-1 rounded-full text-xs font-bold text-white shadow-lg">LIVE2D MENTOR</div>
-                    </div>
-                </div>
-                <div class="md:col-span-8 space-y-4">
-                    <h1 class="text-4xl font-black text-gradient" data-i18n="name_display">阿卡貓 (HakkaNeko)</h1>
-                    <p class="text-xl text-gray-300" data-i18n="intro_role">個人接案建模師 · Live2D 導師</p>
-                    <p class="text-gray-400 leading-relaxed" data-i18n="intro_bio">
-                        自 2021 年起投入 Live2D 建模領域，不僅致力於商業委託，更在現實中擔任導師傳承技術。累計完成超過 1000 件委託，熱愛在 X 與同好交流、分享創作心得。憑藉對細節的極致追求與創意思維，我期待能與各類繪師攜手，賦予平面角色生動的靈魂。
-                    </p>
-                    <div class="flex flex-wrap gap-3 items-center">
-                        <a href="https://x.com/HakkaNekoLive2D" target="_blank" rel="noopener noreferrer" class="text-3xl text-purple-400 hover:text-white transition" title="X"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="https://www.twitch.tv/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="text-3xl text-purple-500 hover:text-[#9146ff] transition" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
-                        <!-- <span class="material-symbols-outlined" aria-hidden="true">build</span> 委託狀態：IS_COMMISSION_OPEN = true 開放中 / false 暫停中 -->
-                        <span id="commissionBadge" class="text-sm px-3 py-1.5 rounded-md flex items-center gap-2 font-bold"></span>
-                        <!-- 直播狀態 -->
-                        <span id="twitterLiveBadge" class="text-sm px-3 py-1.5 rounded-md flex items-center gap-2 font-bold bg-gray-500/20 text-gray-400">
-                            <span id="liveDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
-                            <span id="liveText">Twitch 未直播</span>
-                        </span>
-                    </div>
-                </div>
-            </section>
+    <div id="page-fanart" class="page-content block max-w-4xl mx-auto px-4 pb-16 space-y-10">
 
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-panel p-6">
-                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-graduation-cap text-purple-400"></i> <span data-i18n="intro_education">學習經歷</span>
-                    </h3>
-                    <ul class="space-y-3 text-sm text-gray-400">
-                        <li class="flex justify-between items-center pb-2 border-b border-white/5"><span data-i18n="edu_soda1">SodaArt 建模班五、六期生</span><a href="https://x.com/SODAART_class" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-white transition"><span data-i18n="edu_link">連結</span> <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a></li>
-                        <li class="flex justify-between items-center pb-2 border-b border-white/5"><span data-i18n="edu_soda2">SodaArt 動畫班二、三期生</span><a href="https://x.com/mimiandrairai" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-white transition"><span data-i18n="edu_link">連結</span> <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a></li>
-                        <li class="pt-1 text-purple-200" data-i18n="edu_soda3">SodaArt 創作技巧延伸班一期生</li>
-                    </ul>
-                </div>
-                <div class="glass-panel p-6">
-                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-award text-yellow-500"></i> <span data-i18n="intro_achievements">特殊成就</span>
-                    </h3>
-                    <div class="space-y-2 p-4 bg-white/5 rounded-xl border border-white/5 mb-3">
-                        <p class="text-base font-bold text-gray-200" data-i18n="ach_juku_title">Live2D JUKU 公式 創作展示</p>
-                        <p class="text-xs text-purple-300" data-i18n="ach_juku_date">日期：2025 / 03 / 26</p>
-                        <a href="https://x.com/HakkaNekoLive2D/status/1904751322123165795" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-sm text-blue-400 hover:text-white transition font-medium" data-i18n="ach_view_btn">查看展示作品 <i class="fa-solid fa-arrow-right ml-1"></i></a>
-                    </div>
-                    <button onclick="location.href='creative/portfolio/portfolio.html'"
-                        class="w-full mt-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/25 border border-purple-500/25 hover:border-purple-400/50 text-purple-300 hover:text-white text-sm font-bold transition-all">
-                        <i class="fa-solid fa-photo-film text-emerald-400"></i>
-                        <span data-i18n="ach_portfolio_btn">前往創作空間查看更多作品</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                    </button>
-                </div>
-            </section>
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-black text-gradient mb-3" data-i18n="fanart_title">二創展示</h2>
+            <p class="text-purple-200/60 text-sm" data-i18n="fanart_desc">感謝大家的二創！每一份都是最棒的禮物 <span class="material-symbols-outlined" aria-hidden="true">favorite</span></p>
+        </div>
 
-            <section class="space-y-6">
-                <h2 class="text-2xl font-bold text-center text-white" data-i18n="intro_services_title">提供的專業服務</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-user-astronaut"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_live2d">V皮設計</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_live2d_desc">提供 VTuber 模型製作，支援面部捕捉與滑鼠追蹤。</p>
-                    </div>
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-film"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_anim">動畫設計</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_anim_desc">動態 Logo、貼圖、PV 及遊戲 CG 動畫設計。</p>
-                    </div>
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-comments"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_consult">Live2D 顧問</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_consult_desc">諮詢協助、VTubeStudio 與 OBS 直播環境設定。</p>
-                    </div>
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-file-code"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_project">專案檔加購</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_project_desc">委託後可選擇買斷工程原始檔（不單單販售）。</p>
+        <!-- 角色設定 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 阿卡貓 -->
+            <div class="glass-panel p-6 rounded-3xl border border-purple-500/20">
+                <h3 class="text-lg font-black text-gradient mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-cat text-pink-400"></i> <span class="deco-star">✧</span><span data-i18n="fanart_chara1">【阿卡貓】角色設定</span>
+                </h3>
+                <div class="space-y-2 text-sm text-purple-200/80 leading-relaxed">
+                    <div class="flex gap-3"><span class="text-purple-400 font-bold w-16 shrink-0" data-i18n="char_height">身高</span><span>174 <span data-i18n="char_height_unit">公分</span></span></div>
+                    <div class="flex gap-3"><span class="text-purple-400 font-bold w-16 shrink-0" data-i18n="char_birthday">生日</span><span>08 / 19</span></div>
+                    <div class="flex gap-3"><span class="text-purple-400 font-bold w-16 shrink-0" data-i18n="char_gender">性別</span><span data-i18n="char_male">男性</span></div>
+                    <div class="pt-2 border-t border-white/10 text-purple-200/70 leading-relaxed">
+                        <span data-i18n="char1_desc">誤入奇幻世界的普通男孩，能夠召喚〈駭客面板〉這個工具對現實進行一定的修改，有〈貓球〉這個小夥伴會一起陪伴冒險。</span>
                     </div>
                 </div>
-            </section>
-
-            <section class="glass-panel p-8 bg-gradient-to-br from-purple-900/20 to-transparent border-purple-500/20">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="flex-1 space-y-4">
-                        <h2 class="text-2xl font-bold text-white" data-i18n="collab_title">專業繪師合作一條龍</h2>
-                        <p class="text-gray-300 leading-relaxed" data-i18n="collab_desc">
-                            雖然我不直接從事繪畫，但我與多位優秀專業繪師長期配合，能為您提供從「角色設計」到「建模完成」的全方位服務。無論是簡單風格還是極致精細，皆能滿足您的需求。
-                        </p>
-                        <ul class="text-sm text-purple-300 space-y-2 mt-4 font-medium">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-emerald-400"></i> <span data-i18n="collab_point1">多樣化畫風選擇，量身打造</span></li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-emerald-400"></i> <span data-i18n="collab_point2">溝通無礙，配合度高</span></li>
-                        </ul>
-                        <button onclick="location.href='artists.html'" class="mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white rounded-xl font-bold shadow-lg shadow-purple-500/30 transition-all flex items-center gap-2">
-                            <span data-i18n="collab_btn">前往查看合作繪師</span> <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                    <div class="w-full md:w-80 shrink-0 relative">
-                        <img loading="lazy" src="https://pbs.twimg.com/media/G8rR_qlbMAIdiz0?format=png&name=small"
-                            class="rounded-2xl shadow-[0_10px_40px_rgba(139,92,246,0.3)] border border-white/10 w-full object-cover avatar-click"
-                            onclick="showBubble(this, 'collab'); playBonk()" id="collabAvatar"
-                            onerror="this.onerror=null;this.src='https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png'" alt="">
-                        <p class="text-xs text-center text-purple-400/50 mt-2" data-i18n="intro_click_tip"><span class="material-symbols-outlined" aria-hidden="true">touch_app</span> 點我試試看！</p>
+            </div>
+            <!-- 阿卡咪 -->
+            <div class="glass-panel p-6 rounded-3xl border border-pink-500/20">
+                <h3 class="text-lg font-black mb-4 flex items-center gap-2" style="background:linear-gradient(135deg,#f9a8d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    <i class="fa-solid fa-cat text-pink-400"></i> <span class="deco-star">✧</span><span data-i18n="fanart_chara2">【阿卡咪】角色設定（虛擬）</span>
+                </h3>
+                <div class="space-y-2 text-sm text-purple-200/80 leading-relaxed">
+                    <div class="flex gap-3"><span class="text-pink-400 font-bold w-16 shrink-0" data-i18n="char_height">身高</span><span class="text-purple-300/50">--- <span data-i18n="char_height_unit">公分</span></span></div>
+                    <div class="flex gap-3"><span class="text-pink-400 font-bold w-16 shrink-0" data-i18n="char_birthday">生日</span><span class="text-purple-300/50">-- / --</span></div>
+                    <div class="flex gap-3"><span class="text-pink-400 font-bold w-16 shrink-0" data-i18n="char_gender">性別</span><span data-i18n="char_female">女性</span></div>
+                    <div class="pt-2 border-t border-white/10 text-purple-200/70 leading-relaxed">
+                        <span data-i18n="char2_desc">沒有過多資訊，只知道是莫名突然出現的特殊角色....？</span>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-        </div><!-- end page-intro -->
+        <!-- 二創規範 -->
+        <div class="glass-panel p-6 rounded-3xl border border-yellow-500/20 bg-yellow-400/5">
+            <h3 class="text-lg font-bold text-yellow-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-scroll text-yellow-400"></i> <span class="deco-star">✧</span> <span data-i18n="fanart_rules_title">二創資訊</span>
+            </h3>
+            <div class="space-y-2 text-sm leading-relaxed">
+                <p class="flex items-start gap-2 text-red-300"><i class="fa-solid fa-ban mt-0.5 shrink-0 text-red-400"></i><span data-i18n="fanart_ban1">【禁止】過度血腥、NSFW（除非有經過我允許）</span></p>
+                <p class="flex items-start gap-2 text-red-300"><i class="fa-solid fa-ban mt-0.5 shrink-0 text-red-400"></i><span data-i18n="fanart_ban2">【禁止】歪曲角色設定（不限服裝）</span></p>
+                <p class="flex items-start gap-2 text-emerald-300 mt-3"><i class="fa-solid fa-check-circle mt-0.5 shrink-0 text-emerald-400"></i><span data-i18n="fanart_ok">歡迎各位有趣二創，我這邊有看到也會轉發。</span></p>
+                <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-3 bg-white/5 rounded-xl p-3">
+                    <i class="fa-brands fa-x-twitter text-blue-400 text-lg shrink-0"></i>
+                    <div>
+                        <p class="text-xs text-purple-300/60 mb-0.5" data-i18n="fanart_tag_label">推特 Tag 資訊</p>
+                        <a href="https://x.com/search?q=%23%E9%98%BF%E6%8D%8F%E5%8D%A1%E5%A5%BD" target="_blank" rel="noopener noreferrer" class="font-black text-blue-300 hover:text-white transition text-base">#阿捏卡好</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分隔線 -->
+        <div class="flex items-center gap-4 py-2">
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+            <span class="text-purple-400/60 text-xs font-bold tracking-widest px-2" data-i18n="fanart_treasures_label"><span class="deco-star">✦</span> 我的寶物 <span class="deco-star">✦</span></span>
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+        </div>
+
+        <!-- 我的寶物 -->
+        <section>
+            <div class="flex items-center gap-3 mb-6 pb-2 border-b border-white/10">
+                <i class="fa-solid fa-gem text-2xl text-pink-400"></i>
+                <h3 class="text-2xl font-bold text-white" data-i18n="fanart_treasures">我的寶物</h3>
+            </div>
+
+            <!-- 自動從 GitHub 載入 -->
+            <div class="relative px-6">
+                <!-- 圖片格 -->
+                <div id="fanartGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div class="col-span-full glass-panel p-8 text-center">
+                        <i class="fa-solid fa-spinner fa-spin text-purple-400 text-2xl mb-3 block"></i>
+                        <p class="text-purple-200/60 text-sm" data-i18n="fanart_loading">正在從 GitHub 載入二創作品⋯</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 分隔線 -->
+        <div class="flex items-center gap-4 my-4">
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-500/40 to-transparent"></div>
+            <span class="text-xs text-pink-400/60 font-bold tracking-widest" data-i18n="fanart_submit_label">二創投稿</span>
+            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-500/40 to-transparent"></div>
+        </div>
+
+        <!-- 二創投稿：Google 表單按鈕 -->
+        <div class="text-center">
+            <p class="text-xs text-pink-400/60 mb-3 leading-relaxed" data-i18n="fanart_submit_notice">投稿即代表您同意阿卡貓在其網站及社群媒體轉載此作品並標明創作者。表單內可選擇是否匿名。</p>
+            <a href="https://forms.gle/FTnW6fVrQpXQhqrN6" data-form-key="fanart" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold rounded-2xl shadow-lg shadow-pink-500/30 transition-all hover:scale-105 hover:shadow-pink-500/50 text-base">
+                <i class="fa-solid fa-image text-xl"></i>
+                <span data-i18n="fanart_submit_btn">投稿二創作品</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+            </a>
+        </div>
+
+    </div>
 
     <footer class="relative z-10 mt-16 border-t border-white/5 bg-black/20 backdrop-blur-sm">
         <div class="max-w-5xl mx-auto px-4 py-10 text-center space-y-3">
@@ -351,11 +343,14 @@
     </div>
 
     <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
-    <script src="locales/zh-TW.js" defer></script>
-    <script src="locales/zh-CN.js" defer></script>
-    <script src="locales/en.js" defer></script>
-    <script src="locales/ja.js" defer></script>
-    <script src="effects/meteor-bg.js" defer></script>
-    <script src="common.js" defer></script>
+    <script src="../../locales/zh-TW.js"></script>
+    <script src="../../locales/zh-CN.js"></script>
+    <script src="../../locales/en.js"></script>
+    <script src="../../locales/ja.js"></script>
+    <script src="../../effects/meteor-bg.js"></script>
+    <script src="../../common.js"></script>
+    <!-- 二創展示載入邏輯：只有這一頁需要，載入順序要在 common.js 之後
+         （需要用到 common.js 的 ulbGroups/ulbOpen 燈箱系統與 I18N 字典）。 -->
+    <script src="fanart-render.js"></script>
 </body>
 </html>

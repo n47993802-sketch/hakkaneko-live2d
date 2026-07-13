@@ -15,7 +15,7 @@
     </script>
         <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/gif" href="images/common/hakkaneko-pixel.gif">
+    <link rel="icon" type="image/gif" href="../../images/common/hakkaneko-pixel.gif">
     <meta name="description" content="阿卡貓 HakkaNeko 的 Live2D 專業建模委託網站。提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
     <meta name="keywords" content="Live2D, VTuber, 建模, 委託, 阿卡貓, HakkaNeko, 動畫設計, 模型製作">
     <meta name="author" content="阿卡貓 HakkaNeko">
@@ -69,7 +69,7 @@
         }
     })();
     </script>
-    <link rel="stylesheet" href="tailwind.min.css">
+    <link rel="stylesheet" href="../../tailwind.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
         <!-- DNS prefetch for external resources -->
@@ -82,10 +82,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="../../common.css">
 </head>
 <body class="antialiased min-h-screen pb-12 loading">
-    <script>window.SITE_BASE = '';</script>
+    <script>window.SITE_BASE = '../../';</script>
     <script>
     // 提早套用日夜模式，避免「切換分頁時先閃一下深色、才變回淺色」的問題。
     // 原本這段邏輯放在 common.js 裡，但 common.js 要等到 <body> 最底部
@@ -105,7 +105,7 @@
     </script>
     <!-- ── RPG Loader ── -->
     <div id="rpgLoader">
-        <img id="rpgCatImg" src="images/common/hakkaneko-pixel.gif" alt="HakkaNeko" style="width:64px;height:64px;image-rendering:pixelated;image-rendering:crisp-edges;">
+        <img id="rpgCatImg" src="../../images/common/hakkaneko-pixel.gif" alt="HakkaNeko" style="width:64px;height:64px;image-rendering:pixelated;image-rendering:crisp-edges;">
         <div class="rpg-title">HakkaNeko · Live2D</div>
         <div class="rpg-bar-wrap">
             <div class="rpg-bar-fill" id="rpgBarFill"></div>
@@ -125,7 +125,7 @@
     <header class="pt-16 pb-8 text-center relative z-10">
         <div class="max-w-5xl mx-auto px-4">
             <h1 class="text-4xl md:text-5xl font-black mb-3 tracking-tight v2-title">
-                <img src="images/common/hakkaneko-pixel.gif" alt="阿卡貓" style="width:1em;height:1em;vertical-align:-0.15em;image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;" class="mr-2">
+                <img src="../../images/common/hakkaneko-pixel.gif" alt="阿卡貓" style="width:1em;height:1em;vertical-align:-0.15em;image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;" class="mr-2">
                 <span class="text-gradient" data-i18n="name_brand">阿卡貓</span><span data-i18n="header_title"> 的 Live2D 委託</span>
             </h1>
             <p class="text-base md:text-lg text-purple-300/70 font-medium tracking-widest mb-5" data-i18n="header_sub">
@@ -135,9 +135,9 @@
             <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
             <!-- 導覽列設定＋渲染：緊跟在 <nav> 容器後面、同步載入，
                  讓按鈕在畫面第一次繪製前就已經填好，避免空白容器閃爍 -->
-            <script src="site-config.js"></script>
-            <script src="nav-config.js"></script>
-            <script src="nav-render.js"></script>
+            <script src="../../site-config.js"></script>
+            <script src="../../nav-config.js"></script>
+            <script src="../../nav-render.js"></script>
         </div>
     </header>
 
@@ -181,117 +181,204 @@
 
     <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div id="page-intro" class="page-content block max-w-5xl mx-auto space-y-12">
-            <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                <div class="md:col-span-4 text-center">
-                    <div class="relative inline-block">
-                        <img loading="lazy" src="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png" alt="阿卡貓"
-                            class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-purple-500/30 object-cover shadow-2xl mx-auto avatar-click"
-                            onclick="showBubble(this, 'intro'); playIntroSound()" id="introAvatar">
-                        <div class="absolute -bottom-2 right-4 bg-purple-600 px-4 py-1 rounded-full text-xs font-bold text-white shadow-lg">LIVE2D MENTOR</div>
-                    </div>
-                </div>
-                <div class="md:col-span-8 space-y-4">
-                    <h1 class="text-4xl font-black text-gradient" data-i18n="name_display">阿卡貓 (HakkaNeko)</h1>
-                    <p class="text-xl text-gray-300" data-i18n="intro_role">個人接案建模師 · Live2D 導師</p>
-                    <p class="text-gray-400 leading-relaxed" data-i18n="intro_bio">
-                        自 2021 年起投入 Live2D 建模領域，不僅致力於商業委託，更在現實中擔任導師傳承技術。累計完成超過 1000 件委託，熱愛在 X 與同好交流、分享創作心得。憑藉對細節的極致追求與創意思維，我期待能與各類繪師攜手，賦予平面角色生動的靈魂。
-                    </p>
-                    <div class="flex flex-wrap gap-3 items-center">
-                        <a href="https://x.com/HakkaNekoLive2D" target="_blank" rel="noopener noreferrer" class="text-3xl text-purple-400 hover:text-white transition" title="X"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="https://www.twitch.tv/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="text-3xl text-purple-500 hover:text-[#9146ff] transition" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
-                        <!-- <span class="material-symbols-outlined" aria-hidden="true">build</span> 委託狀態：IS_COMMISSION_OPEN = true 開放中 / false 暫停中 -->
-                        <span id="commissionBadge" class="text-sm px-3 py-1.5 rounded-md flex items-center gap-2 font-bold"></span>
-                        <!-- 直播狀態 -->
-                        <span id="twitterLiveBadge" class="text-sm px-3 py-1.5 rounded-md flex items-center gap-2 font-bold bg-gray-500/20 text-gray-400">
-                            <span id="liveDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
-                            <span id="liveText">Twitch 未直播</span>
-                        </span>
-                    </div>
-                </div>
-            </section>
+        <div id="page-live2d-demo" class="page-content block max-w-5xl mx-auto px-4 pb-16">
 
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-panel p-6">
-                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-graduation-cap text-purple-400"></i> <span data-i18n="intro_education">學習經歷</span>
-                    </h3>
-                    <ul class="space-y-3 text-sm text-gray-400">
-                        <li class="flex justify-between items-center pb-2 border-b border-white/5"><span data-i18n="edu_soda1">SodaArt 建模班五、六期生</span><a href="https://x.com/SODAART_class" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-white transition"><span data-i18n="edu_link">連結</span> <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a></li>
-                        <li class="flex justify-between items-center pb-2 border-b border-white/5"><span data-i18n="edu_soda2">SodaArt 動畫班二、三期生</span><a href="https://x.com/mimiandrairai" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-white transition"><span data-i18n="edu_link">連結</span> <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a></li>
-                        <li class="pt-1 text-purple-200" data-i18n="edu_soda3">SodaArt 創作技巧延伸班一期生</li>
-                    </ul>
+        <!-- 施工中橫幅 -->
+        <div class="glass-panel p-5 mb-6 border-yellow-400/30 bg-yellow-400/8 flex items-center gap-4">
+            <div class="text-3xl animate-bounce"><span class="material-symbols-outlined" aria-hidden="true">construction</span></div>
+            <div>
+                <h3 class="font-bold text-yellow-300 mb-1">此頁面施工中 · Under Construction</h3>
+                <p class="text-xs text-purple-200/70">Live2D 互動模型正跑去吃路邊攤(?)，完成後將開放互動體驗。感謝您的耐心等候！</p>
+            </div>
+        </div>
+
+        <!-- 模型資訊卡 -->
+        <div class="glass-panel p-5 mb-6 border-purple-500/20">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-lg shrink-0"><i class="fa-solid fa-pen-nib"></i></div>
+                    <div><div class="text-xs text-purple-300/60 mb-0.5">原畫繪師</div><div class="font-bold text-white text-sm">詢問中 / 待公開</div></div>
                 </div>
-                <div class="glass-panel p-6">
-                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-award text-yellow-500"></i> <span data-i18n="intro_achievements">特殊成就</span>
-                    </h3>
-                    <div class="space-y-2 p-4 bg-white/5 rounded-xl border border-white/5 mb-3">
-                        <p class="text-base font-bold text-gray-200" data-i18n="ach_juku_title">Live2D JUKU 公式 創作展示</p>
-                        <p class="text-xs text-purple-300" data-i18n="ach_juku_date">日期：2025 / 03 / 26</p>
-                        <a href="https://x.com/HakkaNekoLive2D/status/1904751322123165795" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-sm text-blue-400 hover:text-white transition font-medium" data-i18n="ach_view_btn">查看展示作品 <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-lg shrink-0"><i class="fa-solid fa-cube"></i></div>
+                    <div><div class="text-xs text-purple-300/60 mb-0.5" data-i18n="intro_role_short">Live2D 建模師</div><div class="font-bold text-white text-sm" data-i18n="name_short">阿卡貓 HakkaNeko</div></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-lg shrink-0"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div><div class="text-xs text-purple-300/60 mb-0.5">展示用途</div><div class="font-bold text-white text-sm">作品集參考 · 互動展示</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 版權警告 -->
+        <div class="glass-panel p-4 mb-6 border-red-500/25 bg-red-500/5 flex items-start gap-3">
+            <i class="fa-solid fa-shield-halved text-red-400 text-xl mt-0.5 shrink-0"></i>
+            <div>
+                <div class="font-bold text-red-300 text-sm mb-1">著作權聲明 · 請勿竊取</div>
+                <p class="text-xs text-purple-200/70 leading-relaxed">
+                    本展示模型之角色設計、Live2D 工程檔及所有相關美術資產均受著作權法保護。
+                    禁止未經授權截取、複製、盜用或假冒為自製作品。
+                    <strong class="text-red-300">發現侵權行為將依法追究，情節嚴重者保留提出民事及刑事訴訟之權利。</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- 左側：模型展示區 -->
+            <div class="lg:col-span-2">
+                <div class="glass-panel p-4 h-full">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-bold text-purple-300 flex items-center gap-2">
+                            <i class="fa-solid fa-eye text-pink-400"></i> 角色視窗
+                        </span>
+                        <span id="demoStatusBadge" class="text-xs bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full">等待載入</span>
                     </div>
-                    <button onclick="location.href='creative/portfolio/portfolio.html'"
-                        class="w-full mt-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/25 border border-purple-500/25 hover:border-purple-400/50 text-purple-300 hover:text-white text-sm font-bold transition-all">
-                        <i class="fa-solid fa-photo-film text-emerald-400"></i>
-                        <span data-i18n="ach_portfolio_btn">前往創作空間查看更多作品</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+
+                    <!-- Canvas 區域 -->
+                    <div id="live2dWrapper" class="relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#0f052a] to-[#06030f] border border-white/10"
+                         style="height: 420px; cursor: crosshair;">
+                        <!-- 示意佔位圖 -->
+                        <div id="live2dPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-purple-300/40">
+                            <i class="fa-solid fa-person-rays text-7xl"></i>
+                            <p class="text-sm font-bold">請輸入模型網址並按下「載入模型」</p>
+                            <p class="text-xs">滑鼠移動後角色將自動追蹤視線</p>
+                        </div>
+                        <canvas id="live2dCanvas" class="w-full h-full" style="display:none;"></canvas>
+                    </div>
+
+                    <!-- 操作提示 -->
+                    <div class="mt-3 grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-black/20 rounded-xl p-2">
+                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">mouse</span>️</div>
+                            <div class="text-xs text-purple-300/70">滑鼠移動<br>視線跟隨</div>
+                        </div>
+                        <div class="bg-black/20 rounded-xl p-2">
+                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">touch_app</span></div>
+                            <div class="text-xs text-purple-300/70">點擊頭部<br>觸發表情</div>
+                        </div>
+                        <div class="bg-black/20 rounded-xl p-2">
+                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">back_hand</span>️</div>
+                            <div class="text-xs text-purple-300/70">點擊身體<br>觸發動作</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側：控制面板 -->
+            <div class="space-y-4">
+
+                <!-- 載入模型 -->
+                <div class="glass-panel p-5">
+                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-cat text-pink-400"></i> 展示模型
+                    </h3>
+                    <div class="bg-black/30 rounded-xl px-3 py-2.5 text-xs text-purple-300/70 border border-white/10 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-lock text-purple-400 text-xs"></i>
+                        <span data-i18n="port_demo_label">阿卡貓 展示模型（固定）</span>
+                    </div>
+                    <button onclick="loadLive2DModel()" class="w-full py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate"></i> 載入模型
                     </button>
                 </div>
-            </section>
 
-            <section class="space-y-6">
-                <h2 class="text-2xl font-bold text-center text-white" data-i18n="intro_services_title">提供的專業服務</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-user-astronaut"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_live2d">V皮設計</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_live2d_desc">提供 VTuber 模型製作，支援面部捕捉與滑鼠追蹤。</p>
-                    </div>
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-film"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_anim">動畫設計</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_anim_desc">動態 Logo、貼圖、PV 及遊戲 CG 動畫設計。</p>
-                    </div>
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-comments"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_consult">Live2D 顧問</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_consult_desc">諮詢協助、VTubeStudio 與 OBS 直播環境設定。</p>
-                    </div>
-                    <div class="glass-panel p-5 hover:border-purple-500/50 hover:scale-105 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all duration-300 cursor-default">
-                        <div class="w-12 h-12 rounded-xl service-icon flex items-center justify-center mb-4 text-2xl"><i class="fa-solid fa-file-code"></i></div>
-                        <h4 class="font-bold mb-2 text-white" data-i18n="svc_project">專案檔加購</h4>
-                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="svc_project_desc">委託後可選擇買斷工程原始檔（不單單販售）。</p>
+                <!-- 動畫觸發 -->
+                <div class="glass-panel p-5">
+                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-yellow-400"></i> 觸發動畫
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="triggerMotion('Idle')" class="py-2 px-3 rounded-lg text-xs font-bold bg-purple-600/30 hover:bg-purple-600/60 text-purple-200 border border-purple-500/30 transition-all"><span class="material-symbols-outlined" aria-hidden="true">bedtime</span> 待機</button>
+                        <button onclick="triggerMotion('TapBody')" class="py-2 px-3 rounded-lg text-xs font-bold bg-pink-600/30 hover:bg-pink-600/60 text-pink-200 border border-pink-500/30 transition-all"><span class="material-symbols-outlined" aria-hidden="true">waving_hand</span> 揮手</button>
+                        <button onclick="triggerMotion('FlickHead')" class="py-2 px-3 rounded-lg text-xs font-bold bg-blue-600/30 hover:bg-blue-600/60 text-blue-200 border border-blue-500/30 transition-all"><span class="material-symbols-outlined" aria-hidden="true">sentiment_satisfied</span> 開心</button>
+                        <button onclick="triggerMotion('Pinch')" class="py-2 px-3 rounded-lg text-xs font-bold bg-indigo-600/30 hover:bg-indigo-600/60 text-indigo-200 border border-indigo-500/30 transition-all"><span class="material-symbols-outlined" aria-hidden="true">sentiment_excited</span> 驚訝</button>
                     </div>
                 </div>
-            </section>
 
-            <section class="glass-panel p-8 bg-gradient-to-br from-purple-900/20 to-transparent border-purple-500/20">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="flex-1 space-y-4">
-                        <h2 class="text-2xl font-bold text-white" data-i18n="collab_title">專業繪師合作一條龍</h2>
-                        <p class="text-gray-300 leading-relaxed" data-i18n="collab_desc">
-                            雖然我不直接從事繪畫，但我與多位優秀專業繪師長期配合，能為您提供從「角色設計」到「建模完成」的全方位服務。無論是簡單風格還是極致精細，皆能滿足您的需求。
-                        </p>
-                        <ul class="text-sm text-purple-300 space-y-2 mt-4 font-medium">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-emerald-400"></i> <span data-i18n="collab_point1">多樣化畫風選擇，量身打造</span></li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-emerald-400"></i> <span data-i18n="collab_point2">溝通無礙，配合度高</span></li>
-                        </ul>
-                        <button onclick="location.href='artists.html'" class="mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white rounded-xl font-bold shadow-lg shadow-purple-500/30 transition-all flex items-center gap-2">
-                            <span data-i18n="collab_btn">前往查看合作繪師</span> <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                <!-- 參數控制 -->
+                <div class="glass-panel p-5">
+                    <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-emerald-400"></i> 即時參數
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs text-purple-300 mb-1.5">
+                                <span>視線靈敏度</span><span id="eyeVal" class="text-white font-bold">50%</span>
+                            </div>
+                            <input type="range" id="eyeSensitivity" min="0" max="100" value="50"
+                                oninput="updateParam('eye', this.value)"
+                                class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-purple-500 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-purple-300 mb-1.5">
+                                <span>身體搖擺幅度</span><span id="bodyVal" class="text-white font-bold">50%</span>
+                            </div>
+                            <input type="range" id="bodySwing" min="0" max="100" value="50"
+                                oninput="updateParam('body', this.value)"
+                                class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-pink-500 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-purple-300 mb-1.5">
+                                <span>表情強度</span><span id="expVal" class="text-white font-bold">50%</span>
+                            </div>
+                            <input type="range" id="expressionStrength" min="0" max="100" value="50"
+                                oninput="updateParam('exp', this.value)"
+                                class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-emerald-500 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-purple-300 mb-1.5">
+                                <span>呼吸速度</span><span id="breathVal" class="text-white font-bold">50%</span>
+                            </div>
+                            <input type="range" id="breathSpeed" min="0" max="100" value="50"
+                                oninput="updateParam('breath', this.value)"
+                                class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-blue-500 cursor-pointer">
+                        </div>
                     </div>
-                    <div class="w-full md:w-80 shrink-0 relative">
-                        <img loading="lazy" src="https://pbs.twimg.com/media/G8rR_qlbMAIdiz0?format=png&name=small"
-                            class="rounded-2xl shadow-[0_10px_40px_rgba(139,92,246,0.3)] border border-white/10 w-full object-cover avatar-click"
-                            onclick="showBubble(this, 'collab'); playBonk()" id="collabAvatar"
-                            onerror="this.onerror=null;this.src='https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png'" alt="">
-                        <p class="text-xs text-center text-purple-400/50 mt-2" data-i18n="intro_click_tip"><span class="material-symbols-outlined" aria-hidden="true">touch_app</span> 點我試試看！</p>
+
+                    <!-- 開關 -->
+                    <div class="mt-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-purple-300">眨眼自動</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="autoBlink" checked onchange="toggleSwitch('blink', this.checked)" class="sr-only peer">
+                                <div class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"></div>
+                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-purple-300">口型同步</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="lipSync" onchange="toggleSwitch('lip', this.checked)" class="sr-only peer">
+                                <div class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"></div>
+                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-purple-300">物理演算</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="physicsOn" checked onchange="toggleSwitch('physics', this.checked)" class="sr-only peer">
+                                <div class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"></div>
+                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-        </div><!-- end page-intro -->
+            </div>
+        </div>
+
+        <!-- 注意事項 -->
+        <div class="glass-panel p-5 mt-6 border-purple-400/20 bg-purple-400/5">
+            <h3 class="text-sm font-bold text-purple-300 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-circle-exclamation"></i> 展示說明
+            </h3>
+            <ul class="text-xs text-purple-200/70 space-y-1.5 leading-relaxed list-none">
+                <li><i class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"></i><span data-i18n="port_demo_note">本模型為阿卡貓作品集展示用途，僅供參考，不作任何商業販售。</span></li>
+                <li><i class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"></i>所有互動功能（視線追蹤、動畫觸發）均由本站提供，角色資料由建模師本人管理。</li>
+                <li><i class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"></i>若您也有意委託製作同等品質的 Live2D 模型，歡迎至 V皮設計 分頁試算報價。</li>
+                <li><i class="fa-solid fa-circle text-red-400/60 text-[6px] mr-2"></i>嚴禁截圖、錄影後冒用為他人作品或商業使用，違者將依著作權法追究。</li>
+            </ul> </div>
+    </div>
 
     <footer class="relative z-10 mt-16 border-t border-white/5 bg-black/20 backdrop-blur-sm">
         <div class="max-w-5xl mx-auto px-4 py-10 text-center space-y-3">
@@ -351,11 +438,11 @@
     </div>
 
     <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
-    <script src="locales/zh-TW.js" defer></script>
-    <script src="locales/zh-CN.js" defer></script>
-    <script src="locales/en.js" defer></script>
-    <script src="locales/ja.js" defer></script>
-    <script src="effects/meteor-bg.js" defer></script>
-    <script src="common.js" defer></script>
+    <script src="../../locales/zh-TW.js"></script>
+    <script src="../../locales/zh-CN.js"></script>
+    <script src="../../locales/en.js"></script>
+    <script src="../../locales/ja.js"></script>
+    <script src="../../effects/meteor-bg.js"></script>
+    <script src="../../common.js"></script>
 </body>
 </html>

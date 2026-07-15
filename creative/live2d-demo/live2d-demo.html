@@ -188,7 +188,7 @@
             <div class="text-3xl animate-bounce"><span class="material-symbols-outlined" aria-hidden="true">construction</span></div>
             <div>
                 <h3 class="font-bold text-yellow-300 mb-1">此頁面施工中 · Under Construction</h3>
-                <p class="text-xs text-purple-200/70">Live2D 互動模型正跑去吃路邊攤(?)，完成後將開放互動體驗。感謝您的耐心等候！</p>
+                <p class="text-xs text-purple-200/70" data-i18n="demo_placeholder_note">Live2D 互動模型正跑去吃路邊攤(?)，完成後將開放互動體驗。感謝您的耐心等候！</p>
             </div>
         </div>
 
@@ -197,7 +197,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-lg shrink-0"><i class="fa-solid fa-pen-nib"></i></div>
-                    <div><div class="text-xs text-purple-300/60 mb-0.5">原畫繪師</div><div class="font-bold text-white text-sm">詢問中 / 待公開</div></div>
+                    <div><div class="text-xs text-purple-300/60 mb-0.5" data-i18n="demo_artist_label">原畫繪師</div><div class="font-bold text-white text-sm" data-i18n="demo_artist_pending">詢問中 / 待公開</div></div>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-lg shrink-0"><i class="fa-solid fa-cube"></i></div>
@@ -205,7 +205,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-lg shrink-0"><i class="fa-solid fa-lightbulb"></i></div>
-                    <div><div class="text-xs text-purple-300/60 mb-0.5">展示用途</div><div class="font-bold text-white text-sm">作品集參考 · 互動展示</div></div>
+                    <div><div class="text-xs text-purple-300/60 mb-0.5" data-i18n="demo_purpose_label">展示用途</div><div class="font-bold text-white text-sm" data-i18n="demo_purpose_value">作品集參考 · 互動展示</div></div>
                 </div>
             </div>
         </div>
@@ -216,9 +216,9 @@
             <div>
                 <div class="font-bold text-red-300 text-sm mb-1">著作權聲明 · 請勿竊取</div>
                 <p class="text-xs text-purple-200/70 leading-relaxed">
-                    本展示模型之角色設計、Live2D 工程檔及所有相關美術資產均受著作權法保護。
-                    禁止未經授權截取、複製、盜用或假冒為自製作品。
-                    <strong class="text-red-300">發現侵權行為將依法追究，情節嚴重者保留提出民事及刑事訴訟之權利。</strong>
+                    <span data-i18n="demo_copyright_l1">本展示模型之角色設計、Live2D 工程檔及所有相關美術資產均受著作權法保護。</span>
+                    <span data-i18n="demo_copyright_l2">禁止未經授權截取、複製、盜用或假冒為自製作品。</span>
+                    <strong class="text-red-300" data-i18n="demo_copyright_l3">發現侵權行為將依法追究，情節嚴重者保留提出民事及刑事訴訟之權利。</strong>
                 </p>
             </div>
         </div>
@@ -232,7 +232,7 @@
                         <span class="text-sm font-bold text-purple-300 flex items-center gap-2">
                             <i class="fa-solid fa-eye text-pink-400"></i> 角色視窗
                         </span>
-                        <span id="demoStatusBadge" class="text-xs bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full">等待載入</span>
+                        <span id="demoStatusBadge" class="text-xs bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full" data-i18n="demo_status_waiting">等待載入</span>
                     </div>
 
                     <!-- Canvas 區域 -->
@@ -241,8 +241,8 @@
                         <!-- 示意佔位圖 -->
                         <div id="live2dPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-purple-300/40">
                             <i class="fa-solid fa-person-rays text-7xl"></i>
-                            <p class="text-sm font-bold">請輸入模型網址並按下「載入模型」</p>
-                            <p class="text-xs">滑鼠移動後角色將自動追蹤視線</p>
+                            <p class="text-sm font-bold" data-i18n="demo_input_hint_title">請輸入模型網址並按下「載入模型」</p>
+                            <p class="text-xs" data-i18n="demo_input_hint_desc">滑鼠移動後角色將自動追蹤視線</p>
                         </div>
                         <canvas id="live2dCanvas" class="w-full h-full" style="display:none;"></canvas>
                     </div>
@@ -251,15 +251,15 @@
                     <div class="mt-3 grid grid-cols-3 gap-2 text-center">
                         <div class="bg-black/20 rounded-xl p-2">
                             <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">mouse</span>️</div>
-                            <div class="text-xs text-purple-300/70">滑鼠移動<br>視線跟隨</div>
+                            <div class="text-xs text-purple-300/70" data-i18n="demo_interact_mouse">滑鼠移動<br>視線跟隨</div>
                         </div>
                         <div class="bg-black/20 rounded-xl p-2">
                             <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">touch_app</span></div>
-                            <div class="text-xs text-purple-300/70">點擊頭部<br>觸發表情</div>
+                            <div class="text-xs text-purple-300/70" data-i18n="demo_interact_head">點擊頭部<br>觸發表情</div>
                         </div>
                         <div class="bg-black/20 rounded-xl p-2">
                             <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">back_hand</span>️</div>
-                            <div class="text-xs text-purple-300/70">點擊身體<br>觸發動作</div>
+                            <div class="text-xs text-purple-300/70" data-i18n="demo_interact_body">點擊身體<br>觸發動作</div>
                         </div>
                     </div>
                 </div>
@@ -311,7 +311,7 @@
                         </div>
                         <div>
                             <div class="flex justify-between text-xs text-purple-300 mb-1.5">
-                                <span>身體搖擺幅度</span><span id="bodyVal" class="text-white font-bold">50%</span>
+                                <span data-i18n="demo_slider_body">身體搖擺幅度</span><span id="bodyVal" class="text-white font-bold">50%</span>
                             </div>
                             <input type="range" id="bodySwing" min="0" max="100" value="50"
                                 oninput="updateParam('body', this.value)"
@@ -319,7 +319,7 @@
                         </div>
                         <div>
                             <div class="flex justify-between text-xs text-purple-300 mb-1.5">
-                                <span>表情強度</span><span id="expVal" class="text-white font-bold">50%</span>
+                                <span data-i18n="demo_slider_expr">表情強度</span><span id="expVal" class="text-white font-bold">50%</span>
                             </div>
                             <input type="range" id="expressionStrength" min="0" max="100" value="50"
                                 oninput="updateParam('exp', this.value)"
@@ -327,7 +327,7 @@
                         </div>
                         <div>
                             <div class="flex justify-between text-xs text-purple-300 mb-1.5">
-                                <span>呼吸速度</span><span id="breathVal" class="text-white font-bold">50%</span>
+                                <span data-i18n="demo_slider_breath">呼吸速度</span><span id="breathVal" class="text-white font-bold">50%</span>
                             </div>
                             <input type="range" id="breathSpeed" min="0" max="100" value="50"
                                 oninput="updateParam('breath', this.value)"
@@ -338,7 +338,7 @@
                     <!-- 開關 -->
                     <div class="mt-4 space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs text-purple-300">眨眼自動</span>
+                            <span class="text-xs text-purple-300" data-i18n="demo_blink_auto">眨眼自動</span>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="autoBlink" checked onchange="toggleSwitch('blink', this.checked)" class="sr-only peer">
                                 <div class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"></div>

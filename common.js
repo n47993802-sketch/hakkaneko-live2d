@@ -1331,10 +1331,17 @@
         document.documentElement.lang = dict.htmlLang;
 
         // Update all data-i18n elements
+        // v36 修正：原本用 textContent 覆寫，如果該元素裡面包了 <i> icon 或
+        // <span>/<strong> 這類強調樣式，會被整個「壓平」成純文字、樣式消失
+        // （例如每一頁小標題旁邊的裝飾星星圖示 ✦，切換語言/甚至第一次載入
+        // 套用語言包時就會不見）。改用 innerHTML，讓翻譯字串可以視需要保留
+        // 這些行內標籤；沒有內嵌標籤的一般文字翻譯完全不受影響。
+        // 這裡的翻譯內容都是我們自己維護的固定字串（不是使用者輸入），
+        // 沒有 XSS 疑慮，可以放心用 innerHTML。
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (dict[key] !== undefined) {
-                el.textContent = dict[key];
+                el.innerHTML = dict[key];
             }
         });
 

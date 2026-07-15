@@ -30,7 +30,7 @@
 
         return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" '
             + 'class="glass-panel p-6 rounded-2xl hover:-translate-y-2 hover:border-purple-400 transition-all flex flex-col items-center group text-center block">'
-            + '<img loading="lazy" src="' + avatar + '" '
+            + '<img loading="lazy" width="96" height="96" src="' + avatar + '" '
             + 'class="w-24 h-24 rounded-full border-2 border-white/10 mb-4 object-cover group-hover:scale-105 transition-transform shadow-lg" alt="' + name + '" '
             + 'onerror="this.onerror=null;this.outerHTML=\'<div class=&quot;w-24 h-24 rounded-full border-2 border-white/10 mb-4 bg-white/5 flex items-center justify-center shadow-lg&quot;><i class=&quot;fa-solid fa-user text-3xl text-purple-300/40&quot;></i></div>\';">'
             + '<h3 class="font-bold text-white text-lg px-2">'

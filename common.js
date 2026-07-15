@@ -522,7 +522,7 @@
             }
         }
 
-        // --- Google Sites 剪貼簿繞過方案 (Fallback) ---
+        // --- 複製到剪貼簿（用 execCommand 相容寫法，不依賴 navigator.clipboard 權限） ---
         function copyToClipboardFallback(text) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
@@ -1441,52 +1441,14 @@
     // ── Loader 啟動邏輯 ──
     // 雙保險：DOMContentLoaded（DOM 解析完即可跑，不等圖片/CDN）
     // 與 window.load 同時監聽，誰先到誰觸發，另一個自動跳過。
-    // 這樣即使 Google Sites iframe 中 CDN 資源被 CSP 擋住或超時，
+    // 這樣即使某些 CDN 資源被瀏覽器擋住或逾時，
     // Loader 仍能在 DOM 就緒後立刻正常完成動畫並套用語言。
 
-    // ── v32 Google Sites iframe 高度自動自適應 ──
-    // 使用 ResizeObserver 偵聽 document.body 尺寸變化（展開對照表等互動）
-    // 自動向父層 postMessage 通知最新 scrollHeight，解決雙滾動條與底部裁切。
-    (function() {
-        function notifyParentHeight() {
-            try {
-                var h = Math.max(
-                    document.body.scrollHeight,
-                    document.documentElement.scrollHeight,
-                    document.body.offsetHeight,
-                    document.documentElement.offsetHeight
-                );
-                window.parent.postMessage({ type: 'iframeHeight', height: h }, '*');
-            } catch(e) {}
-        }
+    // v32 Google Sites iframe 高度自動自適應邏輯已移除：網站現在是獨立的
+    // GitHub Pages 站台，不會再被嵌進 Google Sites 的 iframe 裡，這段對外
+    // postMessage 回報高度、並攔截 window.switchTab 的邏輯已經沒有作用
+    // （postMessage 送給的 window.parent 在一般瀏覽情境下就是自己，沒有人在聽）。
 
-        // ResizeObserver 持續偵聽 body 尺寸變化
-        if (typeof ResizeObserver !== 'undefined') {
-            var _roDebounce = null;
-            var ro = new ResizeObserver(function() {
-                clearTimeout(_roDebounce);
-                _roDebounce = setTimeout(notifyParentHeight, 80);
-            });
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() { ro.observe(document.body); });
-            } else {
-                ro.observe(document.body);
-            }
-        }
-
-        // 初始通知（頁面完全載入後）
-        window.addEventListener('load', function() { setTimeout(notifyParentHeight, 300); });
-
-        // 分頁切換後也通知（接在 reveal 的 switchTab 覆寫之後，補充一次高度回報）
-        // 使用 DOMContentLoaded 確保在所有覆寫完成後才 patch，維持正確的覆寫鏈
-        document.addEventListener('DOMContentLoaded', function() {
-            var _stForResize = window.switchTab;
-            window.switchTab = function(tabId) {
-                if (typeof _stForResize === 'function') _stForResize(tabId);
-                setTimeout(notifyParentHeight, 320);
-            };
-        });
-    })();
     (function() {
         var _loaderDone = false;
 

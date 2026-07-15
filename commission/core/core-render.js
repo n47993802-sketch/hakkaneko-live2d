@@ -240,3 +240,12 @@ var prices = window.CORE_PRICES;
                 hintEl.textContent = open ? (_d.plan_compare_hint || '（點擊展開）') : (_d.plan_compare_hint_open || '（點擊收合）');
             }
         }
+
+// v37 修復：右側報價原本要等 window.onload（頁面所有資源都載入完成後，
+// 通常比畫面第一次顯示晚不少）才會第一次計算，這段時間畫面顯示的是
+// core.html 寫死的預設文字「NT$ 15,000」，等 window.onload 觸發計算後
+// 才「跳成」實際金額——這就是右側報價感覺閃一下/跳動的原因。
+// 這裡讓 calculate() 在這支腳本一載入就立刻執行一次（此時表單元素都
+// 已經在 DOM 中，可以安全讀取），畫面一開始顯示的就已經是正確金額，
+// 不會再有「先顯示預設文字、之後又跳成計算結果」的情況。
+calculate();

@@ -78,6 +78,10 @@
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="//pbs.twimg.com">
+    <link rel="preconnect" href="https://pbs.twimg.com" crossorigin>
+    <!-- v37：這頁一次要載入 18 位繪師的頭貼，全部來自 pbs.twimg.com，
+         比其他頁面更依賴這個網域，所以額外加 preconnect（不只 dns-prefetch）
+         提前把連線／TLS 交握做好，減少第一批頭貼開始下載前的等待時間。 -->
     <link rel="dns-prefetch" href="//static-cdn.jtvnw.net">
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

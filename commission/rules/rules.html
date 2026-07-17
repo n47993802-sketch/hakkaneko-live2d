@@ -426,5 +426,9 @@
     <script src="../../locales/ja.js"></script>
     <script src="../../effects/meteor-bg.js"></script>
     <script src="../../common.js"></script>
+    <!-- 常見問題手風琴邏輯：只有這一頁需要，載入順序要在 common.js 之後。
+         （v38 稽核時發現：拆分 toggleFaq() 到這個檔案時忘記加這行 script tag，
+         導致 FAQ 手風琴一直沒作用，這次一併修好。） -->
+    <script src="rules-render.js"></script>
 </body>
 </html>

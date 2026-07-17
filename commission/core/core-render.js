@@ -183,19 +183,13 @@ var prices = window.CORE_PRICES;
             syncCheckboxVisuals();
         }
 
-        function getQuoteText() {
-            const _d = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang]:I18N['zh-TW'];
-            const _qn = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].name_short||'阿卡貓 HakkaNeko':'阿卡貓 HakkaNeko';
-            let text = `💜 ${_qn} Live2D 試算價目表 💜\n================================\n`;
-            window.currentQuoteDetails.forEach(item => { text += `${item.name}：${getCurrencyPrefix()}${formatMoney(item.price)}\n`; });
-            const planLabel = window.currentPaymentPlan==='one'?(_d.pay_one||'一次付清'):window.currentPaymentPlan==='two'?(_d.pay_two||'兩期分款'):(_d.pay_three||'三期分款');
-            text += `--------------------------------\n${_d.pay_method||'支付方式'}：${window.currentPayment}\n${_d.pay_installment||'付款方式'}：${planLabel}\n總金額：${getCurrencyPrefix()}${formatMoney(window.currentFinalTotal)}\n`;
-            const supp = document.getElementById('supplementInfo').value; if(supp) text += `\n${_d.sidebar_supp_label||'補充資訊'}：\n${supp}\n`;
-            if (document.getElementById('rush') && document.getElementById('rush').checked) { const rush = document.getElementById('rushInfo').value; if(rush) text += `\n【${_d.opt_rush||'加急趕工'}】\n${rush}\n`; }
-            return text;
-        }
+        // getQuoteText() 已移除：舊版純文字報價摘要產生器，只有已刪除的
+        // copyQuote()/screenshotAndEmail() 會用到，目前的 screenshotQuote()
+        // 走的是 html2canvas 截圖路線，不需要文字版摘要了。
 
-        function copyQuote() { if(document.getElementById('agreeTerms').checked) { copyToClipboardFallback(getQuoteText()); } }
+        // copyQuote() 已移除：舊版「純文字複製到剪貼簿」按鈕的邏輯，
+        // 已被目前 core.html 實際使用的 screenshotQuote()（截圖+自動產生
+        // 委託編號）取代，沒有任何按鈕在呼叫它了。
 
         function resetForm() {
             document.querySelectorAll('#page-core input[type="checkbox"]').forEach(i => i.checked = false);

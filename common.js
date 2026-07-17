@@ -161,17 +161,10 @@
         // ==================== V5 功能 JS ====================
 
         // ==================== 截圖 + 寄信 ====================
-        function screenshotAndEmail(panelId, emailInputId, type) {
-            const agreeId = panelId === 'quoteSummaryPanel' ? 'agreeTerms' : 'animAgreeTerms';
-            if (!document.getElementById(agreeId).checked) { alert((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].toast_agree||'請先勾選同意條款':'請先勾選同意條款'); return; }
-            const userEmail = document.getElementById(emailInputId).value;
-            const targetEmail = 'n47993802@gmail.com';
-            const subject = encodeURIComponent(`【委託表單】Live2D ${type} 委託試算`);
-            const body = encodeURIComponent(`申請人信箱: ${userEmail}\n\n請查看附件截圖（已另存為圖片）。\n\n${type === 'V皮設計' ? getQuoteText() : getAnimQuoteText()}`);
-            // Screenshot first then open mail
-            screenshotQuote(panelId);
-            setTimeout(() => window.open(`mailto:${targetEmail}?subject=${subject}&body=${body}`), 800);
-        }
+        // screenshotAndEmail() 已移除：這是舊版「截圖後自動開啟 mailto: 郵件」
+        // 的流程，已被目前 core.html／anim.html 實際使用的 screenshotQuote()
+        // + 表單（site-config.js 的 FORM_URLS）取代，沒有任何按鈕在呼叫它了。
+
 
         // ==================== 截圖報價單 ====================
         // ==================== 委託編號產生 ====================
@@ -431,13 +424,21 @@
             ['comm','creative'].forEach(k => {
                 const dd = document.getElementById(k + 'Dropdown');
                 if(dd) dd.classList.add('hidden');
+                document.getElementById(k + 'DropdownWrap')?.classList.remove('nav-dropdown-open');
             });
         }
         function toggleNavDropdown(e, key) { e.stopPropagation();
             const dd = document.getElementById(key + 'Dropdown');
+            const ddWrap = document.getElementById(key + 'DropdownWrap');
             const other = key === 'comm' ? 'creativeDropdown' : 'commDropdown';
+            const otherWrap = key === 'comm' ? 'creativeDropdownWrap' : 'commDropdownWrap';
             document.getElementById(other)?.classList.add('hidden');
+            document.getElementById(otherWrap)?.classList.remove('nav-dropdown-open');
             dd.classList.toggle('hidden');
+            // v38：原本 common.css 就有寫箭頭要跟著旋轉的樣式（.nav-dropdown-open），
+            // 但一直沒有任何程式碼真的加上這個 class，箭頭從來沒轉過，
+            // 這裡補上，讓下拉選單展開時箭頭正確跟著轉向。
+            ddWrap?.classList.toggle('nav-dropdown-open', !dd.classList.contains('hidden'));
         }
         document.addEventListener('click', e => {
             if(!document.getElementById('commDropdownWrap')?.contains(e.target) &&
@@ -1119,33 +1120,12 @@
             }
         };
 
-        // ==================== v29 patch：儲存 VP 計算機詳細資料供複製功能使用 ====================
-        // 漏洞背景：若未來引入 Swiper.js 輪播組件，重複呼叫 new Swiper() 而不銷毀舊實例
-        // 會導致 DOM 監聽器常駐記憶體，頻繁切換時越滑越卡。
-        // 此全域管理器確保每個容器 ID 同時只存在一個 Swiper 實例。
-        var portfolioSwipers = {};
-        function initPortfolioSwiper(containerId, config) {
-            // 💡 核心漏洞修復：若該區塊已有 Swiper 實例，先進行銷毀，釋放 DOM 監聽器與記憶體
-            if (portfolioSwipers[containerId]) {
-                try {
-                    portfolioSwipers[containerId].destroy(true, true);
-                } catch(e) { /* 容錯：實例可能已在外部被銷毀 */ }
-                portfolioSwipers[containerId] = null;
-            }
-            // 重新初始化並存入全域追蹤（Swiper 未載入時不執行，避免 ReferenceError）
-            if (typeof Swiper !== 'undefined') {
-                portfolioSwipers[containerId] = new Swiper(containerId, config);
-            }
-            return portfolioSwipers[containerId] || null;
-        }
-        // 頁面卸載時統一銷毀所有 Swiper 實例，防止瀏覽器標籤頁切換後記憶體殘留
-        window.addEventListener('beforeunload', function() {
-            Object.keys(portfolioSwipers).forEach(function(id) {
-                if (portfolioSwipers[id]) {
-                    try { portfolioSwipers[id].destroy(true, true); } catch(e) {}
-                }
-            });
-        });
+        // v38：移除了一整段「為了以後可能會用 Swiper.js 輪播」預先寫好、
+        // 但 Swiper.js 從來沒有真的被載入過的管理程式碼（portfolioSwipers /
+        // initPortfolioSwiper() / beforeunload 清理監聽器），純屬從未使用過
+        // 的臆測性程式碼，站上目前的作品展示分頁邏輯跟這個完全無關
+        // （見 portfolio-render.js 的 gifRenderPage/gifNav）。
+
 
         // ==================== 動態貼圖 / Logo GIF 展示：渲染邏輯 ====================
         // 已拆分至 portfolio-render.js（gifBuildAll/gifRenderPage/gifNav/gifEnsureInit），

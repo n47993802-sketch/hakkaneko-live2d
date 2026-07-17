@@ -110,15 +110,13 @@
             }
         }
 
-        function getAnimQuoteText() {
-            const _qna = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].name_short||'阿卡貓 HakkaNeko':'阿卡貓 HakkaNeko';
-            let text = `💜 ${_qna} Live2D 動畫設計 💜\n================================\n`;
-            window.currentAnimDetails.forEach(item => { text += `${item.name}：${getCurrencyPrefix()}${formatMoney(item.price)}\n`; });
-            text += `--------------------------------\n總金額：${getCurrencyPrefix()}${formatMoney(window.currentAnimTotal)}\n`;
-            return text;
-        }
+        // getAnimQuoteText() 已移除：舊版純文字報價摘要產生器，只有已刪除的
+        // copyAnimQuote()/screenshotAndEmail() 會用到，目前的 screenshotQuote()
+        // 走的是 html2canvas 截圖路線，不需要文字版摘要了。
 
-        function copyAnimQuote() { if(document.getElementById('animAgreeTerms').checked) { copyToClipboardFallback(getAnimQuoteText()); } }
+        // copyAnimQuote() 已移除：舊版「純文字複製到剪貼簿」按鈕的邏輯，
+        // 已被目前 anim.html 實際使用的 screenshotQuote()（截圖+自動產生
+        // 委託編號）取代，沒有任何按鈕在呼叫它了。
 
         function resetAnimForm() {
             document.querySelectorAll('#page-anim input[type="checkbox"]').forEach(i => i.checked = false);

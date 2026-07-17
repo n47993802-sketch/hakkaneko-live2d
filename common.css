@@ -420,7 +420,7 @@
         .v2-title { font-family: 'Zen Kaku Gothic New', 'Noto Sans TC', sans-serif; letter-spacing: 0.05em; }
 
         .option-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.15s;
             cursor: pointer;
             position: relative;
             background: rgba(26, 17, 54, 0.6);
@@ -428,9 +428,9 @@
         }
 
         .option-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(139, 92, 246, 0.6);
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.15);
+            transform: translateY(-1px);
+            border-color: rgba(168, 85, 247, 0.45) !important;
+            box-shadow: 0 0 18px rgba(168, 85, 247, 0.18);
         }
 
         .option-card:has(input:checked) {
@@ -580,82 +580,9 @@
         #copyBtn:disabled, #animCopyBtn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(100%); }
         .btn-copy-summary:disabled { pointer-events: none; }
 
-        /* ══════════════════════════════════════════════════
-           ✨ v32 Google Drive 作品集骨架屏增強
-           ══════════════════════════════════════════════════ */
-
-        /* 通用 Drive 骨架屏容器 */
-        .drive-skeleton-wrap {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1rem;
-        }
-        .drive-skeleton-card {
-            background: rgba(18,8,36,0.7);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-        .drive-skeleton-thumb {
-            aspect-ratio: 1;
-            background: linear-gradient(
-                90deg,
-                rgba(255,255,255,0.04) 0%,
-                rgba(168,85,247,0.10) 40%,
-                rgba(255,255,255,0.04) 80%
-            );
-            background-size: 200% 100%;
-            animation: skeleton-shimmer 1.6s ease-in-out infinite;
-        }
-        .drive-skeleton-text {
-            padding: 0.55rem 0.7rem;
-        }
-        .drive-skeleton-line {
-            height: 0.7rem;
-            border-radius: 4px;
-            background: linear-gradient(
-                90deg,
-                rgba(255,255,255,0.04) 0%,
-                rgba(168,85,247,0.08) 40%,
-                rgba(255,255,255,0.04) 80%
-            );
-            background-size: 200% 100%;
-            animation: skeleton-shimmer 1.6s ease-in-out infinite;
-            margin-bottom: 0.4rem;
-        }
-        .drive-skeleton-line.short { width: 60%; }
-
-        /* Drive 作品集圖片淡入效果 */
-        .drive-img-fade {
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .drive-img-fade.loaded { opacity: 1; }
-
-        /* Drive 作品集骨架屏 spinner 標題列 */
-        .drive-loading-banner {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.8rem 1rem;
-            background: rgba(168,85,247,0.06);
-            border: 1px solid rgba(168,85,247,0.15);
-            border-radius: 0.75rem;
-            margin-bottom: 1rem;
-            font-size: 0.78rem;
-            color: rgba(192,132,252,0.75);
-            font-weight: 600;
-            letter-spacing: 0.02em;
-        }
-        .drive-loading-banner .spinner {
-            width: 14px; height: 14px;
-            border: 2px solid rgba(168,85,247,0.3);
-            border-top-color: #a855f7;
-            border-radius: 50%;
-            animation: drive-spin 0.8s linear infinite;
-            flex-shrink: 0;
-        }
-        @keyframes drive-spin { to { transform: rotate(360deg); } }
+        /* v38：移除了從未使用過的 Google Drive 作品集骨架屏 CSS（.drive-skeleton-*
+           .drive-img-fade .drive-loading-banner），目前作品展示的骨架屏用的是
+           下面這一段「GIF 卡片骨架屏基底」，跟 Drive 那套完全無關。 */
 
         /* GIF 卡片骨架屏基底 */
         .gif-skeleton {
@@ -683,10 +610,10 @@
             opacity: 1;
         }
 
-        /* 視窗外 GIF 凍結：圖片替換為骨架屏時的包裹容器樣式 */
-        .gif-wrap-frozen .gif-img-fade {
-            opacity: 0 !important;
-        }
+        /* v38：移除了 .gif-wrap-frozen 規則，這是舊版「視窗外 GIF 用
+           IntersectionObserver 凍結」機制的殘留樣式，該機制本身已經被
+           拿掉（見 portfolio-render.js 開頭的說明），沒有任何地方會再
+           加上 gif-wrap-frozen 這個 class。 */
 
         /* ══════════════════════════════════════════════════
            📱 v27 行動裝置：iOS 滾動硬體加速
@@ -821,11 +748,9 @@
         .avatar-click:active { transform: scale(0.95); }
         body.light-mode .speech-bubble { background: rgba(210,190,245,0.97); color: #1a1030; border-color: rgba(100,60,150,0.5); }
 
-        /* ===== V4 創意加強樣式 ===== */
-        .option-card { position: relative; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s, transform 0.15s; }
+        /* ===== V4 創意加強樣式（shimmer 光澤掃過效果，跟上面 .option-card 主要樣式合併整理過） ===== */
         .option-card::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(120deg, transparent 30%, rgba(168,85,247,0.22) 50%, transparent 70%); transform: translateX(-120%); pointer-events: none; transition: none; }
         .option-card:hover::before { transform: translateX(120%); transition: transform 0.5s ease; }
-        .option-card:hover { border-color: rgba(168,85,247,0.45) !important; box-shadow: 0 0 18px rgba(168,85,247,0.18); transform: translateY(-1px); }
 
         /* Nav dropdown */
 		.nav-dropdown-open #commArrow { transform: rotate(180deg); }

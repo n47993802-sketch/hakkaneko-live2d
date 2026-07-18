@@ -287,5 +287,16 @@
             demo_copyright_l3: 'Infringement will be pursued through legal channels; severe cases may result in civil or criminal action.',
             rules_delivery_format: 'This commission only includes the exported <code class="bg-white/10 px-1 rounded">.moc3</code> runtime files, texture sets, and parameter configs needed to run the model. <strong class="text-red-300">The <code class="bg-white/10 px-1 rounded">.cmo3</code> source project file is not included</strong> (available separately through the full-buyout option).',
             rules_vts_optimize: 'Every model is deeply optimized for <strong class="text-white">VTube Studio</strong> (including parameters like <code class="bg-white/10 px-1 rounded">ParamEyeLOpen</code> for eye and face tracking) to ensure smooth playback and accurate tracking.',
+            // ── template.html：v39 補齊英文缺漏的 9 個 key（其餘三語言都已存在，
+            //    唯獨英文一直沒有，導致這幾個字串在英文版會顯示中文原文）──
+            tmpl_acc_note: 'glasses / bouquet / staff, etc.',
+            tmpl_custom_note: 'Requires detailed discussion with the artist and rigger',
+            tmpl_custom_price: 'From NT$1,500',
+            tmpl_gallery_switch: 'Click to switch outfit',
+            tmpl_outfit_detail_add: 'Additional outfit',
+            tmpl_outfit_price_1: '1st outfit: NT$1,000',
+            tmpl_outfit_price_add: '+NT$400 for each outfit after the first',
+            tmpl_s1_hint: '(Base price for the 1st outfit; +$400 for each additional one)',
+            tmpl_total_hint: 'Excludes shipping and processing fees',
     };
 })();

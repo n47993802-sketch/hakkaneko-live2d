@@ -151,9 +151,12 @@
 
         function selectPaymentAnim(s) { ['bank', 'paypal', 'ecpay'].forEach(p => document.getElementById('anim'+p.charAt(0).toUpperCase()+p.slice(1)).checked = (p === s)); calculateAnim(); syncCheckboxVisuals();
             // 委託編號：第一次報價時生成，之後固定不變
-            const vpOrderEl = document.getElementById('orderIdVP');
-            if (vpOrderEl && vpOrderEl.textContent.trim() === '\u2014') {
-                vpOrderEl.textContent = generateOrderNumber('vp');
+            // v39 修復：這裡原本寫的是 orderIdVP（V皮頁的元素 id），anim.html 根本沒有
+            // 這個元素，等於一直是無效程式碼（有做 null 檢查所以不會噴錯，但完全沒作用）。
+            // 應該讀寫的是這一頁自己的 orderIdAnim。
+            const animOrderElPay = document.getElementById('orderIdAnim');
+            if (animOrderElPay && animOrderElPay.textContent.trim() === '\u2014') {
+                animOrderElPay.textContent = generateOrderNumber('anim');
             }
         }
 

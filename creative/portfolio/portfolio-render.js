@@ -198,3 +198,29 @@ var gifPage = { stickers: 0, logos: 0 };
         } else {
             gifEnsureInit();
         }
+
+// v39 修復：port-reveal 首次顯示邏輯搬到這裡立即執行（不再放在 common.js 的
+// switchTab() 裡等 window.onload 才觸發）。.port-reveal 元素預設 opacity:0
+// （見 common.css），之前要等頁面「所有」圖片/資源都載入完成才會淡入，
+// 跟其他頁面的呈現時機差很多，體感上明顯「延遲」。現在頁面一解析完
+// （DOMContentLoaded）就立刻觸發，不用再等圖片全部載入。
+function triggerPortReveal() {
+    var pageEl = document.getElementById('page-portfolio');
+    if (!pageEl) return;
+    var firstPortEl = pageEl.querySelector('.port-reveal');
+    if (!firstPortEl || firstPortEl.classList.contains('visible')) return; // 已經顯示過
+    var portEls = pageEl.querySelectorAll('.port-reveal');
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+            portEls.forEach(function(el, i) {
+                setTimeout(function() { el.classList.add('visible'); }, i * 70);
+            });
+        });
+    });
+    pageEl.classList.remove('gif-hidden', 'hidden');
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', triggerPortReveal);
+} else {
+    triggerPortReveal();
+}

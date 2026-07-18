@@ -467,27 +467,15 @@
             // 閱讀之後，於 window.onload 這個較晚的時間點又無意義地重播一次
             // 淡入動畫——這正是切換分頁後過一下子又閃一下、或內容突然跳動的
             // 原因之一。現在改成：不再做任何隱藏/顯示/重播動畫/捲動置頂，
-            // 只保留 portfolio 的 port-reveal 首次顯示（見下方說明），以及
-            // 各分頁真正需要的一次性初始化呼叫。
+            // 只保留各分頁真正需要的一次性初始化呼叫。
+            //
+            // v39 修復：portfolio 的 port-reveal 首次顯示，之前也放在這裡，
+            // 但這裡只會被 window.onload 呼叫（等頁面所有圖片/資源都載入完，
+            // 通常比第一次畫面顯示晚很多），導致作品展示內容會「先完全透明、
+            // 等很久才淡入」，體感上跟其他頁面完全不同步。已經搬到
+            // portfolio-render.js 裡跟 gifEnsureInit() 一樣立即執行，不用
+            // 再等 window.onload。
             const targetPage = document.getElementById('page-' + tabId);
-
-            // portfolio 比較特別：.port-reveal 元素預設 opacity:0（見 common.css），
-            // 目前「唯一」讓它們顯示出來的地方就是這裡，不是單純的重播特效，
-            // 所以仍保留，但只在「還沒顯示過」時才觸發一次。
-            if (tabId === 'portfolio' && targetPage) {
-                const firstPortEl = targetPage.querySelector('.port-reveal');
-                if (firstPortEl && !firstPortEl.classList.contains('visible')) {
-                    const portEls = targetPage.querySelectorAll('.port-reveal');
-                    requestAnimationFrame(function() {
-                        requestAnimationFrame(function() {
-                            portEls.forEach(function(el, i) {
-                                setTimeout(function() { el.classList.add('visible'); }, i * 70);
-                            });
-                        });
-                    });
-                }
-                targetPage.classList.remove('gif-hidden', 'hidden');
-            }
 
             // 分頁按鈕的高亮，nav-render.js 在畫面第一次繪製前就已經處理過一次，
             // 這裡再做一次是安全的（同一個結果），保留是為了不影響其他呼叫點
@@ -511,9 +499,10 @@
                 }
             })();
 
-            if(tabId === 'core') calculate();
-            else if(tabId === 'anim') calculateAnim();
-            else if(tabId === 'template') { /* tmplCalculate called by interceptor */ }
+            // v39：core/anim 的初次報價計算已經改成在 core-render.js／anim-render.js
+            // 一載入就立刻執行（見那兩個檔案結尾），這裡不用再重複算一次；
+            // 語言切換時的重新計算也已經由 setLang() 自己處理，不需要靠這裡觸發。
+            if(tabId === 'template') { /* tmplCalculate called by interceptor */ }
             else if(tabId === 'live2d-demo') initLive2DDemo();
             else if(tabId === 'fanart') loadFanart();
             else if(tabId === 'portfolio') {
@@ -621,181 +610,9 @@
 
 
         // ==================== Live2D 互動分頁邏輯 ====================
-        let live2dApp = null;
-        let live2dModel = null;
-        let live2dInited = false;
-        let demoParams = { eye: 0.5, body: 0.5, exp: 0.5, breath: 0.5, blink: true, lip: false, physics: true };
+        // 已拆分至 creative/live2d-demo/live2d-demo-render.js，只有
+        // live2d-demo.html 會載入這個檔案，其餘 9 個頁面不會再跟著下載。
 
-        function initLive2DDemo() {
-            if (live2dInited) return;
-            live2dInited = true;
-        }
-
-        // 模型固定 URL — 📌 改為 GitHub raw URL 後即可正常載入
-        // 格式：https://raw.githubusercontent.com/你的帳號/repo/main/live2d/yourmodel.model3.json
-        const LIVE2D_MODEL_URL = 'https://raw.githubusercontent.com/你的帳號/repo/main/live2d/yourmodel.model3.json';
-        const CORS_PROXY = 'https://corsproxy.io/?url=';
-
-        async function loadLive2DModel() {
-            const badge = document.getElementById('demoStatusBadge');
-            const placeholder = document.getElementById('live2dPlaceholder');
-            const canvasEl = document.getElementById('live2dCanvas');
-            { const _d=(typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang]:I18N['zh-TW']; badge.textContent = _d.badge_loading||'載入中…'; badge.className = 'text-xs bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full'; }
-
-            // Dynamically load pixi + live2d-display
-            if (!window.PIXI) {
-                await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.10/browser/pixi.min.js');
-            }
-            if (!window.Live2DModel) {
-                await loadScript('https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/index.min.js');
-                if (window.PIXI && window.Live2DModel) {
-                    window.Live2DModel.registerTicker(PIXI.Ticker);
-                }
-            }
-
-            // Try direct URL first, then CORS proxy
-            const urlsToTry = [
-                LIVE2D_MODEL_URL,
-                CORS_PROXY + encodeURIComponent(LIVE2D_MODEL_URL)
-            ];
-
-            try {
-                const wrapper = document.getElementById('live2dWrapper');
-                const w = wrapper.clientWidth, h = wrapper.clientHeight;
-
-                if (live2dApp) { live2dApp.destroy(true); live2dApp = null; }
-
-                live2dApp = new PIXI.Application({ width: w, height: h, backgroundAlpha: 0, view: canvasEl, antialias: true });
-                canvasEl.style.display = 'block';
-                placeholder.style.display = 'none';
-
-                let loadedModel = null;
-                for (const url of urlsToTry) {
-                    try {
-                        loadedModel = await window.Live2DModel.from(url, { autoHitTest: true, autoFocus: true });
-                        break;
-                    } catch(e) { continue; }
-                }
-                if (!loadedModel) throw new Error('All URLs failed');
-                live2dModel = loadedModel;
-
-                live2dApp.stage.addChild(live2dModel);
-
-                // Scale to fit
-                const scale = Math.min(w / live2dModel.internalModel.originalWidth, h / live2dModel.internalModel.originalHeight) * 0.85;
-                live2dModel.scale.set(scale);
-                live2dModel.x = w / 2 - (live2dModel.internalModel.originalWidth * scale) / 2;
-                live2dModel.y = h / 2 - (live2dModel.internalModel.originalHeight * scale) / 2;
-
-                // Mouse eye tracking
-                wrapper.addEventListener('mousemove', e => {
-                    if (!live2dModel) return;
-                    const rect = wrapper.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-                    const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-                    const sens = demoParams.eye;
-                    live2dModel.focus(rect.left + (x * sens + 1) * rect.width / 2, rect.top + (y * sens + 1) * rect.height / 2);
-                });
-
-                // Touch support for mobile
-                wrapper.addEventListener('touchmove', e => {
-                    if (!live2dModel) return;
-                    const touch = e.touches[0];
-                    const rect = wrapper.getBoundingClientRect();
-                    live2dModel.focus(touch.clientX, touch.clientY);
-                }, { passive: true });
-
-                // Click to trigger motion
-                live2dModel.on('hit', areas => {
-                    const headAreas = ['Head','head','Face','face','Hair','hair'];
-                    if (areas.some(a => headAreas.includes(a))) {
-                        live2dModel.motion('FlickHead');
-                    } else {
-                        live2dModel.motion('TapBody');
-                    }
-                });
-
-                { const _d=(typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang]:I18N['zh-TW']; badge.textContent = _d.badge_loaded||'✓ 已載入'; badge.className = 'text-xs bg-green-500/20 text-green-300 px-3 py-1 rounded-full'; }
-            } catch(e) {
-                { const _d=(typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang]:I18N['zh-TW']; badge.textContent = _d.badge_fail||'載入失敗'; badge.className = 'text-xs bg-red-500/20 text-red-400 px-3 py-1 rounded-full'; }
-                placeholder.style.display = 'flex';
-                canvasEl.style.display = 'none';
-                console.error('Live2D load error:', e);
-            }
-        }
-
-        function loadScript(src) {
-            return new Promise((res, rej) => {
-                const s = document.createElement('script');
-                s.src = src; s.onload = res; s.onerror = rej;
-                document.head.appendChild(s);
-            });
-        }
-
-        function triggerMotion(name) {
-            if (!live2dModel) { alert('請先載入模型！'); return; }
-            try { live2dModel.motion(name); } catch(e) {
-}
-        }
-
-        function updateParam(type, val) {
-            const pct = Math.round(val);
-            demoParams[type] = pct / 100;
-            if (type === 'eye') document.getElementById('eyeVal').textContent = pct + '%';
-            if (type === 'body') document.getElementById('bodyVal').textContent = pct + '%';
-            if (type === 'exp') document.getElementById('expVal').textContent = pct + '%';
-            if (type === 'breath') document.getElementById('breathVal').textContent = pct + '%';
-
-            if (live2dModel) {
-                try {
-                    if (type === 'body') live2dModel.internalModel?.motionManager?.groups?.idle && (live2dModel.internalModel.motionManager.preferredFrameRate = 30 + Math.round(demoParams.body * 30));
-                } catch(e) {}
-            }
-        }
-
-        function toggleSwitch(type, val) {
-            demoParams[type] = val;
-            if (!live2dModel) return;
-            try {
-                if (type === 'blink') live2dModel.internalModel.eyeBlink && (live2dModel.internalModel.eyeBlink.enabled = val);
-                if (type === 'lip') live2dModel.internalModel.lipSync && (live2dModel.internalModel.lipSync.enabled = val);
-            } catch(e) {}
-        }
-
-        // ---- Intro avatar sound ----
-        function playIntroSound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                // Cheerful ascending arpeggio
-                [523, 659, 784, 1047].forEach((freq, i) => {
-                    const o = ctx.createOscillator();
-                    const g = ctx.createGain();
-                    o.type = 'sine';
-                    o.connect(g); g.connect(ctx.destination);
-                    o.frequency.value = freq;
-                    const t = ctx.currentTime + i * 0.1;
-                    g.gain.setValueAtTime(0, t);
-                    g.gain.linearRampToValueAtTime(0.25, t + 0.05);
-                    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-                    o.start(t); o.stop(t + 0.3);
-                });
-            } catch(e) {}
-        }
-
-        // ---- Bonk 音效 ----
-        function playBonk() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const o = ctx.createOscillator();
-                const g = ctx.createGain();
-                o.connect(g); g.connect(ctx.destination);
-                o.frequency.setValueAtTime(300, ctx.currentTime);
-                o.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.1);
-                g.gain.setValueAtTime(0.35, ctx.currentTime);
-                g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
-                o.start(); o.stop(ctx.currentTime + 0.28);
-            } catch(e) {}
-        }
 
         // ================================================================
         // 表單網址設定已搬到 site-config.js（window.FORM_URLS），全站共用設定檔。
@@ -1174,9 +991,16 @@
                 });
             }
 
-            // 初始頁面（page-intro 是唯一可見的）
-            const introPage = document.getElementById('page-intro');
-            if (introPage) attachReveal(introPage);
+            // v39 修復：之前只有 index.html 自己的內容（page-intro）在這裡立刻
+            // attachReveal()，其餘 9 個頁面都要等 window.onload 呼叫 switchTab()
+            // 才會補上 .reveal（見下面的 window.switchTab 攔截）。這造成的畫面
+            // 現象是：頁面先用預設樣式顯示 → window.onload 觸發時突然被加上
+            // .reveal（opacity:0，瞬間消失）→ IntersectionObserver 偵測到才
+            // 又淡入——等於「先顯示、又隱藏、才慢慢出現」，跟其他頁面的呈現
+            // 時機明顯不同步。現在改成：不管是哪一頁，一律立刻對「自己」的
+            // 內容執行 attachReveal()，不用再等 window.onload。
+            const currentPage = document.querySelector('.page-content');
+            if (currentPage) attachReveal(currentPage);
 
             const _origSwitch = window.switchTab;
             window.switchTab = function(tabId) {

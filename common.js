@@ -461,20 +461,17 @@
             // 不會再有「同一頁裡有好幾個分頁互相切換」的情況了。這個函式是
             // 從「一體式版本」留下來的，那時候它的工作是：把其他分頁隱藏、
             // 把目標分頁顯示出來、並強制重播一次淡入動畫。
-            // 但現在 window.onload 只會用「目前這一頁自己的 id」呼叫它一次
-            // （目的只是要觸發下面 calculate()/loadFanart() 這類一次性初始化），
-            // 如果照舊整個跑一次「隱藏→重新淡入」，等於畫面在使用者已經開始
-            // 閱讀之後，於 window.onload 這個較晚的時間點又無意義地重播一次
-            // 淡入動畫——這正是切換分頁後過一下子又閃一下、或內容突然跳動的
-            // 原因之一。現在改成：不再做任何隱藏/顯示/重播動畫/捲動置頂，
-            // 只保留各分頁真正需要的一次性初始化呼叫。
+            // 現在 initPage()（見下方，DOMContentLoaded 時觸發一次）只會用
+            // 「目前這一頁自己的 id」呼叫它一次（目的只是要觸發下面
+            // loadFanart() 這類一次性初始化），如果照舊整個跑一次
+            // 「隱藏→重新淡入」，等於無意義地重播一次淡入動畫——這正是
+            // 切換分頁後過一下子又閃一下、或內容突然跳動的原因之一。
+            // 現在改成：不再做任何隱藏/顯示/重播動畫/捲動置頂，只保留
+            // 各分頁真正需要的一次性初始化呼叫。
             //
-            // v39 修復：portfolio 的 port-reveal 首次顯示，之前也放在這裡，
-            // 但這裡只會被 window.onload 呼叫（等頁面所有圖片/資源都載入完，
-            // 通常比第一次畫面顯示晚很多），導致作品展示內容會「先完全透明、
-            // 等很久才淡入」，體感上跟其他頁面完全不同步。已經搬到
+            // portfolio 的 port-reveal 首次顯示，之前也放在這裡觸發，但已經搬到
             // portfolio-render.js 裡跟 gifEnsureInit() 一樣立即執行，不用
-            // 再等 window.onload。
+            // 再等這裡才觸發。
             const targetPage = document.getElementById('page-' + tabId);
 
             // 分頁按鈕的高亮，nav-render.js 在畫面第一次繪製前就已經處理過一次，
@@ -727,29 +724,50 @@
             }
         });
 
-        window.onload = () => {
+        // ==================== 統一頁面初始化 initPage() ====================
+        // v40 重構：這裡原本是 window.onload（要等頁面「所有」資源，包括圖片、
+        // 外部 CDN 等全部載入完成才觸發，通常明顯比 DOM 解析完晚很多），
+        // 現在改成 DOMContentLoaded（HTML 解析完就觸發，不用等圖片）。
+        // 這裡做的事全部都只需要 DOM 結構存在，不需要等圖片/外部資源，
+        // 所以搬到更早的時機觸發是安全的，也能讓 nav 高亮、常見問題手風琴、
+        // 二創/Live2D 初始化等更快完成，不會被慢速圖片拖住。
+        //
+        // 同時修掉一個先前拆分 core.html／anim.html 報價計算機邏輯到獨立檔案
+        // 時，不小心留下的嚴重錯誤：以前這裡有 _safe(calculate)／
+        // _safe(calculateAnim)／_safe(updateAnimFields) 這幾行，直接把
+        // 「可能根本沒被定義」的函式當參數傳給 _safe()。問題在於 JS 在呼叫
+        // _safe(calculate) 之前，就要先計算「calculate」這個參數的值——
+        // 如果目前這一頁根本沒有載入定義 calculate 的檔案（例如在
+        // artists.html／portfolio.html 等 8 個非報價頁面上，calculate 只存在
+        // 於 core.html 專屬的 core-render.js 裡），這一行會直接丟出「未攔截」
+        // 的 ReferenceError，導致整個初始化流程從這裡中斷，後面的
+        // bindCheckboxSync()／syncCheckboxVisuals()／自己直播狀態檢查全部
+        // 都不會執行！這幾行本來就是多餘的（core-render.js／anim-render.js
+        // 現在都已經在自己腳本載入時立刻算過一次），這次直接移除，
+        // 不再有這個風險。
+        function initPage() {
             function _safe(fn){ try { if (typeof fn === 'function') fn(); } catch(e) { console.warn('[init]', e); } }
             var _firstPage = document.querySelector('.page-content');
             if (_firstPage) { _safe(function(){ switchTab(_firstPage.id.replace('page-','')); }); }
-            _safe(calculate);
-            _safe(calculateAnim);
-            _safe(updateAnimFields);
             _safe(bindCheckboxSync);
             _safe(syncCheckboxVisuals);
 
-            // v34：checkMyLiveStatus／setLiveStatus 是查「阿卡貓自己」的直播狀態，
+            // checkMyLiveStatus／setLiveStatus 是查「阿卡貓自己」的直播狀態，
             // 對應的徽章（#twitterLiveBadge）目前只有 index.html 有，
-            // 之前這裡沒有先判斷徽章存不存在，導致其他 9 個頁面每次載入
-            // 都會偷偷對外發一次一樣的查詢請求、卻找不到地方顯示結果，
-            // 白白浪費一次網路請求。現在改成先確認頁面上真的有這個徽章才查詢。
-            // （推薦頻道的直播狀態查詢已搬到 channels-render.js，只有
-            //   channels.html 會執行，這裡不用再管。）
+            // 先確認頁面上真的有這個徽章才查詢，避免其他頁面白白發送請求。
+            // （推薦頻道的直播狀態查詢在 channels-render.js，只有
+            //   channels.html 會執行，這裡不用管。）
             if (document.getElementById('twitterLiveBadge')) {
                 _safe(setLiveStatus);
                 setTimeout(() => checkMyLiveStatus(), 0);
                 setInterval(checkMyLiveStatus, 3 * 60 * 1000);
             }
-        };
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            initPage();
+        }
 		
         // ==================== 二創展示載入 ====================
         // 已拆分至 fanart-render.js（FANART_API/FANART_RAW/loadFanart()），
@@ -1055,67 +1073,34 @@
             };
         }
 
-        // ==================== 金額滾動數字動畫 ====================
-        (function() {
-            function animateCounter(el, from, to) {
-                const diff = to - from;
-                const duration = Math.min(Math.abs(diff) / 30 + 200, 550);
-                const startTime = performance.now();
-                let rafId;
-                function step(now) {
-                    const t = Math.min((now - startTime) / duration, 1);
-                    const ease = 1 - Math.pow(1 - t, 3);
-                    el.textContent = getCurrencyPrefix() + Math.round(from + diff * ease).toLocaleString();
-                    if (t < 1) { rafId = requestAnimationFrame(step); }
-                    else el.textContent = getCurrencyPrefix() + to.toLocaleString();
-                }
-                if (el._rafId) cancelAnimationFrame(el._rafId);
-                el._rafId = requestAnimationFrame(step);
+        // ==================== 金額滾動數字動畫（共用工具函式） ====================
+        // v40 修復：這裡原本用一個立即執行的 IIFE，嘗試包裝 window.calculate／
+        // window.calculateAnim 加上數字滾動動畫效果。但這段程式碼在 common.js
+        // 裡，會比 core-render.js／anim-render.js 更早執行——那時候
+        // window.calculate／window.calculateAnim 根本還不存在（還沒載入），
+        // 包裝的對象等於是 undefined。等 core-render.js／anim-render.js
+        // 稍後才真正定義 calculate()／calculateAnim() 時，又會把這裡包裝好的
+        // 版本整個覆蓋掉——等於這個滾動動畫效果自從報價機邏輯拆檔之後，
+        // 已經完全沒有作用過。
+        // 修法：animateCounter() 留在這裡當共用工具函式，實際「包裝」的動作
+        // 改到 core-render.js／anim-render.js 自己的檔案裡，在它們各自定義
+        // 完 calculate()／calculateAnim() 之後才進行包裝，順序才會正確。
+        function animateCounter(el, from, to) {
+            const diff = to - from;
+            const duration = Math.min(Math.abs(diff) / 30 + 200, 550);
+            const startTime = performance.now();
+            let rafId;
+            function step(now) {
+                const t = Math.min((now - startTime) / duration, 1);
+                const ease = 1 - Math.pow(1 - t, 3);
+                el.textContent = getCurrencyPrefix() + Math.round(from + diff * ease).toLocaleString();
+                if (t < 1) { rafId = requestAnimationFrame(step); }
+                else el.textContent = getCurrencyPrefix() + to.toLocaleString();
             }
+            if (el._rafId) cancelAnimationFrame(el._rafId);
+            el._rafId = requestAnimationFrame(step);
+        }
 
-            // patch：先記舊值，呼叫原始函數後再動畫
-            const _origCalc = window.calculate;
-            // v27 Debounce：50ms 防抖，消除連續點擊的微卡頓
-            const _debouncedCalc = debounce(function() {
-                const el = document.getElementById('totalPrice');
-                if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
-                _origCalc && _origCalc();
-                if (!el) return;
-                const from = parseInt(el.dataset.animFrom || '0');
-                const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
-                if (from !== to) animateCounter(el, from, to);
-            }, 60);
-            window.calculate = function() {
-                // 先同步跑一次（讓 DOM 數字立即更新），再 debounce 動畫渲染
-                const el = document.getElementById('totalPrice');
-                if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
-                _origCalc && _origCalc();
-                if (!el) return;
-                const from = parseInt(el.dataset.animFrom || '0');
-                const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
-                if (from !== to) _debouncedCalc();
-            };
-
-            const _origAnimCalc = window.calculateAnim;
-            const _debouncedAnimCalc = debounce(function() {
-                const el = document.getElementById('animTotalPrice');
-                if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
-                _origAnimCalc && _origAnimCalc();
-                if (!el) return;
-                const from = parseInt(el.dataset.animFrom || '0');
-                const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
-                if (from !== to) animateCounter(el, from, to);
-            }, 60);
-            window.calculateAnim = function() {
-                const el = document.getElementById('animTotalPrice');
-                if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
-                _origAnimCalc && _origAnimCalc();
-                if (!el) return;
-                const from = parseInt(el.dataset.animFrom || '0');
-                const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
-                if (from !== to) _debouncedAnimCalc();
-            };
-        })();
 
         // switchTab 已在上方內建 fanart 支援 (else if tabId==='fanart') loadFanart()
 

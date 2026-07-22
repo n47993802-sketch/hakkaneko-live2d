@@ -185,6 +185,32 @@
         function toggleAnimRushField() { document.getElementById('animRushContainer').classList.toggle('hidden', !document.getElementById('animRush').checked); calculateAnim(); }
 
 
+// v40 修復：金額滾動數字動畫的「包裝」邏輯，原本放在 common.js 裡，
+// 但 common.js 比這支檔案先載入，那時候 calculateAnim 根本還沒定義，
+// 包裝了個寂寞，等這支檔案稍後才真正定義 calculateAnim() 時，又會把
+// 包裝版本整個蓋掉——滾動動畫因此從沒真正生效過。現在把「包裝」的
+// 動作移來這裡，確保是在 calculateAnim() 真正定義好之後才進行包裝，
+// 順序才正確。（animateCounter() 本身仍是 common.js 提供的共用工具函式。）
+const _origAnimCalc = calculateAnim;
+const _debouncedAnimCalc = debounce(function() {
+    const el = document.getElementById('animTotalPrice');
+    if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
+    _origAnimCalc && _origAnimCalc();
+    if (!el) return;
+    const from = parseInt(el.dataset.animFrom || '0');
+    const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
+    if (from !== to) animateCounter(el, from, to);
+}, 60);
+calculateAnim = function() {
+    const el = document.getElementById('animTotalPrice');
+    if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
+    _origAnimCalc && _origAnimCalc();
+    if (!el) return;
+    const from = parseInt(el.dataset.animFrom || '0');
+    const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
+    if (from !== to) _debouncedAnimCalc();
+};
+
 // v37 修復：右側報價原本要等 window.onload（頁面所有資源都載入完成後，
 // 通常比畫面第一次顯示晚不少）才會第一次計算，這段時間畫面顯示的是
 // anim.html 寫死的預設文字「NT$ 8,000」，等 window.onload 觸發計算後
@@ -192,4 +218,9 @@
 // 這裡讓 calculateAnim() 在這支腳本一載入就立刻執行一次（此時表單元素
 // 都已經在 DOM 中，可以安全讀取），畫面一開始顯示的就已經是正確金額，
 // 不會再有「先顯示預設文字、之後又跳成計算結果」的情況。
-calculateAnim();
+// 注意：這裡刻意呼叫 _origAnimCalc()（沒有滾動動畫的原始版本），不是
+// 上面包裝過的 calculateAnim()——如果用包裝版本，畫面會先顯示 HTML 寫死
+// 的預設金額，被 animateCounter() 從那個假預設值「滾動」到正確金額，
+// 等於又重新做出一次一開始就想避免的視覺跳動。之後使用者互動觸發的
+// calculateAnim() 才需要滾動動畫，第一次不需要。
+_origAnimCalc();

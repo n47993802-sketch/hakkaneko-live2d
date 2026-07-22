@@ -69,7 +69,7 @@
         }
     })();
     </script>
-    <link rel="stylesheet" href="../../tailwind.min.css">
+    <link rel="stylesheet" href="../../tailwind.min.css?v=20260718">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
         <!-- DNS prefetch for external resources -->
@@ -82,7 +82,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="../../common.css">
+    <link rel="stylesheet" href="../../common.css?v=20260718">
 </head>
 <body class="antialiased min-h-screen pb-12 loading">
     <script>window.SITE_BASE = '../../';</script>
@@ -135,9 +135,9 @@
             <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
             <!-- 導覽列設定＋渲染：緊跟在 <nav> 容器後面、同步載入，
                  讓按鈕在畫面第一次繪製前就已經填好，避免空白容器閃爍 -->
-            <script src="../../site-config.js"></script>
-            <script src="../../nav-config.js"></script>
-            <script src="../../nav-render.js"></script>
+            <script src="../../site-config.js?v=20260718"></script>
+            <script src="../../nav-config.js?v=20260718"></script>
+            <script src="../../nav-render.js?v=20260718"></script>
         </div>
     </header>
 
@@ -343,14 +343,14 @@
     </div>
 
     <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
-    <script src="../../locales/zh-TW.js"></script>
-    <script src="../../locales/zh-CN.js"></script>
-    <script src="../../locales/en.js"></script>
-    <script src="../../locales/ja.js"></script>
-    <script src="../../effects/meteor-bg.js"></script>
-    <script src="../../common.js"></script>
+    <script src="../../locales/zh-TW.js?v=20260718"></script>
+    <script src="../../locales/zh-CN.js?v=20260718"></script>
+    <script src="../../locales/en.js?v=20260718"></script>
+    <script src="../../locales/ja.js?v=20260718"></script>
+    <script src="../../effects/meteor-bg.js?v=20260718"></script>
+    <script src="../../common.js?v=20260718"></script>
     <!-- 二創展示載入邏輯：只有這一頁需要，載入順序要在 common.js 之後
          （需要用到 common.js 的 ulbGroups/ulbOpen 燈箱系統與 I18N 字典）。 -->
-    <script src="fanart-render.js"></script>
+    <script src="fanart-render.js?v=20260718"></script>
 </body>
 </html>

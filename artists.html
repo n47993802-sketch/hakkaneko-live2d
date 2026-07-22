@@ -147,19 +147,19 @@
 
         <!-- 固定右上角：日夜模式 -->
     <button onclick="toggleTheme()" id="themeFixedBtn"
-        class="fixed top-4 right-[6.5rem] z-[999] w-10 h-10 rounded-full glass-panel flex items-center justify-center shadow-lg hover:scale-110 transition-transform border border-white/10"
+        class="fixed top-4 right-[6.5rem] z-[999] w-10 h-10 rounded-full glass-panel no-reveal flex items-center justify-center shadow-lg hover:scale-110 transition-transform border border-white/10"
         title="切換白天/夜晚模式">
         <i id="themeIcon" class="fa-solid fa-sun text-yellow-400 text-sm"></i>
     </button>
 
     <!-- 固定右上角：語言切換 -->
     <div class="fixed top-4 right-4 z-[999]" id="langSwitcherWrap"><button onclick="toggleLangMenu()" id="langBtn"
-            class="h-9 px-2.5 rounded-full glass-panel flex items-center gap-1.5 shadow-lg hover:scale-105 transition-transform border border-white/10 text-purple-300 text-xs font-bold"
+            class="h-9 px-2.5 rounded-full glass-panel no-reveal flex items-center gap-1.5 shadow-lg hover:scale-105 transition-transform border border-white/10 text-purple-300 text-xs font-bold"
             title="切換語言 / Language">
             <span id="langFlag" class="text-base leading-none"></span>
             <span id="langCode" class="text-[0.65rem] font-bold tracking-wide opacity-80">TW</span>
         </button>
-        <div id="langMenu" class="hidden absolute top-12 glass-panel rounded-2xl p-2 shadow-2xl border border-purple-500/30" style="background:#120824; right:auto; left:50%; transform:translateX(-50%); min-width:160px; white-space:nowrap;">
+        <div id="langMenu" class="hidden absolute top-12 glass-panel no-reveal rounded-2xl p-2 shadow-2xl border border-purple-500/30" style="background:#120824; right:auto; left:50%; transform:translateX(-50%); min-width:160px; white-space:nowrap;">
             <button onclick="setLang('zh-TW')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
                 <span class="text-base"><span class="fi fi-tw" aria-hidden="true"></span></span>
                 <span class="flex-1">繁體中文</span>

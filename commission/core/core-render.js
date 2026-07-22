@@ -241,24 +241,23 @@ var prices = window.CORE_PRICES;
 // 蓋掉——滾動動畫因此從沒真正生效過。現在把「包裝」的動作移來這裡，
 // 確保是在 calculate() 真正定義好之後才進行包裝，順序才正確。
 // （animateCounter() 本身仍是 common.js 提供的共用工具函式。）
+//
+// v41 修復：上一版這裡用了 debounce 包一層，邏輯有誤——debounce 延後
+// 執行的那個函式，會「重新」讀一次 el.textContent 當作 from（這時候
+// textContent 其實已經被 _origCalc() 更新成新數字了），導致 from 跟 to
+// 永遠相等、動畫條件永遠不成立，滾動動畫完全沒有觸發。
+// 這裡不需要 debounce：calculate() 只會在 checkbox/radio 的 onchange
+// 事件觸發，不是連續輸入，不會有需要節流的高頻率呼叫情境。正確做法是
+// 單純同步執行：先記錄舊值 → 呼叫 _origCalc() 讓它把新值寫進畫面 →
+// 立刻用「舊值→新值」呼叫 animateCounter()，把畫面重新接管成動畫過程。
 const _origCalc = calculate;
-const _debouncedCalc = debounce(function() {
-    const el = document.getElementById('totalPrice');
-    if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
-    _origCalc && _origCalc();
-    if (!el) return;
-    const from = parseInt(el.dataset.animFrom || '0');
-    const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
-    if (from !== to) animateCounter(el, from, to);
-}, 60);
 calculate = function() {
     const el = document.getElementById('totalPrice');
-    if (el) el.dataset.animFrom = el.textContent.replace(/[^0-9]/g, '') || '0';
+    const from = el ? parseInt(el.textContent.replace(/[^0-9]/g, '') || '0') : 0;
     _origCalc && _origCalc();
     if (!el) return;
-    const from = parseInt(el.dataset.animFrom || '0');
-    const to   = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
-    if (from !== to) _debouncedCalc();
+    const to = parseInt(el.textContent.replace(/[^0-9]/g, '') || '0');
+    if (from !== to) animateCounter(el, from, to);
 };
 
 // v37 修復：右側報價原本要等 window.onload（頁面所有資源都載入完成後，

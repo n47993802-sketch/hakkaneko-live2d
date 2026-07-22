@@ -998,13 +998,22 @@
             }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
 
             function attachReveal(page) {
-                // .no-reveal 標記的元素（如 carousel card）跳過，避免 GIF 二次閃爍
+                // .no-reveal 標記的元素（如 carousel card、固定右上角的日夜模式／
+                // 語言切換按鈕）跳過，避免 GIF 二次閃爍，也避免這些固定不動的
+                // UI 按鈕被誤算進「內容淡入」的順序裡。
                 const els = page.querySelectorAll('.glass-panel:not(.no-reveal), .faq-item');
                 els.forEach((el, i) => {
                     if (el.classList.contains('reveal')) return;
                     el.classList.add('reveal');
-                    // delay 以本頁 index 計算，最多 0.18s，避免後面的元素等太久
-                    el.style.transitionDelay = Math.min(i * 0.035, 0.18) + 's';
+                    // v41 修復：原本 cap 在 0.18s，全站目前最多的頁面（rules.html／
+                    // template.html）有 10 個 .glass-panel/.faq-item，0.18÷0.035≈5.1，
+                    // 代表第 6 個之後全部元素都會被 cap 到同一個 0.18s，
+                    // 變成「前幾個依序出現、後面一整排同時蹦出來」，跟其他元素
+                    // 「一排一排跟著出現」的效果不一致。這裡把上限拉高到 0.6s
+                    // （0.6÷0.035≈17，目前所有頁面的數量都在這個範圍內，
+                    // 不會再被 cap 卡住），如果之後某一頁的內容多到超過 17 個，
+                    // 只有超過的部分會維持在 0.6s、不會無限拉長等待時間。
+                    el.style.transitionDelay = Math.min(i * 0.035, 0.6) + 's';
                     io.observe(el);
                 });
             }
@@ -1093,9 +1102,9 @@
             function step(now) {
                 const t = Math.min((now - startTime) / duration, 1);
                 const ease = 1 - Math.pow(1 - t, 3);
-                el.textContent = getCurrencyPrefix() + Math.round(from + diff * ease).toLocaleString();
+                el.textContent = getCurrencyPrefix() + formatMoney(from + diff * ease);
                 if (t < 1) { rafId = requestAnimationFrame(step); }
-                else el.textContent = getCurrencyPrefix() + to.toLocaleString();
+                else el.textContent = getCurrencyPrefix() + formatMoney(to);
             }
             if (el._rafId) cancelAnimationFrame(el._rafId);
             el._rafId = requestAnimationFrame(step);

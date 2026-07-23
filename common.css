@@ -1,23 +1,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap');
 
-        
-
-        /* Google Sites iframe 內的修正 */
-        /* 星星/流星 canvas 在 iframe 內仍正常顯示（效能由 JS 行動端降級 + FPS 監控處理）*/
-        /* iframe 內：rpgLoader 維持 fixed（相對 iframe viewport），不改動定位 */
-        html.in-iframe .fixed {
-            position: sticky !important;
-        }
-        html.in-iframe #themeFixedBtn {
-            position: absolute !important;
-            top: 1rem !important;
-            right: 6.5rem !important;
-        }
-        html.in-iframe #langSwitcherWrap {
-            position: absolute !important;
-            top: 1rem !important;
-            right: 1rem !important;
-        }
+        /* v42：移除了 html.in-iframe 相關的一整組樣式（Google Sites iframe
+           內的版面修正），因為對應的 JS 偵測/加上這個 class 的邏輯，早在
+           先前清理 Google Sites 相容性代碼那一輪就已經移除，這幾條規則
+           從那之後就沒有任何元素會用到，屬於殘留樣式。 */
 
 
 
@@ -204,7 +190,19 @@
                 radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.07), transparent 40%);
             background-attachment: fixed;
             color: var(--text-main);
-            overflow-x: hidden;
+            /* v42 修復：這裡原本是 overflow-x: hidden，用意是避免裝飾用的
+               星星/流星背景或漸層造成不必要的水平捲軸。但 overflow-x:hidden
+               （或 hidden/auto/scroll 這幾種值，只要不是 visible）加在 body
+               這種很上層的祖先元素上，會讓瀏覽器把它當成一個「捲動容器」，
+               連帶讓 .sticky-summary（右側報價浮動面板）的 position:sticky
+               失效——這正是你想要的「捲動時報價欄跟著移動」一直沒有作用的
+               原因。改用 overflow-x: clip（同樣會裁切超出範圍的內容、避免
+               水平捲軸，但規格上不會讓 body 變成捲動容器，不會影響子元素的
+               sticky 定位），並明確補上 overflow-y: visible，避免瀏覽器
+               在只設定 overflow-x 時，把沒設定的 overflow-y 自動代換成
+               auto（那樣一樣會產生同樣的副作用）。 */
+            overflow-x: clip;
+            overflow-y: visible;
             transition: background-color 0.5s ease, color 0.5s ease;
 
         }

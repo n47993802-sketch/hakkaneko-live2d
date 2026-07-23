@@ -21,7 +21,7 @@ window.ARTISTS_CONFIG = [
     { name: '莉比Ribi', handle: 'yazawaribii', profileUrl: 'https://x.com/yazawaribii', avatar: 'https://pbs.twimg.com/profile_images/2054602495230713856/1JqUDA6L_400x400.jpg' },
     { name: '玻璃姬', handle: 'usanana520', profileUrl: 'https://x.com/usanana520', avatar: 'https://pbs.twimg.com/profile_images/1907104678279782400/h_Ktp8dN_400x400.jpg' },
     { name: '殘光', handle: 'jXDXcEezDG0PUUl', profileUrl: 'https://x.com/jXDXcEezDG0PUUl', avatar: 'https://pbs.twimg.com/profile_images/1956153505208516611/l9Cx5-e-_400x400.jpg' },
-    { name: '雲糰', handle: 'Bai35461097', profileUrl: 'https://x.com/Bai35461097', avatar: 'https://pbs.twimg.com/profile_images/1972000407988944896/woVIm-kz_400x400.jpg' },
+    { name: '雲糰', handle: 'Bai35461097', profileUrl: 'https://x.com/Bai35461097', avatar: 'https://pbs.twimg.com/profile_images/2077305339054346240/2Zmmw8kg_400x400.jpg' },
     { name: 'FcError', handle: 'FCerror93131', profileUrl: 'https://x.com/FCerror93131', avatar: 'https://pbs.twimg.com/profile_images/2065094092112236544/xC9wtHxL_400x400.jpg' },
     { name: 'Chiyo ch.千代剎那', handle: 'ChiyoSetsuna', profileUrl: 'https://x.com/ChiyoSetsuna', avatar: 'https://pbs.twimg.com/profile_images/2024122706015510528/OZnlQlds_400x400.jpg' },
     { name: '零夜Reiya', handle: 'Reiya_VT', profileUrl: 'https://x.com/Reiya_VT', avatar: 'https://pbs.twimg.com/profile_images/2039380417758056448/lS0anzRt_400x400.jpg' },

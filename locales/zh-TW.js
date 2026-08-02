@@ -172,6 +172,7 @@
             sidebar_rush_label: '加急趕工說明', sidebar_supp_label: '補充資訊',
             sidebar_agree: '我已閱讀並同意「流程與規範」內的所有條款。',
             sidebar_screenshot: '一鍵截圖預估金額',
+            sidebar_screenshot_loading: '產生中⋯',
             sidebar_copy_summary: '一鍵複製委託需求清單',
             sidebar_rules_link: '查看授權與委託須知',
             sidebar_port_btn: '前往作品展示查看參考範例',

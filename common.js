@@ -178,7 +178,7 @@
             return `HKN-${typeCode}-${y}-${m}${d}-${rand}`;
         }
 
-        function screenshotQuote(panelId, type) {
+        function screenshotQuote(panelId, type, btnEl) {
             const panel = document.getElementById(panelId);
             if (!panel) return;
             // 讀取面板內已有的委託編號（由 calculate/calculateAnim 初次呼叫時生成）
@@ -190,17 +190,51 @@
                 orderId = generateOrderNumber(type);
                 if (orderEl) orderEl.textContent = orderId;
             }
+            // v52 修復：html2canvas 函式庫下載＋實際渲染截圖這段期間（尤其
+            // 第一次使用、CDN 函式庫還沒被瀏覽器快取時）畫面完全沒反應，
+            // 使用者容易誤以為按鈕沒作用而重複點擊。點下去的當下就先把
+            // 按鈕鎖住、圖示換成轉圈圈、文字換成「產生中⋯」，處理完成
+            // （不管成功或失敗）再由 doScreenshot() 統一還原。
+            const btnState = setBtnLoading(btnEl);
             // Load html2canvas if not already loaded
             if (!window.html2canvas) {
                 const s = document.createElement('script');
                 s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-                s.onload = () => doScreenshot(panel, orderId);
+                s.onload = () => doScreenshot(panel, orderId, btnState);
+                s.onerror = () => restoreBtnLoading(btnState);
                 document.head.appendChild(s);
             } else {
-                doScreenshot(panel, orderId);
+                doScreenshot(panel, orderId, btnState);
             }
         }
-        function doScreenshot(panel, orderId) {
+        // v52：把「按鈕換成處理中狀態」跟「還原」抽成共用函式，
+        // screenshotQuote() 觸發、doScreenshot() 結束時（不管成功或例外）
+        // 都要呼叫對應的一半，避免漏還原讓按鈕卡死在轉圈圈狀態。
+        function setBtnLoading(btnEl) {
+            if (!btnEl) return null;
+            const iconEl = btnEl.querySelector('i');
+            const textEl = btnEl.querySelector('span');
+            const state = {
+                btnEl, iconEl, textEl,
+                prevIconClass: iconEl ? iconEl.className : '',
+                prevText: textEl ? textEl.textContent : '',
+                prevDisabled: btnEl.disabled
+            };
+            btnEl.disabled = true;
+            if (iconEl) iconEl.className = 'fa-solid fa-spinner fa-spin';
+            if (textEl) {
+                const dict = (typeof currentLang !== 'undefined' && I18N[currentLang]) ? I18N[currentLang] : I18N['zh-TW'];
+                textEl.textContent = dict.sidebar_screenshot_loading || '產生中⋯';
+            }
+            return state;
+        }
+        function restoreBtnLoading(state) {
+            if (!state) return;
+            state.btnEl.disabled = state.prevDisabled;
+            if (state.iconEl) state.iconEl.className = state.prevIconClass;
+            if (state.textEl) state.textEl.textContent = state.prevText;
+        }
+        function doScreenshot(panel, orderId, btnState) {
             // 截圖前：隱藏 toast 避免被截入畫面
             const toast = document.getElementById('toast');
             const prevToastOpacity = toast.style.opacity;
@@ -225,6 +259,7 @@
                     foreignObjectRendering: false      // 關閉 foreignObject，提高文字渲染一致性
                 }).then(canvas => {
                 if (list && prevMax !== null) list.style.maxHeight = prevMax;
+                restoreBtnLoading(btnState);
                 const link = document.createElement('a');
                 const baseName = ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].quote_filename||'阿卡貓報價單':'阿卡貓報價單');
                 link.download = `${baseName}_${orderId}.png`;
@@ -245,6 +280,7 @@
                 }, 4000);
             }).catch(e => {
                 if (list && prevMax !== null) list.style.maxHeight = prevMax;
+                restoreBtnLoading(btnState);
                 alert('截圖失敗，請改用瀏覽器的截圖功能。');
             });
         }
@@ -372,6 +408,19 @@
         }
 
         function toggleTheme() {
+            // v52 修復：深色/淺色模式是靠切換 body.light-mode，讓一大堆
+            // `body.light-mode .xxx { color: ... !important }` 規則同時
+            // 生效／失效，之前完全沒有 transition，顏色是瞬間跳過去的。
+            // 這裡加一個短暫的全域顏色過渡 class（見 common.css 的
+            // .theme-transition），讓這些顏色/背景/邊框變化都能平滑地
+            // 漸變過去，過渡結束後就把 class 拿掉——不永久掛著這個全域
+            // transition，避免影響其他地方（例如 hover 效果）原本的過渡
+            // 速度。
+            document.body.classList.add('theme-transition');
+            clearTimeout(window._themeTransitionTimer);
+            window._themeTransitionTimer = setTimeout(function() {
+                document.body.classList.remove('theme-transition');
+            }, 400);
             document.body.classList.toggle('light-mode');
             const icon = document.getElementById('themeIcon');
             const isLight = document.body.classList.contains('light-mode');
@@ -987,13 +1036,43 @@
 
         // ==================== Scroll Reveal ====================
         (function() {
+            // v51 重寫（修正「合作繪師頁面到第 6 張卡片開始全部一起彈出」／
+            // 「流程頁兩個區塊順序顛倒」的問題）：
+            // 上一版把「同一批一起進入視窗的元素」依 compareDocumentPosition
+            // 排序，理論上沒錯，但延遲用 Math.min(i * 90, 450) 硬性封頂在 450ms——只要同一批
+            // 一起進入視窗的元素超過 6 個（450 / 90 = 5），第 6 個以後全部會被
+            // 硬壓到同一個 450ms，變成「前 5 個依序出現，後面全部同時彈出」，
+            // 合作繪師頁面 18 位繪師一次進入視窗就正好踩到這個問題。
+            // 另外，排序時用 IntersectionObserver 每次 callback 給的 entries
+            // 陣列即時用 compareDocumentPosition 兩兩比較，理論上能還原文件
+            // 順序，但這個排序結果依賴瀏覽器當下如何回報 entries、且每次
+            // callback 都要重新比較一次，多一層不必要的不確定性。
+            //
+            // 這次改成：元素被 attachReveal() 接手觀察的當下，就依照
+            // querySelectorAll() 回傳的文件順序，直接指派一個遞增的絕對序號
+            // （revealSeq），不用等 IntersectionObserver 回報才去猜順序。
+            // 同一批進入視窗的元素，直接照這個序號排序——不會受任何瀏覽器
+            // 回報順序影響，一定跟頁面由上到下的實際順序一致。
+            // 延遲的部分則改成「依這一批的元素數量自動縮放間隔」：固定用
+            // 500ms 當作整批最多需要多久出完，元素越多、每個間隔就自動縮小
+            // （但絕對不會讓兩個不同元素被壓成同一個延遲值），元素少的時候
+            // （例如 2~3 個）間隔維持接近 90ms，跟之前小批次的手感一樣。
+            let revealSeq = 0;
             const io = new IntersectionObserver(entries => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) {
+                const visible = entries.filter(e => e.isIntersecting);
+                if (!visible.length) return;
+                visible.sort((a, b) => a.target._revealSeq - b.target._revealSeq);
+                const n = visible.length;
+                // 500ms 除以這批的元素數量，但單一間隔絕不超過 90ms（元素很少
+                // 時，維持原本明快的節奏，不會因為只有 1~2 個元素反而算出
+                // 超過 90ms 的怪異間隔）。
+                const step = Math.min(90, 500 / n);
+                visible.forEach((e, i) => {
+                    io.unobserve(e.target);
+                    const delayMs = Math.round(i * step);
+                    setTimeout(function() {
                         e.target.classList.add('visible');
-                        e.target.style.transitionDelay = '0s'; // 出現後清掉 delay
-                        io.unobserve(e.target);
-                    }
+                    }, delayMs);
                 });
             }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
 
@@ -1002,21 +1081,27 @@
                 // 語言切換按鈕）跳過，避免 GIF 二次閃爍，也避免這些固定不動的
                 // UI 按鈕被誤算進「內容淡入」的順序裡。
                 const els = page.querySelectorAll('.glass-panel:not(.no-reveal), .faq-item');
-                els.forEach((el, i) => {
+                els.forEach((el) => {
                     if (el.classList.contains('reveal')) return;
                     el.classList.add('reveal');
-                    // v41 修復：原本 cap 在 0.18s，全站目前最多的頁面（rules.html／
-                    // template.html）有 10 個 .glass-panel/.faq-item，0.18÷0.035≈5.1，
-                    // 代表第 6 個之後全部元素都會被 cap 到同一個 0.18s，
-                    // 變成「前幾個依序出現、後面一整排同時蹦出來」，跟其他元素
-                    // 「一排一排跟著出現」的效果不一致。這裡把上限拉高到 0.6s
-                    // （0.6÷0.035≈17，目前所有頁面的數量都在這個範圍內，
-                    // 不會再被 cap 卡住），如果之後某一頁的內容多到超過 17 個，
-                    // 只有超過的部分會維持在 0.6s、不會無限拉長等待時間。
-                    el.style.transitionDelay = Math.min(i * 0.035, 0.6) + 's';
+                    // v51：觀察當下就指派絕對序號，順序完全交給程式碼自己
+                    // 決定，不依賴瀏覽器回報 entries 的順序或事後排序猜測。
+                    el._revealSeq = revealSeq++;
                     io.observe(el);
                 });
             }
+
+            // v48：公開給各頁面自己的 xxx-render.js 呼叫。
+            // 原因：common.js 只會在自己載入的當下，對「當時已經存在」的
+            // .glass-panel／.faq-item 掃描一次並接上淡入動畫。但 template /
+            // portfolio / channels / fanart 這幾頁，卡片內容其實是各自的
+            // render.js（有些甚至要等非同步 API 回應才 innerHTML 畫出來）
+            // 在 common.js 掃描「之後」才建立的——這些卡片從頭到尾沒被
+            // IntersectionObserver 接手過，於是完全沒有淡入動畫，會直接
+            // 瞬間整批彈出。渲染腳本自己在 innerHTML 完成、卡片元素真正
+            // 出現在 DOM 之後，呼叫一次 window.attachReveal(容器或 document)，
+            // 就能讓這些「後來才出生」的卡片補上一樣的淡入效果。
+            window.attachReveal = attachReveal;
 
             // v39 修復：之前只有 index.html 自己的內容（page-intro）在這裡立刻
             // attachReveal()，其餘 9 個頁面都要等 window.onload 呼叫 switchTab()
@@ -1029,58 +1114,28 @@
             const currentPage = document.querySelector('.page-content');
             if (currentPage) attachReveal(currentPage);
 
-            const _origSwitch = window.switchTab;
-            window.switchTab = function(tabId) {
-                _origSwitch && _origSwitch(tabId);
-                if (tabId === 'portfolio') {
-                    return;
-                }
-                const page = document.getElementById('page-' + tabId);
-                if (!page) return;
+            // v46 修復：這裡原本還有一段攔截 window.switchTab 的程式碼，
+            // 用意是「切回已經展示過的分頁時，重新補上 .visible」——這是一體式
+            // SPA 版本才需要的情境（同一頁裡有好幾個分頁、使用者可以在不同分頁
+            // 之間來回切換）。現在每個頁面都是各自獨立的 html，不會再有「切回
+            // 已展示過的分頁」這種情況，但這段程式碼還是會在頁面載入時執行一次
+            // （initPage() 會呼叫 switchTab(目前頁面自己的 id) 一次），而且會做一件
+            // 更嚴重的事：把「已經有 .reveal 但還沒 .visible」的元素（也就是還沒被
+            // 使用者捲動到、IntersectionObserver 還沒觸發的下方內容）全部強制立即
+            // 顯示，等於讓「捲動到才淡入」的效果對第一次載入完全失效——所有低於
+            // 螢幕高度的內容，會在頁面一載入時全部同時蹦出來，而不是使用者實際
+            // 捲動到那裡時才淡入。這其實是這幾輪你回報「上滑特效時間不對」問題的
+            // 另一個共同原因。現在已經直接移除這段攔截，讓 IntersectionObserver
+            // 用它原本該有的方式運作：捲到哪裡才淡入哪裡。
 
-                const els = page.querySelectorAll('.glass-panel:not(.no-reveal), .faq-item');
-
-                // ── v32 修復：切回已展示過的分頁（如自我介紹）時，
-                //    元素已有 .reveal 但 IntersectionObserver 早已 unobserve，
-                //    不會再次觸發，導致永遠 opacity:0（全白）。
-                //    解法：對已有 .reveal 但尚未 .visible 的元素直接補上 .visible；
-                //    對完全未初始化（無 .reveal）的元素走原本 attachReveal 流程。 ──
-                let newIdx = 0;
-                els.forEach(el => {
-                    if (el.classList.contains('reveal') && !el.classList.contains('visible')) {
-                        // 已標記但未顯示 → 立即顯示（stagger delay 保留）
-                        el.style.transitionDelay = Math.min(newIdx * 0.035, 0.18) + 's';
-                        requestAnimationFrame(() => el.classList.add('visible'));
-                        newIdx++;
-                    } else if (!el.classList.contains('reveal')) {
-                        // 從未初始化 → 走 attachReveal
-                        el.style.transitionDelay = Math.min(newIdx * 0.035, 0.18) + 's';
-                        newIdx++;
-                    }
-                });
-
-                // 仍需 attachReveal 處理未曾 observe 的新元素
-                const hasUninitialized = Array.from(els).some(el => !el.classList.contains('reveal'));
-                if (hasUninitialized) {
-                    requestAnimationFrame(() => attachReveal(page));
-                }
-            };
         })();
 
-        // ==================== v27 效能：Debounce 工具函數 ====================
-        /**
-         * debounce(fn, delay)
-         * 在 delay ms 內若再次呼叫，重設計時器，確保連續點擊只觸發一次。
-         * 對計算機選項的快速切換可消除微卡頓。
-         */
-        function debounce(fn, delay) {
-            var timer = null;
-            return function() {
-                var ctx = this, args = arguments;
-                clearTimeout(timer);
-                timer = setTimeout(function() { fn.apply(ctx, args); }, delay);
-            };
-        }
+        // v46：這裡原本還有一份幾乎一模一樣的 debounce() 函式（註解寫著
+        // 「v27 效能：Debounce 工具函數」），跟本檔案更前面已經定義過的
+        // debounce() 做的事完全一樣，只是寫法略有不同——JS 對同名的
+        // function 宣告，後面那份會覆蓋前面那份，所以這裡並沒有造成
+        // 錯誤，純粹是重複定義、多餘的程式碼，已經移除，統一使用
+        // 前面那一份。
 
         // ==================== 金額滾動數字動畫（共用工具函式） ====================
         // v40 修復：這裡原本用一個立即執行的 IIFE，嘗試包裝 window.calculate／
@@ -1094,6 +1149,160 @@
         // 修法：animateCounter() 留在這裡當共用工具函式，實際「包裝」的動作
         // 改到 core-render.js／anim-render.js 自己的檔案裡，在它們各自定義
         // 完 calculate()／calculateAnim() 之後才進行包裝，順序才會正確。
+        // ==================== 浮動報價提示條（取代 position:sticky） ====================
+        // v45：試過兩輪 position:sticky 的修法（overflow / items-stretch）都沒有讓
+        // 使用者實際看到浮動效果，改用更直接可靠的做法：position:fixed 的小提示條，
+        // 完全不依賴祖先元素的 overflow/對齊設定，只靠 JS 控制「捲動超過原本報價區時
+        // 顯示、捲回去時隱藏」，用 MutationObserver 自動同步顯示的金額文字，不需要
+        // 每次改報價計算邏輯時都要記得同步更新這裡。
+        // 只需要在 core.html／anim.html／template.html 各自的 HTML 裡準備好一個
+        // id="floatingQuoteBar" 的 fixed 元素（含一個顯示金額的子元素），
+        // 然後呼叫 initFloatingQuoteBar('quoteSummaryPanel', 'totalPrice') 即可。
+        // ==================== 報價欄捲動跟隨（取代 position:sticky） ====================
+        // v47：改用這個做法取代 position:sticky —— 不依賴任何 CSS 定位機制，
+        // 純粹用 JS 在每個動畫幀計算「面板現在應該在哪」，用 transform: translateY
+        // 直接移動面板本身，搭配 LERP（線性插值）讓移動過程平滑漸緩，
+        // 不會有 sticky 定位常見的、跟祖先元素 overflow/對齊設定互相影響的問題。
+        function initScrollFollowPanel(panelSelector, containerId) {
+            const panel = document.querySelector(panelSelector);
+            const container = document.getElementById(containerId);
+            if (!panel || !container) return;
+            let currentY = 0;   // 當前面板位移
+            let targetY = 0;    // 目標面板位移
+            let isAnimating = false;
+            // 緩和係數：數字越小越滑順/延遲感越強（0.08~0.15 之間為佳）
+            const ease = 0.1;
+
+            function updatePosition() {
+                // 大螢幕（>=1024px）才啟用跟隨，手機版維持原本排列
+                if (window.innerWidth < 1024) {
+                    panel.style.transform = 'none';
+                    isAnimating = false;
+                    return;
+                }
+                const containerRect = container.getBoundingClientRect();
+                const panelHeight = panel.offsetHeight;
+                const topOffset = 24; // 距離視窗頂部 24px
+                if (containerRect.top < topOffset) {
+                    const maxTranslateY = Math.max(0, containerRect.height - panelHeight);
+                    targetY = Math.min(Math.abs(containerRect.top - topOffset), maxTranslateY);
+                } else {
+                    targetY = 0;
+                }
+                currentY += (targetY - currentY) * ease;
+                if (Math.abs(targetY - currentY) < 0.1) currentY = targetY;
+                panel.style.transform = `translateY(${currentY}px)`;
+                if (Math.abs(targetY - currentY) >= 0.1) {
+                    requestAnimationFrame(updatePosition);
+                } else {
+                    isAnimating = false;
+                }
+            }
+            function onScrollOrResize() {
+                if (!isAnimating) {
+                    isAnimating = true;
+                    requestAnimationFrame(updatePosition);
+                }
+            }
+            window.addEventListener('scroll', onScrollOrResize, { passive: true });
+            window.addEventListener('resize', onScrollOrResize);
+            onScrollOrResize(); // 頁面載入時如果已經在捲動位置，先算一次
+        }
+
+        function initFloatingQuoteBar(panelId, priceId, prefix) {
+            var panel = document.getElementById(panelId);
+            var priceEl = document.getElementById(priceId);
+            var bar = document.getElementById('floatingQuoteBar');
+            var barPriceEl = document.getElementById('floatingQuoteBarPrice');
+            if (!panel || !priceEl || !bar || !barPriceEl) return;
+
+            function syncPrice() { barPriceEl.textContent = (prefix || '') + priceEl.textContent; }
+            syncPrice();
+            // 金額文字改變時（calculate()/calculateAnim() 更新畫面時）自動同步，
+            // 不需要另外去每個計算函式裡加同步的程式碼。
+            new MutationObserver(syncPrice).observe(priceEl, { characterData: true, childList: true, subtree: true });
+
+            function updateVisibility() {
+                var rect = panel.getBoundingClientRect();
+                // 原本的報價區「已經捲出畫面上方」時才顯示浮動提示條，
+                // 避免報價區本身還看得到時，畫面上同時出現兩份一樣的金額。
+                var shouldShow = rect.bottom < 60;
+                bar.classList.toggle('visible', shouldShow);
+            }
+            updateVisibility();
+            window.addEventListener('scroll', debounce(updateVisibility, 50), { passive: true });
+            window.addEventListener('resize', debounce(updateVisibility, 100));
+
+            bar.addEventListener('click', function() {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        // ── 金額變動「閃光脈衝」效果（修復問題4：預估總金額顯示效果差）──
+        // 搭配 common.css 的 .amount-flash / .amount-enter，
+        // 提供給 core-render.js／anim-render.js／template-render.js 共用：
+        //   flashAmount(el)      → 金額變動時呼叫，短暫脈衝提示「數字剛剛變了」
+        //   revealAmountOnLoad(el) → 頁面首次載入、金額第一次顯示時呼叫，
+        //                            讓總金額緩緩淡入（取代原本瞬間顯示）
+        function flashAmount(el, variant) {
+            if (!el) return;
+            // v50：加入 variant 參數，template.html 用 'fuchsia' 對應該頁
+            // 自己的桃紅色主題（見 common.css 的 .amount-flash-fuchsia），
+            // 不傳就維持 core.html／anim.html 原本的紫色系。
+            var cls = (variant === 'fuchsia') ? 'amount-flash-fuchsia' : 'amount-flash';
+            el.classList.remove('amount-flash', 'amount-flash-fuchsia');
+            // 強制 reflow，確保移除又加回同一個 class 時動畫會重新播放，
+            // 不會因為 class 名稱沒變化而被瀏覽器忽略。
+            void el.offsetWidth;
+            el.classList.add(cls);
+        }
+        // v49：把「等某元素最近的 .reveal 祖先真的淡入之後，才執行某個
+        // 動畫」抽成共用函式，讓 core.html／anim.html／template.html 三處
+        // 都能共用同一套修法，不必各自重複寫一次 MutationObserver。
+        function whenPanelVisible(el, cb) {
+            if (!el || typeof cb !== 'function') return;
+            const panel = el.closest('.reveal');
+            if (panel && !panel.classList.contains('visible')) {
+                const mo = new MutationObserver(function() {
+                    if (panel.classList.contains('visible')) {
+                        mo.disconnect();
+                        cb();
+                    }
+                });
+                mo.observe(panel, { attributes: true, attributeFilter: ['class'] });
+            } else {
+                cb();
+            }
+        }
+        window.whenPanelVisible = whenPanelVisible;
+
+        function revealAmountOnLoad(el) {
+            if (!el) return;
+            // v50：真正的金額文字這時候已經被算出來、寫進 textContent 了，
+            // 骨架屏（.price-skeleton）的任務到此結束，立刻拿掉——不需要
+            // 特地等到面板淡入可見才移除，因為骨架屏本來就是蓋在文字上面，
+            // 面板本身還是透明的話兩者都一樣看不到，移除的時間點早晚不影響
+            // 視覺結果，但邏輯上「數字算好了」跟「面板剛好捲進畫面」是兩件
+            // 不相關的事，不需要綁在一起判斷。
+            el.classList.remove('price-skeleton');
+            function play() {
+                el.classList.remove('amount-enter');
+                void el.offsetWidth;
+                el.classList.add('amount-enter');
+            }
+            // v49 修復：金額所在的面板（如 #quoteSummaryPanel）本身也是
+            // Scroll Reveal 系統管理的 .reveal 元素，一開始是完全透明的，
+            // 要等 IntersectionObserver 判定進入視窗後才會加上 .visible
+            // 淡入。如果金額動畫在這之前就搶先播放（腳本一執行就立刻播），
+            // 0.6 秒的動畫會在面板還看不見的時候就播完，等面板真正淡入
+            // 時金額早已是「完成」狀態，使用者只會看到面板整個浮現、
+            // 金額本身卻像是瞬間蹦出來，感覺不到任何專屬效果。
+            // 修法：等金額最近的 .reveal 祖先元素真的被標記 .visible
+            // （真正淡入）之後，才觸發金額自己的緩緩浮現動畫，讓兩者
+            // 視覺上同步發生。
+            whenPanelVisible(el, play);
+        }
+
         function animateCounter(el, from, to) {
             const diff = to - from;
             const duration = Math.min(Math.abs(diff) / 30 + 200, 550);
@@ -1108,6 +1317,7 @@
             }
             if (el._rafId) cancelAnimationFrame(el._rafId);
             el._rafId = requestAnimationFrame(step);
+            flashAmount(el); // 數字滾動的同時，附加一次短暫的閃光脈衝，強化「金額變了」的視覺提示
         }
 
 
@@ -1120,7 +1330,24 @@
     // 並在檔案最上方合併進 window.I18N。currentLang 也已移至檔案頂部宣告，
     // 避免『let 變數暫時性死區（TDZ）』造成的 ReferenceError。
 
+    // v52 修復：setLang() 本體會把上百個 [data-i18n] 元素的 innerHTML
+    // 在同一個 tick 內全部換成新語言的文字——文字內容本身沒辦法用 CSS
+    // transition 做動畫，逐一元素做動畫成本又太高。改成外面包一層：
+    // 切換的當下先讓整個頁面極短暫地淡下去（見 common.css 的
+    // .lang-switching），實際換字的動作刻意安排在畫面最暗的那一刻執行，
+    // 使用者比較不容易看到文字瞬間跳動，換完之後再淡回來，體感上更像是
+    // 一次有意圖的過渡，而不是硬生生地閃一下。
     function setLang(lang) {
+        if (!I18N[lang]) return;
+        document.body.classList.add('lang-switching');
+        setTimeout(function() {
+            _applyLang(lang);
+            requestAnimationFrame(function() {
+                document.body.classList.remove('lang-switching');
+            });
+        }, 160);
+    }
+    function _applyLang(lang) {
         if (!I18N[lang]) return;
         currentLang = lang;
         const dict = I18N[lang];

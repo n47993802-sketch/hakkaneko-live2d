@@ -160,6 +160,7 @@
             sidebar_rush_label: 'Rush Order Details', sidebar_supp_label: 'Additional Notes',
             sidebar_agree: 'I have read and agree to all the Terms & Process.',
             sidebar_screenshot: 'Save Screenshot',
+            sidebar_screenshot_loading: 'Generating…',
             sidebar_copy_summary: 'Copy Commission Summary',
             sidebar_rules_link: 'View Terms & Commission Guidelines',
             sidebar_port_btn: 'Browse Portfolio for Reference', sidebar_send_btn: 'Fill Out Request Form',

@@ -181,7 +181,14 @@
 
     <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
-    <div id="page-template" class="page-content flex flex-col lg:flex-row gap-8 items-start">
+    <div id="page-template" class="page-content flex flex-col lg:flex-row gap-8 items-start lg:items-stretch">
+        <!-- v45：浮動報價提示條，捲動超過原本報價區時顯示，取代原本不可靠的
+             position:sticky。點擊可以平滑捲回完整報價區塊。 -->
+        <div id="floatingQuoteBar" role="button" tabindex="0" aria-label="回到完整報價明細">
+            <i class="fa-solid fa-receipt fqb-icon"></i>
+            <span class="fqb-label" data-i18n="sidebar_total">預估總金額</span>
+            <span class="fqb-price" id="floatingQuoteBarPrice">NT$ ···</span>
+        </div>
 
         <!-- ════ 左側：主內容 2/3 ════ -->
         <div class="w-full lg:w-2/3 flex flex-col gap-6">
@@ -506,7 +513,7 @@
                             </div>
                         </div>
                         <h2 class="text-lg font-bold text-purple-300 mb-1" data-i18n="sidebar_total">預估總金額</h2>
-                        <div class="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">NT$ <span id="tmplTotalPrice">0</span></div>
+                        <div class="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">NT$ <span id="tmplTotalPrice" class="price-skeleton">0</span></div>
                         <div class="mb-6 pb-4 border-b border-white/10">
                             <div class="text-sm text-purple-200/90" id="tmplDepositInfo"></div>
                         </div>
@@ -537,7 +544,7 @@
 
                         <!-- 一鍵截圖 -->
                         <button data-html2canvas-ignore id="tmplScreenshotBtn" disabled
-                            onclick="screenshotQuote('tmplQuoteSummaryPanel','template')"
+                            onclick="screenshotQuote('tmplQuoteSummaryPanel','template',this)"
                             class="btn-copy-summary mb-0"
                             style="background:linear-gradient(135deg,rgba(139,92,246,0.22) 0%,rgba(59,130,246,0.16) 100%);border-color:rgba(99,102,241,0.45);opacity:0.45;cursor:not-allowed;">
                             <i class="fa-solid fa-camera"></i>

@@ -256,11 +256,20 @@
             <!-- 自動從 GitHub 載入 -->
             <div class="relative px-6">
                 <!-- 圖片格 -->
-                <div id="fanartGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div class="col-span-full glass-panel p-8 text-center">
-                        <i class="fa-solid fa-spinner fa-spin text-purple-400 text-2xl mb-3 block"></i>
-                        <p class="text-purple-200/60 text-sm" data-i18n="fanart_loading">正在從 GitHub 載入二創作品⋯</p>
-                    </div>
+                <div id="fanartGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" role="status">
+                    <span class="sr-only" data-i18n="fanart_loading">正在從 GitHub 載入二創作品⋯</span>
+                    <!-- v50：改成跟最終網格版面同樣大小的骨架屏卡片，讓使用者
+                         提前看到「等一下這裡會是幾張圖」的輪廓，比單純一個
+                         轉圈圈圖示更能降低內容出現時的視覺跳動。loadFanart()
+                         抓到資料後會整個覆蓋掉這裡，不需要另外清除。 -->
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton"></div>
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton"></div>
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton"></div>
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton"></div>
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton hidden sm:block"></div>
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton hidden sm:block"></div>
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton hidden lg:block"></div>
+                    <div class="glass-panel overflow-hidden rounded-2xl aspect-square gif-skeleton hidden lg:block"></div>
                 </div>
             </div>
         </section>

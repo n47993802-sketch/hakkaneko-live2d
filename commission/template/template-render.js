@@ -17,6 +17,7 @@
         var tmplQty = { hairBang:0, hairFull:0, acc:0, expr:0, chanyeQty:1 };
         var tmplCurrentModel = 'kanso'; // 'kanso' | 'chanye'
         var PRICE   = { hairBang:150, hairFull:300, acc:100, expr:100 };
+        var _tmplFirstAmountRender = true; // v49：標記總金額是否還沒播過第一次入場動畫
 
         // ── GIF 展示區渲染 ──
         function renderGifGrid() {
@@ -278,8 +279,35 @@
             }
 
             // 更新總計
+            // v48 修復（問題4：template.html 完全沒有動畫，只有文字的即時
+            // 切換）：改成跟 core.html／anim.html 一樣，先讀舊值、算出新值，
+            // 再用滾動數字動畫從舊值過渡到新值（tmplTotalPrice 元素本身只有
+            // 純數字、不含「NT$」字樣，所以用自訂的 tmplAnimateAmount()，
+            // 不能直接沿用 common.js 的 animateCounter()——那個函式的每一幀
+            // 都會把 getCurrencyPrefix() 一起寫進 textContent，會讓「NT$」
+            // 重複出現在數字前面）。
             var tp = document.getElementById('tmplTotalPrice');
-            if (tp) tp.textContent = fmt(total);
+            if (tp) {
+                // v50：金額這時候已經算好了，骨架屏（.price-skeleton）的
+                // 任務結束，立刻拿掉，換回真正的數字（邏輯跟 common.js 的
+                // revealAmountOnLoad() 一致）。
+                tp.classList.remove('price-skeleton');
+                var _tpFrom = parseInt(tp.textContent.replace(/[^0-9]/g, '') || '0', 10);
+                if (_tpFrom !== total) {
+                    // v49 修復：只有「第一次」(頁面剛載入、從 0 開始數) 需要
+                    // 等父層 #tmplQuoteSummaryPanel 真正淡入後才播放，避免
+                    // 動畫在面板還透明時就默默播完；使用者互動後的後續變動，
+                    // 面板早已可見，直接照常播放即可，不需要再等。
+                    if (_tmplFirstAmountRender && typeof window.whenPanelVisible === 'function') {
+                        _tmplFirstAmountRender = false;
+                        window.whenPanelVisible(tp, function() { tmplAnimateAmount(tp, _tpFrom, total); });
+                    } else {
+                        tmplAnimateAmount(tp, _tpFrom, total);
+                    }
+                } else {
+                    tp.textContent = fmt(total);
+                }
+            }
 
             // 訂金資訊
             var dep = document.getElementById('tmplDepositInfo');
@@ -311,6 +339,29 @@
         };
 
         function fmt(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+        // ── 總金額滾動數字動畫（template.html 專用版本） ──
+        // 邏輯跟 common.js 的 animateCounter() 一樣（ease-out 三次方緩動），
+        // 但輸出格式只有純數字（fmt()，不含「NT$」前綴），因為 tmplTotalPrice
+        // 元素本身只放數字，「NT$」字樣是寫在 HTML 裡、在這個 <span> 外面的
+        // 固定文字（見 template.html：'NT$ <span id="tmplTotalPrice">0</span>'）。
+        // 動畫結束後一樣呼叫 common.js 的 flashAmount()，讓變動的視覺回饋
+        // （閃光脈衝）跟 core.html／anim.html 完全一致。
+        function tmplAnimateAmount(el, from, to) {
+            var diff = to - from;
+            var duration = Math.min(Math.abs(diff) / 30 + 200, 550);
+            var startTime = performance.now();
+            function step(now) {
+                var t = Math.min((now - startTime) / duration, 1);
+                var ease = 1 - Math.pow(1 - t, 3);
+                el.textContent = fmt(Math.round(from + diff * ease));
+                if (t < 1) { el._tmplRafId = requestAnimationFrame(step); }
+                else el.textContent = fmt(to);
+            }
+            if (el._tmplRafId) cancelAnimationFrame(el._tmplRafId);
+            el._tmplRafId = requestAnimationFrame(step);
+            if (typeof flashAmount === 'function') flashAmount(el, 'fuchsia');
+        }
 
         // ── 同意條款切換複製 & 截圖按鈕 ──
         window.tmplToggleSubmit = function() {
@@ -397,6 +448,34 @@
             } catch(e) {}
         };
 
+        // ── v48 修復（嚴重錯誤：服裝展示框／GIF輪播／價格面板在頁面載入時
+        // 完全沒有初始化，一直保持空白直到使用者手動互動）──
+        // 成因：這裡原本「唯一」會呼叫 renderCheckGrid()／renderGifGrid()／
+        // renderChanyeGifGrid()／tmplCalculate() 的地方，是攔截後的
+        // window.switchTab，而攔截本身要等這支腳本自己的 DOMContentLoaded
+        // 監聽器觸發才會裝上去。問題是 common.js 的 initPage() 也監聽了
+        // DOMContentLoaded，而且它的監聽器比這支檔案早註冊（template.html
+        // 裡 common.js 排在 template-render.js 之前載入）——同一個事件的
+        // 多個監聽器會按註冊順序依序執行，所以 initPage() 會先跑，用「舊版、
+        // 還沒被攔截」的 switchTab('template') 呼叫一次，那時候攔截根本
+        // 還沒裝上去，等於這唯一的初始化呼叫點完全沒有真正執行到render
+        // 函式；等這支腳本的監聽器終於裝上攔截時，已經沒有人會再呼叫
+        // switchTab('template') 第二次了——三個區塊因此永遠停留在初始
+        // 空白狀態，直到使用者手動點擊觸發同一批函式才會第一次畫出來。
+        //
+        // 修法：這支腳本本身是非 defer、非 async，且 <script> 標籤緊接在
+        // 頁面所有內容之後才載入，代表它執行的當下，#tmplCheckGrid／
+        // #tmplGifGrid／#tmplTotalPrice 等容器都已經確實存在於 DOM 中，
+        // 不需要等待 DOMContentLoaded 才能安全操作它們。因此改成腳本一
+        // 載入就立刻直接呼叫一次，不再依賴「攔截 switchTab 之後才觸發」
+        // 這個有時序風險的間接路徑。攔截仍然保留（給日後若真的需要在
+        // 執行期間再次呼叫 switchTab('template') 的情境使用），但不再是
+        // 唯一的初始化入口。
+        renderCheckGrid();
+        renderGifGrid();
+        renderChanyeGifGrid();
+        tmplCalculate();
+
         // ── switchTab 攔截 ──
         document.addEventListener('DOMContentLoaded', function() {
             var _orig = window.switchTab;
@@ -409,5 +488,15 @@
                     tmplCalculate();
                 }
             };
+            // v45：初始化浮動報價提示條（見 common.js 的 initFloatingQuoteBar()）。
+            // tmplTotalPrice 這個元素本身只有數字（「NT$」文字在外面），
+            // 所以這裡多帶一個 'NT$ ' 前綴參數，讓浮動提示條顯示完整格式。
+            if (typeof initFloatingQuoteBar === 'function') {
+                initFloatingQuoteBar('tmplQuoteSummaryPanel', 'tmplTotalPrice', 'NT$ ');
+            }
+            // v47：啟用報價欄捲動跟隨效果（見 common.js 的 initScrollFollowPanel()）
+            if (typeof initScrollFollowPanel === 'function') {
+                initScrollFollowPanel('.sticky-summary', 'page-template');
+            }
         });
     })();

@@ -61,16 +61,27 @@ async function loadFanart() {
             <i class="fa-solid fa-plus text-3xl text-purple-400/50 mb-2"></i>
             <p class="text-xs font-bold text-purple-200">等待更多寶物</p>
         </div>`;
+
+        // v48 修復（問題2：二創卡片瞬間彈出、沒有淡入動畫）：
+        // 這些 .glass-panel 卡片是等 GitHub API 回應後才動態畫進 DOM 的，
+        // common.js 在頁面剛載入時做的那一次性掃描根本還沒看過它們。
+        // 呼叫 common.js 公開的 window.attachReveal()，把這批「後來才出生」
+        // 的卡片一樣接上 IntersectionObserver 淡入效果。
+        if (typeof window.attachReveal === 'function') window.attachReveal(grid);
     } catch(e) {
         const isRateLimit = e.message.includes('Rate limit') || e.message.includes('rate limit') || e.message.includes('API rate limit exceeded');
-        grid.innerHTML = `<div class="col-span-full glass-panel p-8 text-center border border-dashed border-pink-500/20">
-            <i class="fa-brands fa-github text-3xl text-purple-400/40 mb-3 block"></i>
-            <p class="text-purple-300/60 text-sm font-bold mb-2">${isRateLimit ? ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].github_rate_short||'GitHub 請求次數已達上限':'GitHub 請求次數已達上限') : ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].badge_fail||'載入失敗':'載入失敗')}</p>
-            <p class="text-xs text-purple-400/40 mb-4">${isRateLimit ? ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].github_rate_tip||'每小時最多 60 次請求，請稍後再重試。':'每小時最多 60 次請求，請稍後再重試。') : ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].error_prefix||'錯誤：':'錯誤：') + e.message}</p>
+        // v50：改用琥珀色系警示樣式（邊框、圖示、標題文字都換成 amber），
+        // 跟其他一般內容卡片統一的紫色系明顯區隔出來，讓使用者一眼就能
+        // 認出「這不是普通內容，是需要注意的錯誤狀態」，不會被略過。
+        grid.innerHTML = `<div class="col-span-full glass-panel p-8 text-center border border-amber-500/30 bg-amber-500/5">
+            <i class="fa-solid fa-triangle-exclamation text-3xl text-amber-400/70 mb-3 block"></i>
+            <p class="text-amber-300/80 text-sm font-bold mb-2">${isRateLimit ? ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].github_rate_short||'GitHub 請求次數已達上限':'GitHub 請求次數已達上限') : ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].badge_fail||'載入失敗':'載入失敗')}</p>
+            <p class="text-xs text-amber-400/50 mb-4">${isRateLimit ? ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].github_rate_tip||'每小時最多 60 次請求，請稍後再重試。':'每小時最多 60 次請求，請稍後再重試。') : ((typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang].error_prefix||'錯誤：':'錯誤：') + e.message}</p>
             <button onclick="fanartLoaded=false;document.getElementById('fanartGrid').innerHTML='<div class=\\'col-span-full glass-panel p-8 text-center\\'><i class=\\'fa-solid fa-spinner fa-spin text-purple-400 text-2xl mb-3 block\\'></i><p class=\\'text-purple-200/60 text-sm\\'>重新載入中⋯</p></div>';loadFanart();"
-                class="px-4 py-2 bg-purple-600/40 hover:bg-purple-600/60 text-purple-200 text-xs font-bold rounded-xl border border-purple-500/30 transition-all">
+                class="px-4 py-2 bg-amber-600/30 hover:bg-amber-600/50 text-amber-200 text-xs font-bold rounded-xl border border-amber-500/40 transition-all">
                 <i class="fa-solid fa-rotate-right mr-1"></i> 重新載入
             </button>
         </div>`;
+        if (typeof window.attachReveal === 'function') window.attachReveal(grid);
     }
 }

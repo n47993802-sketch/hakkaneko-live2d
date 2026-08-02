@@ -159,6 +159,7 @@
             sidebar_rush_label: '急ぎ対応の詳細', sidebar_supp_label: '補足メモ',
             sidebar_agree: '「フローと規約」の内容をすべて読んで同意します。',
             sidebar_screenshot: 'スクリーンショット',
+            sidebar_screenshot_loading: '生成中⋯',
             sidebar_copy_summary: '注文内容をコピー',
             sidebar_rules_link: '規約を確認 →',
             sidebar_port_btn: 'ポートフォリオで参考作品を見る',

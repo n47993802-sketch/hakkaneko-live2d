@@ -212,8 +212,16 @@ function triggerPortReveal() {
     var portEls = pageEl.querySelectorAll('.port-reveal');
     requestAnimationFrame(function() {
         requestAnimationFrame(function() {
+            // v52 修復：原本用固定的 i * 70（沒有上限），跟合作繪師頁修復
+            // 前踩到的問題是同一種寫法——目前區塊數量還少所以還沒出事，
+            // 但架構上是同一個坑。改成跟 common.js 的 Scroll Reveal 系統
+            // 同一套「依批次大小自動縮放間隔」邏輯（同樣以 500ms 為整批
+            // 上限），全站只維護一套淡入節奏手感，日後這裡的區塊變多也
+            // 不會重新出現「越後面延遲越久」的問題。
+            var n = portEls.length;
+            var step = Math.min(70, 500 / n);
             portEls.forEach(function(el, i) {
-                setTimeout(function() { el.classList.add('visible'); }, i * 70);
+                setTimeout(function() { el.classList.add('visible'); }, Math.round(i * step));
             });
         });
     });

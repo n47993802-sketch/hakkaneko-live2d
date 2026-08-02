@@ -157,6 +157,7 @@
             sidebar_rush_label: '加急说明', sidebar_supp_label: '补充说明',
             sidebar_agree: '我已阅读并同意「流程与条款」中的所有内容。',
             sidebar_screenshot: '一键截图预估金额',
+            sidebar_screenshot_loading: '生成中⋯',
             sidebar_copy_summary: '一键复制委托需求清单',
             sidebar_rules_link: '查看授权与委托须知',
             sidebar_port_btn: '查看作品集参考', sidebar_send_btn: '填写委托项目表单',

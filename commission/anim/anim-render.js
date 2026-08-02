@@ -223,3 +223,13 @@ calculateAnim = function() {
 // 等於又重新做出一次一開始就想避免的視覺跳動。之後使用者互動觸發的
 // calculateAnim() 才需要滾動動畫，第一次不需要。
 _origAnimCalc();
+
+// v48 修復（問題4：預估總金額顯示效果差）：第一次算出金額後，
+// 讓它「緩緩浮現」一次，取代原本「文字瞬間出現」的顯示方式。
+revealAmountOnLoad(document.getElementById('animTotalPrice'));
+
+// v45：初始化浮動報價提示條（見 common.js 的 initFloatingQuoteBar()）
+initFloatingQuoteBar('animQuoteSummaryPanel', 'animTotalPrice');
+
+// v47：啟用報價欄捲動跟隨效果（見 common.js 的 initScrollFollowPanel()）
+initScrollFollowPanel('.sticky-summary', 'page-anim');

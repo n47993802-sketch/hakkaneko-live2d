@@ -9,8 +9,12 @@
    這一整塊程式碼——這正是「共用檔案塞了太多不一定用得到的功能」
    的典型例子，現在只有真正會用到的這一頁才會載入。
 
-   LIVE2D_MODEL_URL 目前還是預留的範例網址，等實際要串接 Live2D 模型
-   時，把這裡換成真正的 model3.json 網址即可。
+   LIVE2D_MODEL_URL 現在指向同一個 repo 裡的 model/ 資料夾（相對路徑），
+   把整個模型資料夾（.model3.json + .moc3 + 材質貼圖 + 動作檔案等）放進
+   creative/live2d-demo/model/ 底下即可，不需要另外找外部空間放、也不會
+   有跨網域（CORS）問題——CORS_PROXY 純粹是保留給「未來哪天真的需要載入
+   外部網域的模型」這種情境用的備援，用同一個 repo 裡的相對路徑完全用
+   不到它。
    ============================================================ */
         // ==================== Live2D 互動分頁邏輯 ====================
         let live2dApp = null;
@@ -23,9 +27,15 @@
             live2dInited = true;
         }
 
-        // 模型固定 URL — 📌 改為 GitHub raw URL 後即可正常載入
-        // 格式：https://raw.githubusercontent.com/你的帳號/repo/main/live2d/yourmodel.model3.json
-        const LIVE2D_MODEL_URL = 'https://raw.githubusercontent.com/你的帳號/repo/main/live2d/yourmodel.model3.json';
+        // 模型網址 — 📌 把你的模型資料夾整個放進 creative/live2d-demo/model/
+        // 底下，主要設定檔請命名為 model.model3.json（跟資料夾裡其他被它
+        // 參照的檔案，例如 .moc3、材質貼圖、.physics3.json、動作檔案，
+        // 都維持原本匯出時的相對路徑關係，整包搬過來就好，不用手動改
+        // 內部路徑）。這裡用的是相對路徑，跟著 live2d-demo.html 一起部署
+        // 到 GitHub 後就能直接讀到，不需要外部網址。
+        const LIVE2D_MODEL_URL = 'model/model.model3.json';
+        // 保留給「未來如果要改成載入外部網域的模型」使用的備援，目前用
+        // 同一個 repo 裡的相對路徑完全用不到。
         const CORS_PROXY = 'https://corsproxy.io/?url=';
 
         async function loadLive2DModel() {
@@ -102,8 +112,10 @@
                     const headAreas = ['Head','head','Face','face','Hair','hair'];
                     if (areas.some(a => headAreas.includes(a))) {
                         live2dModel.motion('FlickHead');
+                        playIntroSound(); // v57 修復：點頭部/頭貼時的音效呼叫遺失了，補回來
                     } else {
                         live2dModel.motion('TapBody');
+                        playBonk(); // v57 修復：點身體時的音效呼叫遺失了，補回來
                     }
                 });
 
@@ -155,36 +167,8 @@
         }
 
         // ---- Intro avatar sound ----
-        function playIntroSound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                // Cheerful ascending arpeggio
-                [523, 659, 784, 1047].forEach((freq, i) => {
-                    const o = ctx.createOscillator();
-                    const g = ctx.createGain();
-                    o.type = 'sine';
-                    o.connect(g); g.connect(ctx.destination);
-                    o.frequency.value = freq;
-                    const t = ctx.currentTime + i * 0.1;
-                    g.gain.setValueAtTime(0, t);
-                    g.gain.linearRampToValueAtTime(0.25, t + 0.05);
-                    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-                    o.start(t); o.stop(t + 0.3);
-                });
-            } catch(e) {}
-        }
-
-        // ---- Bonk 音效 ----
-        function playBonk() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const o = ctx.createOscillator();
-                const g = ctx.createGain();
-                o.connect(g); g.connect(ctx.destination);
-                o.frequency.setValueAtTime(300, ctx.currentTime);
-                o.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.1);
-                g.gain.setValueAtTime(0.35, ctx.currentTime);
-                g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
-                o.start(); o.stop(ctx.currentTime + 0.28);
-            } catch(e) {}
-        }
+        // v58：playIntroSound()／playBonk()／getSfxCtx() 已經搬回
+        // common.js（該邏輯其實是全站共用的「點頭貼」互動的一部分，
+        // 首頁的自我介紹頭貼按鈕也在用），這支頁面專屬的檔案不用再
+        // 重複定義一份——common.js 在這支檔案之前就已經載入完成，
+        // 這裡呼叫 playIntroSound()／playBonk() 時函式已經存在。

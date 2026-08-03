@@ -42,7 +42,7 @@
                     + '<div class="absolute bottom-0 left-0 right-0 p-1.5 text-center">'
                     + '<span class="text-[0.65rem] font-bold text-white leading-tight block">' + o.name + '</span>'
                     + '</div>'
-                    + (isChecked ? '<div class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-fuchsia-500 flex items-center justify-center shadow-lg shadow-fuchsia-500/50"><i class="fa-solid fa-check text-white text-[0.55rem]"></i></div>' : '')
+                    + (isChecked ? '<div class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-fuchsia-500 flex items-center justify-center shadow-lg shadow-fuchsia-500/50 check-badge-pop"><i class="fa-solid fa-check text-white text-[0.55rem]"></i></div>' : '')
                     + '</div>';
             }).join('');
 
@@ -72,7 +72,7 @@
             grid.innerHTML = window.TMPL_OUTFITS.map(function(o, idx) {
                 var checked = selectedOutfits.has(idx);
                 return '<label class="tmpl-outfit-check ' + (checked ? 'active' : '') + '" onclick="event.preventDefault(); tmplToggleOutfit(' + idx + ')">'
-                    + '<div class="check-box">' + (checked ? '<i class="fa-solid fa-check text-white text-[0.6rem]"></i>' : '') + '</div>'
+                    + '<div class="check-box">' + (checked ? '<i class="fa-solid fa-check text-white text-[0.6rem] check-badge-pop"></i>' : '') + '</div>'
                     + '<span>' + o.name + '</span>'
                     + '</label>';
             }).join('');

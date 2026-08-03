@@ -407,6 +407,59 @@
             bubbleTimers[type] = setTimeout(() => bubble.remove(), 2600);
         }
 
+        // v58 修復：playIntroSound()／playBonk() 原本也放在這裡，之前一次
+        // 「把 Live2D 展示頁專屬邏輯拆到獨立檔案」的重構，把這兩個函式
+        // 一起搬去了 live2d-demo-render.js（只有 live2d-demo.html 會載入）
+        // ——但沒注意到首頁「自我介紹」的兩個頭貼按鈕（onclick 裡同時呼叫
+        // showBubble() 和 playIntroSound()/playBonk()）其實也在用同一組
+        // 函式。首頁沒有載入那支專屬檔案，於是點下去等於呼叫一個根本
+        // 不存在的函式，沒有任何聲音（也沒有明顯錯誤訊息，不容易發現）。
+        // 這兩個函式其實跟 showBubble() 一樣，都是「點頭貼」互動的一部分，
+        // 邏輯上本來就該放在全站共用的 common.js，讓任何頁面都能用——
+        // 這裡歸位，live2d-demo-render.js 那邊改成直接沿用這裡的版本，
+        // 不再各自維護一份重複的程式碼。
+        let _sfxCtx = null;
+        function getSfxCtx() {
+            if (!_sfxCtx) {
+                _sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            // 瀏覽器有時會自動把 AudioContext 暫停（例如分頁曾經被切到
+            // 背景），確保要播放前一定是 running 狀態。
+            if (_sfxCtx.state === 'suspended') { try { _sfxCtx.resume(); } catch(e) {} }
+            return _sfxCtx;
+        }
+        function playIntroSound() {
+            try {
+                const ctx = getSfxCtx();
+                // Cheerful ascending arpeggio
+                [523, 659, 784, 1047].forEach((freq, i) => {
+                    const o = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    o.type = 'sine';
+                    o.connect(g); g.connect(ctx.destination);
+                    o.frequency.value = freq;
+                    const t = ctx.currentTime + i * 0.1;
+                    g.gain.setValueAtTime(0, t);
+                    g.gain.linearRampToValueAtTime(0.25, t + 0.05);
+                    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+                    o.start(t); o.stop(t + 0.3);
+                });
+            } catch(e) {}
+        }
+        function playBonk() {
+            try {
+                const ctx = getSfxCtx();
+                const o = ctx.createOscillator();
+                const g = ctx.createGain();
+                o.connect(g); g.connect(ctx.destination);
+                o.frequency.setValueAtTime(300, ctx.currentTime);
+                o.frequency.exponentialRampToValueAtTime(160, ctx.currentTime + 0.1);
+                g.gain.setValueAtTime(0.35, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+                o.start(); o.stop(ctx.currentTime + 0.28);
+            } catch(e) {}
+        }
+
         function toggleTheme() {
             // v52 修復：深色/淺色模式是靠切換 body.light-mode，讓一大堆
             // `body.light-mode .xxx { color: ... !important }` 規則同時

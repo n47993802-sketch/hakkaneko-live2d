@@ -611,6 +611,51 @@
             animation: icon-pulse 2s ease-in-out infinite;
         }
 
+        /* v56 修復（鍵盤操作可用性漏洞）：
+           .option-card／.model-card 底下實際的 radio/checkbox 都是視覺隱藏
+           的（class="peer sr-only"），只用旁邊看得見的卡片當作視覺呈現。
+           但這裡完全沒有針對「鍵盤 Tab 移到這個隱藏輸入框」加上任何視覺
+           提示——瀏覽器原生的 focus 外框會出現在那個看不見的輸入框上，
+           只用鍵盤操作（不用滑鼠）的使用者完全看不到自己現在 Tab 到哪一
+           個選項、有沒有選到。
+           修法：用 :has(input:focus-visible) 偵測「卡片內的輸入框正被
+           鍵盤 focus」，把外框直接畫在卡片本身上——只有鍵盤 Tab 才會
+           觸發 :focus-visible（滑鼠點擊不會），不會讓滑鼠使用者平白多看
+           到一圈外框。 */
+        .option-card:has(input:focus-visible) {
+            outline: 3px solid rgba(168, 85, 247, 0.85);
+            outline-offset: 2px;
+        }
+        body.light-mode .option-card:has(input:focus-visible) {
+            outline-color: rgba(107, 33, 168, 0.9);
+        }
+
+        /* v56 新增：選中方案/選項的當下，卡片本身輕輕「彈一下」，
+           強化選中的回饋感，跟這次補的其他互動回饋（hover、金額脈衝）
+           風格一致。用 :has(input:checked) 觸發，只會在「剛被選中」的
+           那一刻播放一次（radio/checkbox 狀態不變就不會重播）。 */
+        .option-card:has(input:checked) {
+            animation: option-select-pop 0.35s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes option-select-pop {
+            0%   { transform: scale(1); }
+            45%  { transform: scale(1.035); }
+            100% { transform: scale(1); }
+        }
+
+        /* v56 新增：template.html 服裝勾選打勾圖示的彈跳進場——這個圖示是
+           每次選中都重新插入的全新 DOM 節點（template-render.js 每次都用
+           innerHTML 整個重畫），所以套用 CSS animation 就會在每次真正
+           「被選中」的當下自動重新播放一次，不需要額外的 JS 判斷。 */
+        .check-badge-pop {
+            animation: check-badge-pop-in 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes check-badge-pop-in {
+            0%   { transform: scale(0); opacity: 0; }
+            60%  { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         @keyframes icon-pulse {
             0%, 100% { transform: scale(1); filter: brightness(1); }
             50% { transform: scale(1.15); filter: brightness(1.3); }

@@ -43,24 +43,10 @@ var gifPage = { stickers: 0, logos: 0 };
 
                 items.forEach(function(item, idx) {
                     var card = document.createElement('div');
-                    card.style.cssText = [
-                        'background:#0f0720',
-                        'border:1px solid rgba(255,255,255,0.07)',
-                        'border-radius:1rem',
-                        'overflow:hidden',
-                        'cursor:default',
-                        'transition:border-color .25s,box-shadow .25s',
-                    ].join(';');
-                    card.onmouseenter = function() {
-                        this.style.borderColor = borderActive;
-                        this.style.boxShadow = '0 0 16px ' + (isS ? 'rgba(52,211,153,.12)' : 'rgba(251,191,36,.12)');
-                    };
-                    card.onmouseleave = function() {
-                        this.style.borderColor = 'rgba(255,255,255,0.07)';
-                        this.style.boxShadow = '';
-                    };
+                    card.className = 'port-gif-card';
+                    card.style.setProperty('--port-accent', borderActive);
+                    card.style.setProperty('--port-accent-shadow', isS ? 'rgba(52,211,153,.12)' : 'rgba(251,191,36,.12)');
                     // v28 燈箱回歸：點擊 GIF 卡片開啟純覆蓋燈箱（不含導覽點與箭頭）
-                    card.style.cursor = 'pointer';
                     (function(captureKey, captureIdx) {
                         card.onclick = function() { ulbOpen(captureKey, captureIdx); };
                     })(key, idx);
@@ -68,8 +54,7 @@ var gifPage = { stickers: 0, logos: 0 };
                     // ── v27 骨架屏容器 ──
                     // 加入 gif-skeleton class 顯示微光，載入完成後移除
                     var wrap = document.createElement('div');
-                    wrap.style.cssText = 'width:100%;aspect-ratio:1;background:#0c0618;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;';
-                    wrap.classList.add('gif-skeleton'); // 初始顯示骨架屏
+                    wrap.className = 'port-gif-wrap gif-skeleton'; // v54：port-gif-wrap 提供跟隨主題的底色，gif-skeleton 負責載入中的微光
 
                     var img = document.createElement('img');
                     img.alt = item.label;
@@ -115,12 +100,13 @@ var gifPage = { stickers: 0, logos: 0 };
                     info.style.cssText = 'padding:.55rem .7rem .65rem;text-align:center;';
                     var labelEl = document.createElement('p');
                     labelEl.textContent = item.label;
-                    labelEl.style.cssText = 'font-size:.72rem;font-weight:700;color:#e9d5ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:' + badgeBg + ';border-radius:.4rem;padding:.15rem .45rem;text-align:center;';
+                    labelEl.className = 'port-gif-label';
+                    labelEl.style.background = badgeBg;
                     info.appendChild(labelEl);
                     if (item.sub) {
                         var subEl = document.createElement('p');
                         subEl.textContent = item.sub;
-                        subEl.style.cssText = 'font-size:.62rem;color:rgba(196,167,255,.45);margin-top:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;';
+                        subEl.className = 'port-gif-sub';
                         info.appendChild(subEl);
                     }
                     // v30：移除「作品規格」標籤區塊，僅保留作品名稱與繪師資訊

@@ -83,16 +83,27 @@
             --panel-bg: rgba(18, 8, 36, 0.75);
         }
 
-        /* 白天模式 — 深化版：霧紫灰色系 */
+        /* 白天模式 — v53 重新設計：拉大「頁面背景」跟「卡片表面」的對比
+           之前頁面背景（#d8d0e8）跟卡片背景（rgba(220,210,240,0.90)）幾乎
+           是同一個亮度層級的淺紫色，卡片自然「浮不出來」；邊框顏色
+           （rgba(100,60,150,0.25)）疊在同樣偏淺的背景上，混合後跟背景幾乎
+           融為一體，難怪邊框像是消失了。
+           重新設計原則：頁面背景維持中等飽和度的薰衣草紫（不要太淺，
+           不然卡片跟輸入框這些「介面表面」很難跟它拉開層次）；所有卡片／
+           表面元件（glass-panel、nav、輸入框、下拉選單、option-card）統一
+           改成接近純白、更不透明的色調，形成清楚的「頁面背景 vs. 介面表面」
+           兩個明確層次；邊框則整批換成更飽和、透明度更高的紫色
+           （rgba(107,33,168, 0.4~0.5)），不管疊在頁面背景還是卡片表面上
+           都清楚可辨。 */
         body.light-mode {
-            --bg-primary: #d8d0e8;
+            --bg-primary: #c7bce0;
             --text-main: #1a1030;
-            --panel-bg: rgba(220, 210, 240, 0.92);
-            --glass-border: rgba(100, 60, 150, 0.25);
+            --panel-bg: rgba(250, 247, 255, 0.95);
+            --glass-border: rgba(107, 33, 168, 0.45);
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(140, 90, 200, 0.18), transparent 30%),
-                radial-gradient(circle at 85% 30%, rgba(80, 100, 200, 0.14), transparent 30%),
-                radial-gradient(circle at 50% 90%, rgba(180, 120, 80, 0.10), transparent 30%);
+                radial-gradient(circle at 15% 50%, rgba(140, 90, 200, 0.20), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(80, 100, 200, 0.16), transparent 30%),
+                radial-gradient(circle at 50% 90%, rgba(180, 120, 80, 0.12), transparent 30%);
         }
         body.light-mode .text-white { color: #1a1030 !important; }
         body.light-mode .text-gray-300, body.light-mode .text-purple-200 { color: #4a3060 !important; }
@@ -100,35 +111,55 @@
         body.light-mode .text-purple-400 { color: #5b1898 !important; }
         body.light-mode .text-gray-400 { color: #5a4c72 !important; }
         body.light-mode .bg-black\/40, body.light-mode .bg-black\/50, body.light-mode .bg-black\/30, body.light-mode .bg-black\/20 { 
-            background-color: rgba(200, 185, 230, 0.80) !important; 
+            background-color: rgba(248, 244, 253, 0.88) !important; 
             color: #1a1030 !important;
-            border-color: rgba(100, 60, 150, 0.20) !important;
+            border-color: rgba(107, 33, 168, 0.4) !important;
         }
-        body.light-mode .option-card { background: rgba(210, 198, 238, 0.88); }
+        body.light-mode .option-card { background: rgba(248, 244, 253, 0.90); }
         body.light-mode .text-gradient { background: linear-gradient(to right, #7b11b8, #d4389a); -webkit-background-clip: text; }
-        body.light-mode .border-white\/5, body.light-mode .border-white\/10 { border-color: rgba(100, 60, 150, 0.22) !important; }
+        body.light-mode .border-white\/5, body.light-mode .border-white\/10 { border-color: rgba(107, 33, 168, 0.38) !important; }
         body.light-mode input, body.light-mode textarea, body.light-mode select { 
             color: #1a1030 !important; 
-            background-color: rgba(200, 188, 228, 0.65) !important;
-            border-color: rgba(100, 60, 150, 0.30) !important;
+            background-color: rgba(248, 244, 255, 0.72) !important;
+            border-color: rgba(107, 33, 168, 0.42) !important;
         }
         body.light-mode .glass-panel {
-            background: rgba(220, 210, 240, 0.90);
-            border-color: rgba(130, 80, 190, 0.25);
-            box-shadow: 0 4px 24px rgba(80, 40, 140, 0.12);
+            background: rgba(250, 247, 255, 0.94);
+            border-color: rgba(107, 33, 168, 0.4);
+            box-shadow: 0 4px 24px rgba(80, 40, 140, 0.18);
         }
-        body.light-mode nav { background: rgba(200, 185, 228, 0.90) !important; border-color: rgba(130, 80, 190, 0.25) !important; }
+        body.light-mode nav { background: rgba(248, 244, 255, 0.92) !important; border-color: rgba(107, 33, 168, 0.35) !important; }
         body.light-mode .tab-btn { color: #6b21a8 !important; }
         body.light-mode .tab-btn.active { color: #1a1030 !important; }
         body.light-mode header p { color: #6b21a8 !important; }
-        body.light-mode #langMenu { background: rgba(225, 215, 245, 0.99) !important; border-color: rgba(130, 80, 190, 0.40) !important; }
+        body.light-mode #langMenu { background: rgba(250, 247, 255, 0.99) !important; border-color: rgba(107, 33, 168, 0.4) !important; }
         body.light-mode #langMenu button { color: #3b1f6e !important; }
         body.light-mode #langMenu button:hover { background: rgba(130, 80, 190, 0.15) !important; color: #1a1030 !important; }
         body.light-mode .text-emerald-400 { color: #065f46 !important; }
         body.light-mode .text-blue-300 { color: #1e3a8a !important; }
         body.light-mode .text-yellow-300 { color: #92400e !important; }
         body.light-mode .text-red-400 { color: #991b1b !important; }
-        body.light-mode ::-webkit-scrollbar-track { background: #d8d0e8; }
+        body.light-mode ::-webkit-scrollbar-track { background: #c7bce0; }
+
+        /* v54 修復：core.html 方案選擇卡片的懸浮提示框（.plan-tooltip）
+           本身固定是黑色背景＋backdrop-blur（不管深色/淺色模式都一樣，
+           刻意設計成永遠是深色浮層，方便疊在任何顏色的卡片上都能維持
+           閱讀性，類似原生系統 tooltip 的做法）。但淺色模式的文字覆寫
+           規則是全站套用的，會把提示框裡的文字也一起強制變成深色，
+           結果就是「深色文字疊在黑色背景上」幾乎看不見，等於文字被
+           蓋住了。這裡把提示框內的文字顏色鎖定回原本設計的淺色系，
+           不受淺色模式覆寫影響。 */
+        body.light-mode .plan-tooltip { color: #e9d5ff !important; }
+        body.light-mode .plan-tooltip .text-blue-300 { color: #93c5fd !important; }
+        body.light-mode .plan-tooltip .text-blue-400 { color: #60a5fa !important; }
+        body.light-mode .plan-tooltip .text-emerald-400 { color: #34d399 !important; }
+        body.light-mode .plan-tooltip .text-purple-200\/70 { color: rgba(233,213,255,0.7) !important; }
+        body.light-mode .plan-tooltip .text-purple-200\/80 { color: rgba(233,213,255,0.8) !important; }
+        body.light-mode .plan-tooltip .text-purple-400 { color: #c084fc !important; }
+        body.light-mode .plan-tooltip .text-purple-400\/50 { color: rgba(192,132,252,0.5) !important; }
+        body.light-mode .plan-tooltip .text-yellow-300 { color: #fde047 !important; }
+        body.light-mode .plan-tooltip .text-yellow-300\/70 { color: rgba(253,224,71,0.7) !important; }
+        body.light-mode .plan-tooltip .text-yellow-400 { color: #facc15 !important; }
 
         /* 白天模式追加修復：所有可能偏淺的文字 */
         body.light-mode .text-purple-200\/80 { color: #4a3060 !important; }
@@ -168,15 +199,15 @@
         body.light-mode .glass-panel h4 { color: #1a1030 !important; }
         /* 明細清單 */
         body.light-mode #detailList div,
-        body.light-mode #animDetailList div { color: #1a1030 !important; border-color: rgba(100,60,150,0.2) !important; }
+        body.light-mode #animDetailList div { color: #1a1030 !important; border-color: rgba(107,33,168,0.35) !important; }
         /* code 標籤 */
-        body.light-mode code { background: rgba(100,60,150,0.15) !important; color: #5b1898 !important; }
+        body.light-mode code { background: rgba(107,33,168,0.18) !important; color: #5b1898 !important; }
         /* 連結 */
         body.light-mode a.text-blue-400 { color: #1e40af !important; }
         /* nav 上的 tab 按鈕 active 狀態 */
-        body.light-mode .tab-btn.active { background: rgba(100,60,150,0.25) !important; color: #1a1030 !important; }
+        body.light-mode .tab-btn.active { background: rgba(107,33,168,0.28) !important; color: #1a1030 !important; }
         /* 明確加深 service icon */
-        body.light-mode .service-icon { background: rgba(100,60,150,0.2) !important; color: #5b1898 !important; }
+        body.light-mode .service-icon { background: rgba(107,33,168,0.22) !important; color: #5b1898 !important; }
         /* 開關說明文字 */
         body.light-mode .text-xs { color: #3a2855 !important; }
         body.light-mode .text-sm { color: #2a1a44 !important; }
@@ -444,6 +475,17 @@
             background-size: 200% 100%;
             animation: skeleton-shimmer 1.6s ease-in-out infinite;
         }
+        /* v53：白色系 shimmer 是為深色背景設計的，疊在淺色模式的淺色卡片上
+           幾乎看不見，改用深紫色系漸層維持一樣的可見度。 */
+        body.light-mode .price-skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(107,33,168,0.10) 0%,
+                rgba(107,33,168,0.24) 40%,
+                rgba(107,33,168,0.10) 80%
+            );
+            background-size: 200% 100%;
+        }
 
         /* ── 卡片 hover 微浮起效果（v50 新增，v51 修正衝突）──
            之前所有 .glass-panel 只有「捲動進入視窗時」的淡入動畫，滑鼠移
@@ -491,8 +533,8 @@
            影響其他地方（如卡片 hover）原本的過渡速度。 */
         body.theme-transition,
         body.theme-transition * {
-            transition: background-color 0.35s ease, color 0.35s ease,
-                        border-color 0.35s ease, box-shadow 0.35s ease !important;
+            transition: background-color 0.55s ease, color 0.55s ease,
+                        border-color 0.55s ease, box-shadow 0.55s ease !important;
         }
 
         /* ── 語言切換過渡（v52 新增）──
@@ -501,7 +543,7 @@
            做動畫。改成讓整個頁面在替換文字的那一刻極短暫地變暗，把生硬
            的瞬間切換包裝成一次平滑的過渡，而不是單純的「消失又出現」。 */
         body {
-            transition: opacity 0.16s ease;
+            transition: opacity 0.28s ease;
         }
         body.lang-switching {
             opacity: 0.55;
@@ -777,9 +819,86 @@
             animation: skeleton-shimmer 1.6s ease-in-out infinite;
             border-radius: 0.5rem;
         }
+        /* v53：同樣是白色系 shimmer，在淺色模式下改用深紫色系維持可見度。 */
+        body.light-mode .gif-skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(107,33,168,0.08) 0%,
+                rgba(107,33,168,0.16) 40%,
+                rgba(107,33,168,0.08) 80%
+            );
+            background-size: 200% 100%;
+        }
         @keyframes skeleton-shimmer {
             0%   { background-position: 200% center; }
             100% { background-position: -200% center; }
+        }
+
+        /* ── 作品展示頁：動態貼圖／動態Logo 卡片（v54 新增）──
+           這幾張卡片原本是 portfolio-render.js 用 JS 直接寫 inline style
+           （background:#0f0720 這類寫死的深色值），淺色模式的所有覆寫
+           都是透過 CSS class 選擇器生效的，完全碰不到 inline style，
+           所以這幾張卡片不管切換到深色還是淺色模式，看起來都還是
+           深色版本。改成用這裡的 CSS class 定義基礎樣式，讓淺色模式的
+           覆寫規則可以正常生效；每張卡片各自的重點色（貼圖=翠綠／
+           Logo=琥珀）改用 CSS 自訂屬性 --port-accent 帶入，這個顏色在
+           兩個主題下都一樣顯眼，不需要跟著主題切換。 */
+        .port-gif-card {
+            background: #0f0720;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 1rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color .25s, box-shadow .25s;
+        }
+        .port-gif-card:hover {
+            border-color: var(--port-accent, rgba(168,85,247,0.35));
+            box-shadow: 0 0 16px var(--port-accent-shadow, rgba(168,85,247,.12));
+        }
+        body.light-mode .port-gif-card {
+            background: rgba(250, 247, 255, 0.94);
+            border-color: rgba(107, 33, 168, 0.35);
+        }
+        .port-gif-wrap:not(.gif-skeleton) {
+            background: #0c0618;
+        }
+        .port-gif-wrap {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        body.light-mode .port-gif-wrap:not(.gif-skeleton) {
+            background: rgba(235, 228, 250, 0.85);
+        }
+        .port-gif-label {
+            font-size: .72rem;
+            font-weight: 700;
+            color: #e9d5ff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border-radius: .4rem;
+            padding: .15rem .45rem;
+            text-align: center;
+        }
+        body.light-mode .port-gif-label {
+            color: #3b1f6e;
+        }
+        .port-gif-sub {
+            font-size: .62rem;
+            color: rgba(196,167,255,.45);
+            margin-top: .2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+        body.light-mode .port-gif-sub {
+            color: rgba(90, 50, 140, 0.65);
         }
 
         /* GIF 圖片：載入完成後淡入 */

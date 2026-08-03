@@ -25,6 +25,34 @@
             let meteors = [], stars = [], nebulae = [], orbs = [];
             let animId, isLight = false, t = 0;
             let _resizeTimer = null;
+            let isRunning = false; // v53：真正的「迴圈是否正在跑」狀態，取代之前「一直排程、只是跳過畫圖」的做法
+
+            // v53 修復（效能問題）：
+            // 之前不管是「分頁切到背景」還是「淺色模式」，animation loop
+            // 都還是會透過 requestAnimationFrame 永遠重新排程下一幀，只是
+            // 跳過實際畫圖動作——等於就算畫面上完全看不到任何東西，還是
+            // 每一幀都在做至少一次 ctx.clearRect()，持續耗電/耗效能，
+            // 而且完全沒有偵測「減少動態效果」這個系統設定，開啟該設定的
+            // 使用者（通常也更在意效能／暈眩問題）反而完全沒被照顧到，
+            // 動畫其實還是在一個被 CSS 藏起來的畫布上全力運算。
+            // 改成：用 shouldRun() 統一判斷「現在到底該不該跑」，該停的
+            // 時候用 cancelAnimationFrame() 真正停止，不留著空轉的迴圈；
+            // 該恢復的時候（切回深色模式／分頁重新可見／使用者關掉減少
+            // 動態效果）才重新呼叫 requestAnimationFrame() 啟動一次。
+            const reducedMotionMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+            function shouldRun() {
+                return !document.hidden && !isLight && !reducedMotionMQ.matches;
+            }
+            function startLoop() {
+                if (isRunning) return;
+                isRunning = true;
+                _lastTs = 0; // 避免暫停一段時間後恢復時，第一幀的時間差被誤判成「掉幀」而觸發降級模式
+                animId = requestAnimationFrame(draw);
+            }
+            function stopLoop() {
+                isRunning = false;
+                if (animId) cancelAnimationFrame(animId);
+            }
 
             // ── 裝置效能分級 ──
             // isMobile：觸控裝置 or 視窗寬度 ≤ 768px（含 Google Sites iframe 內的行動瀏覽器）
@@ -97,8 +125,11 @@
             }
 
             function draw(ts) {
-                // ── Page Visibility API：分頁不可見時跳過繪製 ──
-                if (document.hidden) { animId = requestAnimationFrame(draw); return; }
+                // v53：不管是分頁不可見、淺色模式、還是使用者開了「減少
+                // 動態效果」，只要現在不該跑，就直接真正停止（不再呼叫
+                // requestAnimationFrame 排下一幀），迴圈到此為止，等
+                // shouldRun() 重新變成 true 時才會由 startLoop() 重新啟動。
+                if (!shouldRun()) { isRunning = false; return; }
 
                 // ── 幀率監控：連續 3 幀 > 50ms（<20fps）自動進入降級模式 ──
                 if (!_degraded && _lastTs > 0) {
@@ -118,7 +149,6 @@
                 _lastTs = ts;
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (isLight) { animId = requestAnimationFrame(draw); return; }
                 t += 0.003;
 
                 // Slow-pulsing nebula orbs（手機及降級模式下已為空陣列，跳過）
@@ -215,8 +245,39 @@
                 animId = requestAnimationFrame(draw);
             }
 
-            window.setMeteorMode = function(light) { isLight = light; };
+            window.setMeteorMode = function(light) {
+                isLight = light;
+                if (shouldRun()) {
+                    startLoop();
+                } else {
+                    stopLoop();
+                    // 切到淺色模式的當下清空一次畫布，避免最後一幀的星星／
+                    // 流星殘影凍結在畫面上（迴圈已經真正停止，不會再自己清）。
+                    if (isLight) ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            };
+
+            // v53：分頁被切到背景／重新回到前景時，對應真正停止／恢復迴圈，
+            // 不再讓迴圈自己空轉排程。
+            document.addEventListener('visibilitychange', function() {
+                if (shouldRun()) startLoop(); else stopLoop();
+            });
+
+            // v53：即時監聽「減少動態效果」系統設定的變化（使用者有可能在
+            // 分頁開著的狀態下臨時切換這個設定），開啟時真正停止迴圈並清空
+            // 畫布，關閉時才重新啟動。
+            try {
+                reducedMotionMQ.addEventListener('change', function() {
+                    if (shouldRun()) {
+                        startLoop();
+                    } else {
+                        stopLoop();
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                });
+            } catch (e) {}
+
             window.addEventListener('resize', resizeDebounced);
             resize();
-            animId = requestAnimationFrame(draw);
+            if (shouldRun()) startLoop();
         })();

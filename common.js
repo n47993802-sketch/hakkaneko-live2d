@@ -420,7 +420,7 @@
             clearTimeout(window._themeTransitionTimer);
             window._themeTransitionTimer = setTimeout(function() {
                 document.body.classList.remove('theme-transition');
-            }, 400);
+            }, 600);
             document.body.classList.toggle('light-mode');
             const icon = document.getElementById('themeIcon');
             const isLight = document.body.classList.contains('light-mode');
@@ -1337,15 +1337,29 @@
     // .lang-switching），實際換字的動作刻意安排在畫面最暗的那一刻執行，
     // 使用者比較不容易看到文字瞬間跳動，換完之後再淡回來，體感上更像是
     // 一次有意圖的過渡，而不是硬生生地閃一下。
-    function setLang(lang) {
+    // v55 修復：之前每次「切換到其他分頁」時，common.js 都會重新呼叫一次
+    // setLang(儲存的語言) 來套用使用者已經選好的語言——即使語言其實根本
+    // 沒有改變，這只是把同一個語言重新套用在剛載入的新頁面上。但 v52
+    // 加的「淡出→換字→淡入」效果，只要呼叫 setLang() 就會觸發，於是變成
+    // 每次翻頁都會跑一次淡出淡入，才會看起來像是「閃一下、文字也跟著
+    // 微調了一下」。
+    // 修法：加一個 animate 參數，預設是 true（維持使用者在語言選單裡
+    // 主動點選切換語言時，原本淡出淡入的效果）；只有 common.js 內部在
+    // 「頁面剛載入、套用已儲存語言」這幾個地方，才明確傳入 false，
+    // 跳過淡出淡入、直接瞬間套用——因為這些情境下畫面本來就还在載入
+    // 過程，不是使用者正在看著內容、主動切換語言，不需要也不應該有
+    // 過渡動畫。另外也把過渡時間從 0.16 秒拉長到 0.28 秒，手感更從容
+    // 一些，不會太趕。
+    function setLang(lang, animate) {
         if (!I18N[lang]) return;
+        if (animate === false) { _applyLang(lang); return; }
         document.body.classList.add('lang-switching');
         setTimeout(function() {
             _applyLang(lang);
             requestAnimationFrame(function() {
                 document.body.classList.remove('lang-switching');
             });
-        }, 160);
+        }, 280);
     }
     function _applyLang(lang) {
         if (!I18N[lang]) return;
@@ -1511,7 +1525,7 @@
             // 同一瀏覽階段內，非第一次進站的分頁：直接套用語言、立即隱藏 Loading，
             // 不再跑逐步動畫，滿足「切換分頁不用每次都看 Loading」的需求。
             if (_skipAnimation) {
-                if (typeof setLang === 'function') setLang(targetLang);
+                if (typeof setLang === 'function') setLang(targetLang, false);
                 loader.style.display = 'none';
                 document.body.classList.remove('loading');
                 return;
@@ -1536,7 +1550,7 @@
                     setTimeout(runStep, step === 1 ? 280 : step === 2 ? 220 : 180);
                 } else {
                     setTimeout(function() {
-                        if (typeof setLang === 'function') setLang(targetLang);
+                        if (typeof setLang === 'function') setLang(targetLang, false);
                         loader.classList.add('fade-out');
                         document.body.classList.remove('loading');
                         setTimeout(function() { loader.style.display = 'none'; }, 650);
@@ -1569,7 +1583,7 @@
                 else if (bl.startsWith('zh')) lang = 'zh-CN';
                 else if (bl.startsWith('ja')) lang = 'ja';
                 else if (bl.startsWith('en')) lang = 'en';
-                if (typeof setLang === 'function') setLang(lang);
+                if (typeof setLang === 'function') setLang(lang, false);
             } catch(e) {}
             loader.classList.add('fade-out');
             document.body.classList.remove('loading');

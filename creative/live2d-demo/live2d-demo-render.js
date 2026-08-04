@@ -56,11 +56,22 @@
             if (!window.Live2DCubismCore) {
                 await loadScript('https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js');
             }
-            if (!window.Live2DModel) {
+            // v61 修復：pixi-live2d-display 在瀏覽器（非模組系統）環境下，
+            // 是掛在 window.PIXI.live2d.Live2DModel 這個命名空間下，
+            // 不是直接掛在 window.Live2DModel——之前程式碼一直假設是後者，
+            // 結果 window.Live2DModel 永遠是 undefined，載入模型時
+            // 呼叫 .from() 自然會報「Cannot read properties of undefined
+            // (reading 'from')」，跟模型檔案本身完全無關，是全域變數路徑
+            // 寫錯了。
+            if (!(window.PIXI && window.PIXI.live2d && window.PIXI.live2d.Live2DModel)) {
                 await loadScript('https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/index.min.js');
-                if (window.PIXI && window.Live2DModel) {
-                    window.Live2DModel.registerTicker(PIXI.Ticker);
+                if (window.PIXI && window.PIXI.live2d && window.PIXI.live2d.Live2DModel) {
+                    window.PIXI.live2d.Live2DModel.registerTicker(PIXI.Ticker);
                 }
+            }
+            const Live2DModelCtor = window.PIXI && window.PIXI.live2d && window.PIXI.live2d.Live2DModel;
+            if (!Live2DModelCtor) {
+                throw new Error('pixi-live2d-display 載入失敗：找不到 PIXI.live2d.Live2DModel，函式庫可能沒有正確下載。');
             }
 
             // Try direct URL first, then CORS proxy
@@ -88,7 +99,7 @@
                 let loadedModel = null;
                 for (const url of urlsToTry) {
                     try {
-                        loadedModel = await window.Live2DModel.from(url, { autoHitTest: true, autoFocus: true });
+                        loadedModel = await Live2DModelCtor.from(url, { autoHitTest: true, autoFocus: true });
                         break;
                     } catch(e) {
                         // v59 修復：之前這裡直接 continue，把每次嘗試失敗的

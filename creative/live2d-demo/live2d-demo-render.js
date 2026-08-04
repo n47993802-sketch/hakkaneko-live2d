@@ -48,6 +48,14 @@
             if (!window.PIXI) {
                 await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.10/browser/pixi.min.js');
             }
+            // v59 修復：Cubism Core 運行時（.moc3 格式，也就是 Cubism 3/4
+            // 模型必須要有這個才能被解析）之前完全沒有被載入——這是
+            // pixi-live2d-display 能不能讀懂模型檔案的關鍵前置依賴，
+            // 缺了它，不管模型檔案本身多正確，載入都會失敗。跟 PIXI 一樣
+            // 要在 pixi-live2d-display 之前載入好。
+            if (!window.Live2DCubismCore) {
+                await loadScript('https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js');
+            }
             if (!window.Live2DModel) {
                 await loadScript('https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/index.min.js');
                 if (window.PIXI && window.Live2DModel) {
@@ -63,7 +71,13 @@
 
             try {
                 const wrapper = document.getElementById('live2dWrapper');
-                const w = wrapper.clientWidth, h = wrapper.clientHeight;
+                // v60 修復：如果容器在這個當下量到的寬高剛好是 0（例如
+                // 容器還沒被瀏覽器排版完成、或是頁面切換的時機不巧），
+                // 用 0 去初始化 PIXI 的 WebGL context 會導致 shader 編譯
+                // 失敗，丟出「Invalid value of `0` passed to
+                // checkMaxIfStatementsInShader」這種不容易一眼看懂根本
+                // 原因的錯誤。加個保底值，避免用 0 去初始化。
+                const w = wrapper.clientWidth || 400, h = wrapper.clientHeight || 420;
 
                 if (live2dApp) { live2dApp.destroy(true); live2dApp = null; }
 
@@ -76,7 +90,15 @@
                     try {
                         loadedModel = await window.Live2DModel.from(url, { autoHitTest: true, autoFocus: true });
                         break;
-                    } catch(e) { continue; }
+                    } catch(e) {
+                        // v59 修復：之前這裡直接 continue，把每次嘗試失敗的
+                        // 真正原因（404、CORS、Cubism Core 未載入、moc3
+                        // 格式錯誤等）都吃掉了，最後只會看到籠統的
+                        // 「All URLs failed」，很難排查卡在哪一步。先印出
+                        // 這次嘗試實際失敗的原因，再繼續試下一個網址。
+                        console.warn('Live2D model load attempt failed for', url, e);
+                        continue;
+                    }
                 }
                 if (!loadedModel) throw new Error('All URLs failed');
                 live2dModel = loadedModel;

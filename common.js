@@ -1069,10 +1069,29 @@
         // 只有 portfolio.html 會載入這個檔案。資料本身在 portfolio-config.js。
 
 
-        // ==================== 回到頂部 (v28 rAF 節流) ====================
-        // 原本的 scroll listener 每幀觸發 60-120 次，改用 requestAnimationFrame 節流
-        // 確保每個顯示幀最多執行一次，完全消除高頻率 DOM 操作造成的掉幀。
-        const backToTopBtn = document.getElementById('backToTop');
+        // ==================== 回到頂部 (v28 rAF 節流，v60 修復嚴重 bug) ====================
+        // v60 修復：發現「回到頂部」按鈕的 HTML 元素（id="backToTop"）在
+        // 全站任何一個頁面都不存在——common.css 裡樣式（圓形按鈕、淡入
+        // 淡出、hover 效果）都寫好了，但沒有任何頁面真的建立這個元素。
+        // 下面這段程式碼卻直接假設它一定存在，對它呼叫 classList.add()／
+        // remove()，結果是只要使用者在「任何」頁面往下捲超過 300px，
+        // 就會丟出 null reference 錯誤，整個「回到頂部」功能形同虛設。
+        // 這是全站規模的問題，不是單一頁面的個案。
+        // 修法：改成由這裡動態建立按鈕（含點擊回到頂部的行為），只寫一次、
+        // 全站共用，不需要在每個 HTML 檔案裡各自補上這個元素，也不會有
+        // 「漏掉某一頁」的風險。
+        let backToTopBtn = document.getElementById('backToTop');
+        if (!backToTopBtn) {
+            backToTopBtn = document.createElement('button');
+            backToTopBtn.id = 'backToTop';
+            backToTopBtn.type = 'button';
+            backToTopBtn.setAttribute('aria-label', 'Back to top');
+            backToTopBtn.innerHTML = '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i>';
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            document.body.appendChild(backToTopBtn);
+        }
         let _scrollRafPending = false;
         function _handleScrollFrame() {
             const y = window.scrollY;

@@ -46,8 +46,7 @@ window.NAV_CONFIG = [
     {
         id: 'creative', dropdown: true, icon: 'fa-star', label: 'nav_creative', text: '創作空間', enabled: true,
         items: [
-            // live2d-demo 目前暫時關閉（沿用原本的設定）
-            { id: 'live2d-demo', href: 'creative/live2d-demo/live2d-demo.html', icon: 'fa-person-rays', color: 'text-blue-400',   label: 'nav_live2d_demo', text: '角色互動', enabled: false },
+            { id: 'live2d-demo', href: 'creative/live2d-demo/live2d-demo.html', icon: 'fa-person-rays', color: 'text-blue-400',   label: 'nav_live2d_demo', text: '角色互動', enabled: true },
             { id: 'portfolio',   href: 'creative/portfolio/portfolio.html',     icon: 'fa-photo-film',  color: 'text-emerald-400', label: 'nav_portfolio',   text: '作品展示', enabled: true },
             { id: 'channels',    href: 'creative/channels/channels.html',      icon: 'fa-heart',       color: 'text-pink-400',    label: 'nav_channels',    text: '推薦頻道', enabled: true },
             { id: 'fanart',      href: 'creative/fanart/fanart.html',          icon: 'fa-star',        color: 'text-yellow-400',  label: 'nav_fanart',      text: '二創展示', enabled: true },

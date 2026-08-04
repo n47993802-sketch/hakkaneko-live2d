@@ -1,0 +1,23 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "HakkaNekoQQ.moc3",
+		"Textures": [
+			"HakkaNekoQQ.1024/texture_00.png"
+		],
+		"Physics": "HakkaNekoQQ.physics3.json",
+		"DisplayInfo": "HakkaNekoQQ.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	]
+}

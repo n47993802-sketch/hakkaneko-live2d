@@ -1,0 +1,90 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "",
+			"Name": "左眼 開關"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "",
+			"Name": "右眼 開關"
+		},
+		{
+			"Id": "ParamEyeROpen2",
+			"GroupId": "",
+			"Name": "開口"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		},
+		{
+			"Id": "ParamBreath2",
+			"GroupId": "",
+			"Name": "呼吸2"
+		},
+		{
+			"Id": "Param",
+			"GroupId": "",
+			"Name": "頭髮物理"
+		},
+		{
+			"Id": "Param2",
+			"GroupId": "",
+			"Name": "頭髮物理2"
+		},
+		{
+			"Id": "Param3",
+			"GroupId": "",
+			"Name": "面部X"
+		},
+		{
+			"Id": "Param4",
+			"GroupId": "",
+			"Name": "面部Z"
+		},
+		{
+			"Id": "Param5",
+			"GroupId": "",
+			"Name": "面部Y"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [],
+	"CombinedParameters": [
+		[
+			"ParamAngleX",
+			"ParamAngleY"
+		],
+		[
+			"ParamBreath",
+			"ParamBreath2"
+		],
+		[
+			"Param",
+			"Param2"
+		],
+		[
+			"Param3",
+			"Param4"
+		]
+	]
+}

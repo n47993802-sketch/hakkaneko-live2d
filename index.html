@@ -13,57 +13,48 @@
         } catch(e) {}
     })();
     </script>
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/gif" href="images/common/hakkaneko-pixel.gif">
-    
-    <!-- 基礎 SEO 與 Discord / 社群卡片設定 -->
-    <title id="pageTitle">阿卡貓 HakkaNeko | Live2D 專業建模委託</title>
-    <meta name="description" content="你好！我是個人接案Live2D建模師——阿卡貓 HakkaNeko。這裡提供 VTuber 模型製作、動畫設計、Live2D 顧問與合作繪師一條龍服務。期待與你一同打造躍然而生的夢想角色！ ✨">
-    <meta name="keywords" content="Live2D, VTuber, 建模, 委託, 阿卡貓, HakkaNeko, 動畫設計, 模型製作, Live2D教學">
+    <meta name="description" content="阿卡貓 HakkaNeko 的 Live2D 專業建模委託網站。提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
+    <meta name="keywords" content="Live2D, VTuber, 建模, 委託, 阿卡貓, HakkaNeko, 動畫設計, 模型製作">
     <meta name="author" content="阿卡貓 HakkaNeko">
-    
-    <!-- 1. 邊框顏色：搭配角色水藍/青色眼睛與發光塗裝 (#38bdf8) -->
-    <meta name="theme-color" content="#38bdf8">
+    <meta name="theme-color" content="#0a0118">
     <meta name="robots" content="index, follow">
-    
-    <!-- 規範網址 -->
-    <link rel="canonical" href="https://hakkanekolive2d.cc/">
-
-    <!-- Open Graph (Facebook / Discord / LINE 預覽) -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://hakkanekolive2d.cc/">
-    <meta property="og:title" content="阿卡貓 HakkaNeko | Live2D 專業建模委託">
-    <meta property="og:description" content="你好！我是個人接案建模師兼 Live2D 導師——阿卡貓 HakkaNeko 🐾 擁有 SodaArt 完整培訓背景，累計超過 1000 件作品經驗！這裡提供 VTuber 模型製作、動畫設計、Live2D 顧問與繪師一條龍服務。網站內內建透明估價計算機與線上作品集，期待與你一同打造躍然而生的夢想角色！ ✨">
-    <!-- 2. 替換為 1:1 正方形頭像圖片 -->
-    <meta property="og:image" content="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png">
+    <meta property="og:title" content="阿卡貓 HakkaNeko · Live2D 專業建模">
+    <meta property="og:description" content="提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
+    <meta property="og:image" content="https://pbs.twimg.com/profile_banners/1903371671929528320/1748027809/1500x500">
     <meta property="og:locale" content="zh_TW">
-
-    <!-- Twitter Cards (卡片樣式改為 summary 以顯示右側小圖) -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="阿卡貓 HakkaNeko | Live2D 專業建模委託">
-    <meta name="twitter:description" content="你好！我是個人接案建模師兼 Live2D 導師——阿卡貓 HakkaNeko 🐾 擁有 SodaArt 完整培訓背景，累計超過 1000 件作品經驗！這裡提供 VTuber 模型製作、動畫設計、Live2D 顧問與繪師一條龍服務。網站內內建透明估價計算機與線上作品集，期待與你一同打造躍然而生的夢想角色！ ✨">
-    <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="阿卡貓 HakkaNeko · Live2D 專業建模">
+    <meta name="twitter:description" content="提供 VTuber 模型製作、動畫設計、Live2D 顧問等服務，透明流程、專業品質。">
+    <meta name="twitter:image" content="https://pbs.twimg.com/profile_banners/1903371671929528320/1748027809/1500x500">
     <meta name="twitter:site" content="@HakkaNekoLive2D">
+    <title id="pageTitle">阿卡貓 HakkaNeko · Live2D 專業建模</title>
+    <!-- v32 修復記錄：
+         1. gif-hidden CSS 強化（transform3d移出可視區 + will-change + isolation）
+         2. carousel-card 補充 GPU compositing layer
+         3. 全語系 i18n 對齊：V皮設計/動畫設計/動態貼圖/動畫處理/標準/專業/頂級方案
+         4. svc_live2d→V皮設計, svc_anim→動畫設計（4語系全更新）
+         5. zh-CN 動態貼圖/動畫處理分類對齊；nav_anim→动画设计
+         6. en nav_core→V-Skin Design, en svc_live2d→V-Skin Design
+         7. ja nav_core→V皮デザイン
+         8. prices.specialFx=250 確認；fallback文字補強為'特效動畫'
+         9. copySummaryToClipboard 已完全 i18n 動態化（無中文死碼）
+         ── v32 新增修復 ──
+        10. 【估價計算機互斥】頂級方案(20000)選中時，自動 disabled+uncheck specialFx，
+            加入 ✦ 內含基礎特效 badge，防止重複計費漏洞。
+        11. 【一鍵複製格式優化】copySummaryToClipboard 改用 CRLF(\r\n) + lines 陣列架構，
+            確保 Discord / X (Twitter) / LINE 全平台換行完美呈現，不擠成一團。
+        12. 【Google Drive 作品集骨架屏】新增 .drive-skeleton-* CSS 體系（shimmer動畫、
+            spinner標題列、淡入效果），為 V皮/動態貼圖/動畫處理 區塊提供視覺緩衝。
+        13. 【Google Sites iframe 高度自動自適應】加入 ResizeObserver + postMessage 機制，
+            展開對照表等互動後自動計算 scrollHeight 並通知父層，消除雙滾動條與底部裁切。
+        14. 合作繪師「白(@BT871213)」卡片與結尾標籤完整閉合確認。
+    -->
+    
 
-    <!-- Google 結構化資料 -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "阿卡貓",
-      "alternateName": ["HakkaNeko", "阿卡貓 HakkaNeko"],
-      "url": "https://hakkanekolive2d.cc/",
-      "image": "https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png",
-      "jobTitle": "Live2D 建模師 · Live2D 導師",
-      "sameAs": [
-        "https://x.com/HakkaNekoLive2D",
-        "https://www.twitch.tv/hakkanekolive2d",
-        "https://discord.gg/sXeKwm4Bkz",
-        "https://ko-fi.com/hakkanekolive2d"
-      ]
-    }
-    </script>
 
     <script>
     // Google Sites iframe 相容性偵測
@@ -81,7 +72,7 @@
     <link rel="stylesheet" href="tailwind.min.css?v=20260804">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-    <!-- DNS prefetch for external resources -->
+        <!-- DNS prefetch for external resources -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -96,6 +87,12 @@
 <body class="antialiased min-h-screen pb-12 loading">
     <script>window.SITE_BASE = '';</script>
     <script>
+    // 提早套用日夜模式，避免「切換分頁時先閃一下深色、才變回淺色」的問題。
+    // 原本這段邏輯放在 common.js 裡，但 common.js 要等到 <body> 最底部
+    // 才會執行，使用者會先看到預設的深色畫面，過一瞬間才變成淺色。
+    // 這裡搬到 <body> 最開頭、任何畫面內容之前同步執行，
+    // 就能在瀏覽器第一次繪製前就決定好主題，不會有閃爍。
+    // （common.js 裡仍保留同一段邏輯作為備援，兩邊重複執行是安全的。）
     (function(){
         try {
             var saved = localStorage.getItem('hakka_theme');
@@ -122,7 +119,8 @@
         </div>
     </div>
 
-    <canvas id="meteor-canvas"></canvas>
+
+<canvas id="meteor-canvas"></canvas>
 
     <header class="pt-16 pb-8 text-center relative z-10">
         <div class="max-w-5xl mx-auto px-4">
@@ -135,13 +133,15 @@
             </p>
 
             <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
-            <script src="site-config.js?v=20260805"></script>
-            <script src="nav-config.js?v=20260805"></script>
-            <script src="nav-render.js?v=20260805"></script>
+            <!-- 導覽列設定＋渲染：緊跟在 <nav> 容器後面、同步載入，
+                 讓按鈕在畫面第一次繪製前就已經填好，避免空白容器閃爍 -->
+            <script src="site-config.js?v=20260804"></script>
+            <script src="nav-config.js?v=20260804"></script>
+            <script src="nav-render.js?v=20260804"></script>
         </div>
     </header>
 
-    <!-- 固定右上角：日夜模式 -->
+        <!-- 固定右上角：日夜模式 -->
     <button onclick="toggleTheme()" id="themeFixedBtn"
         class="fixed top-4 right-[6.5rem] z-[999] w-10 h-10 rounded-full glass-panel no-reveal flex items-center justify-center shadow-lg hover:scale-110 transition-transform border border-white/10"
         title="切換白天/夜晚模式">
@@ -149,8 +149,7 @@
     </button>
 
     <!-- 固定右上角：語言切換 -->
-    <div class="fixed top-4 right-4 z-[999]" id="langSwitcherWrap">
-        <button onclick="toggleLangMenu()" id="langBtn"
+    <div class="fixed top-4 right-4 z-[999]" id="langSwitcherWrap"><button onclick="toggleLangMenu()" id="langBtn"
             class="h-9 px-2.5 rounded-full glass-panel no-reveal flex items-center gap-1.5 shadow-lg hover:scale-105 transition-transform border border-white/10 text-purple-300 text-xs font-bold"
             title="切換語言 / Language">
             <span id="langFlag" class="text-base leading-none"></span>
@@ -186,7 +185,7 @@
             <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                 <div class="md:col-span-4 text-center">
                     <div class="relative inline-block">
-                        <img loading="lazy" src="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png" alt="阿卡貓 HakkaNeko Live2D 建模師頭像"
+                        <img loading="lazy" src="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png" alt="阿卡貓"
                             class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-purple-500/30 object-cover shadow-2xl mx-auto avatar-click"
                             onclick="showBubble(this, 'intro'); playIntroSound()" id="introAvatar">
                         <div class="absolute -bottom-2 right-4 bg-purple-600 px-4 py-1 rounded-full text-xs font-bold text-white shadow-lg">LIVE2D MENTOR</div>
@@ -201,7 +200,9 @@
                     <div class="flex flex-wrap gap-3 items-center">
                         <a href="https://x.com/HakkaNekoLive2D" target="_blank" rel="noopener noreferrer" class="text-3xl text-purple-400 hover:text-white transition" title="X"><i class="fa-brands fa-x-twitter"></i></a>
                         <a href="https://www.twitch.tv/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="text-3xl text-purple-500 hover:text-[#9146ff] transition" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
+                        <!-- <span class="material-symbols-outlined" aria-hidden="true">build</span> 委託狀態：IS_COMMISSION_OPEN = true 開放中 / false 暫停中 -->
                         <span id="commissionBadge" class="text-sm px-3 py-1.5 rounded-md flex items-center gap-2 font-bold"></span>
+                        <!-- 直播狀態 -->
                         <span id="twitterLiveBadge" class="text-sm px-3 py-1.5 rounded-md flex items-center gap-2 font-bold bg-gray-500/20 text-gray-400">
                             <span id="liveDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
                             <span id="liveText" data-i18n="live_off">Twitch 未直播</span>
@@ -284,7 +285,7 @@
                         <img loading="lazy" src="https://pbs.twimg.com/media/G8rR_qlbMAIdiz0?format=png&name=small"
                             class="rounded-2xl shadow-[0_10px_40px_rgba(139,92,246,0.3)] border border-white/10 w-full object-cover avatar-click"
                             onclick="showBubble(this, 'collab'); playBonk()" id="collabAvatar"
-                            onerror="this.onerror=null;this.src='https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png'" alt="合作繪師展示">
+                            onerror="this.onerror=null;this.src='https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png'" alt="">
                         <p class="text-xs text-center text-purple-400/50 mt-2" data-i18n="intro_click_tip"><span class="material-symbols-outlined" aria-hidden="true">touch_app</span> 點我試試看！</p>
                     </div>
                 </div>
@@ -294,11 +295,13 @@
 
     <footer class="relative z-10 mt-16 border-t border-white/5 bg-black/20 backdrop-blur-sm">
         <div class="max-w-5xl mx-auto px-4 py-10 text-center space-y-3">
+            <!-- 名字 & 身份 -->
             <div class="flex items-center justify-center gap-3 mb-2">
                 <span class="font-black text-lg tracking-wide text-gradient" data-i18n="name_short">阿卡貓 HakkaNeko</span>
             </div>
             <p class="text-xs text-purple-400/60" data-i18n="footer_role">Live2D 建模師 · 個人接案建模師</p>
 
+            <!-- 社群連結 -->
             <div class="flex flex-wrap justify-center gap-5 text-purple-400/50 text-sm my-2">
                 <a href="mailto:n47993802@gmail.com" class="hover:text-white transition flex items-center gap-1"><i class="fa-solid fa-envelope mr-1"></i>n47993802@gmail.com</a>
                 <a href="https://x.com/HakkaNekoLive2D" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-x-twitter mr-1"></i>@HakkaNekoLive2D</a>
@@ -306,6 +309,7 @@
                 <a href="https://discord.gg/sXeKwm4Bkz" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-discord mr-1"></i>阿卡貓聊天窩</a>
             </div>
 
+            <!-- Ko-fi 贊助 -->
             <div class="pt-3 border-t border-white/5">
                 <div class="flex flex-wrap items-center justify-center gap-3">
                     <a href="https://ko-fi.com/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="kofi-btn"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/></svg><span data-i18n="kofi_btn">請我喝杯咖啡</span></a>
@@ -314,6 +318,7 @@
                 </div>
             </div>
 
+            <!-- 版權（最底部，最小最淡） -->
             <div class="border-t border-white/5 pt-4 space-y-1">
                 <p class="text-xs text-purple-500/40">© <span id="footerYear"></span> <span class="text-purple-300/70" data-i18n="name_short">阿卡貓 HakkaNeko</span> · All Rights Reserved</p>
                 <p class="text-xs text-purple-500/30" data-i18n="footer_credit">本網站由 阿卡貓 HakkaNeko 企劃，介面設計與互動效果均由 AI 輔助生成、迭代優化，並經本人審定後發布。</p>
@@ -323,18 +328,29 @@
     </main>
 
     <div id="unifiedLightbox" role="dialog" aria-modal="true">
+        <!-- 背景點擊關閉 -->
         <div class="absolute inset-0" onclick="ulbClose()"></div>
+
+        <!-- 關閉鈕 -->
         <button onclick="ulbClose()" style="position:absolute;top:16px;right:20px;background:transparent;border:none;color:rgba(255,255,255,0.5);font-size:1.6rem;cursor:pointer;z-index:20;line-height:1;" aria-label="關閉"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+
+        <!-- 左箭頭 -->
         <button class="ulb-arrow" id="ulbPrev" onclick="ulbNav(-1)" aria-label="上一張">‹</button>
+
+        <!-- 中央內容 -->
         <div style="position:relative;display:flex;flex-direction:column;align-items:center;max-width:min(88vw,720px);">
+            <!-- v28：點擊圖片本身在純覆蓋模式（stickers/logos）也關閉燈箱 -->
             <img width="1500" height="500" loading="lazy" id="ulbImg" src="" alt=""
                  onclick="if(ulbCurrent&&(ulbCurrent.group==='stickers'||ulbCurrent.group==='logos'))ulbClose()">
             <p id="ulbLabel">點圖或旁邊關閉 ／ ESC</p>
             <div id="ulbDots"></div>
         </div>
+
+        <!-- 右箭頭 -->
         <button class="ulb-arrow" id="ulbNext" onclick="ulbNav(1)" aria-label="下一張">›</button>
     </div>
 
+    <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
     <script src="locales/zh-TW.js?v=20260804" defer></script>
     <script src="locales/zh-CN.js?v=20260804" defer></script>
     <script src="locales/en.js?v=20260804" defer></script>

@@ -16,8 +16,8 @@
             nav_commission: '委託資訊', nav_rules: '流程與規範',
             nav_core: 'V皮設計', nav_anim: '動畫設計',
             nav_template: '聯名模板',
-            nav_creative: '創作空間', nav_portfolio: '作品展示-施工',
-            nav_channels: '推薦頻道', nav_fanart: '二創展示-施工',
+            nav_creative: '創作空間', nav_portfolio: '作品展示',
+            nav_channels: '推薦頻道', nav_fanart: '二創展示',
             // Intro
             intro_role: '個人接案建模師 · Live2D 導師',
             intro_bio: '自 2021 年起投入 Live2D 建模領域，不僅致力於商業委託，更在現實中擔任導師傳承技術。累計完成超過 1000 件委託，熱愛在 X 與同好交流、分享創作心得。憑藉對細節的極致追求與創意思維，我期待能與各類繪師攜手，賦予平面角色生動的靈魂。',

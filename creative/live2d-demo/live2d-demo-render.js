@@ -64,7 +64,22 @@
             // (reading 'from')」，跟模型檔案本身完全無關，是全域變數路徑
             // 寫錯了。
             if (!(window.PIXI && window.PIXI.live2d && window.PIXI.live2d.Live2DModel)) {
-                await loadScript('https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/index.min.js');
+                // v62 修復（真正的根本原因）：pixi-live2d-display 的
+                // dist/index.min.js 是「同時支援 Cubism 2 + Cubism 4」的
+                // 合併版本，這個版本的初始化程式碼裡有一段寫死、無條件
+                // 執行的檢查——一定要偵測到 Cubism 2 的舊版運行時
+                // （window.Live2D，來自另一支叫 live2d.min.js 的檔案）存在，
+                // 不然會直接 throw 一個「Could not find Cubism 2 runtime」
+                // 例外，把整個函式庫初始化中斷在半路，後面原本要拿來定義
+                // Live2DModel 的程式碼完全沒有機會執行到——這才是「找不到
+                // PIXI.live2d.Live2DModel」的真正原因，跟 CDN 有沒有正確
+                // 下載無關（腳本確實有下載成功，只是執行到一半就被這個
+                // 檢查中斷了）。
+                // 我們的模型是 .moc3（Cubism 3/4 格式），用不到 Cubism 2，
+                // 改成載入只支援 Cubism 4 的專用版本（cubism4.min.js），
+                // 這個版本沒有上述那段檢查。同時把版本號鎖定在 0.4.0，
+                // 避免以後函式庫更新內容跟這裡的假設不一致。
+                await loadScript('https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js');
                 if (window.PIXI && window.PIXI.live2d && window.PIXI.live2d.Live2DModel) {
                     window.PIXI.live2d.Live2DModel.registerTicker(PIXI.Ticker);
                 }

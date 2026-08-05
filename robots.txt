@@ -1,0 +1,9 @@
+# 阿卡貓 HakkaNeko 網站 — robots.txt
+User-agent: *
+Allow: /
+
+# 尚未開放的功能頁面，不希望被收錄／出現在搜尋結果
+Disallow: /commission/template/
+Disallow: /creative/model/
+
+Sitemap: https://hakkanekolive2d.cc/sitemap.xml

@@ -820,10 +820,10 @@
             const channel = 'hakkanekolive2d';
             
             const endpoints = [
-                () => fetch(`https:
+                () => fetch(`https://decapi.me/twitch/uptime/${channel}`, { signal: AbortSignal.timeout(5000) })
                         .then(r => r.text())
                         .then(t => !t.includes('offline') && !t.includes('error') && t.trim().length > 3),
-                () => fetch(`https:
+                () => fetch(`https://api.ivr.fi/v2/twitch/user?login=${channel}`, { signal: AbortSignal.timeout(5000) })
                         .then(r => r.json())
                         .then(d => !!(d[0] && d[0].stream)),
             ];

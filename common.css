@@ -110,7 +110,29 @@
         body.light-mode .text-purple-300 { color: #6b21a8 !important; }
         body.light-mode .text-purple-400 { color: #5b1898 !important; }
         body.light-mode .text-gray-400 { color: #5a4c72 !important; }
-        body.light-mode .bg-black\/40, body.light-mode .bg-black\/50, body.light-mode .bg-black\/30, body.light-mode .bg-black\/20 { 
+        /* v57 修復：漸層背景／單色品牌背景的 CTA 按鈕與徽章，在淺色模式下
+           被上面「.text-white 一律轉深色」的規則誤傷 —— 這類按鈕本來就是
+           靠鮮豔背景本身撐開對比，不管深色/淺色模式都應該維持白字，套用
+           全站規則後變成「深色文字疊在鮮豔背景上」，反而幾乎看不清楚。
+           這裡把「背景本身已經是飽和品牌色」的按鈕/徽章文字鎖定回白色，
+           不受淺色模式的文字覆寫影響。 */
+        body.light-mode [class*="bg-gradient-to-"],
+        body.light-mode [class*="bg-gradient-to-"] span,
+        body.light-mode [class*="bg-gradient-to-"] i,
+        body.light-mode [class*="bg-gradient-to-"] svg,
+        body.light-mode .bg-purple-600,
+        body.light-mode .bg-purple-600 span,
+        body.light-mode .bg-indigo-600,
+        body.light-mode .bg-indigo-600 span {
+            color: #fff !important;
+        }
+        /* Ko-fi 贊助按鈕旁邊的輔助文字（分隔點、贊助者名單），原本設計
+           成低透明度紫色配深色背景，淺色模式下背景變亮，這些低透明度
+           文字對比不足，這裡個別提高透明度／改用較深的紫色。 */
+        body.light-mode #supportersList { color: rgba(91, 24, 152, 0.65) !important; }
+        body.light-mode .text-purple-500\/30 { color: rgba(107, 33, 168, 0.35) !important; }
+
+        body.light-mode .bg-black\/40, body.light-mode .bg-black\/50, body.light-mode .bg-black\/30, body.light-mode .bg-black\/20, body.light-mode .bg-black\/60 { 
             background-color: rgba(248, 244, 253, 0.88) !important; 
             color: #1a1030 !important;
             border-color: rgba(107, 33, 168, 0.4) !important;

@@ -1,9 +1,4 @@
-/* ============================================================
-   阿卡貓 HakkaNeko 網站 — V皮設計頁 報價計算機邏輯
-   ============================================================
-   從 common.js 拆分出來，只有 core.html 會載入這個檔案。
-   需要先載入 core-config.js（提供 window.CORE_QUANTITIES / window.CORE_PRICES）。
-   ============================================================ */
+
 var quantities = window.CORE_QUANTITIES;
 var prices = window.CORE_PRICES;
 
@@ -11,11 +6,11 @@ var prices = window.CORE_PRICES;
             const cb = document.getElementById(type);
             if (!cb) return;
             if (cb.checked && quantities[type] === 0) {
-                // 勾選時若數量為 0，自動設為 1
+                
                 quantities[type] = 1;
                 document.getElementById(type + 'Qty').textContent = 1;
             } else if (!cb.checked) {
-                // 取消勾選時歸零
+                
                 quantities[type] = 0;
                 document.getElementById(type + 'Qty').textContent = 0;
             }
@@ -25,7 +20,7 @@ var prices = window.CORE_PRICES;
         function changeQty(type, delta) {
             quantities[type] = Math.max(0, quantities[type] + delta);
             document.getElementById(type + 'Qty').textContent = quantities[type];
-            // 數量 > 0 時自動勾選；歸零時自動取消勾選
+            
             if (document.getElementById(type)) document.getElementById(type).checked = quantities[type] > 0;
             calculate();
         }
@@ -39,9 +34,9 @@ var prices = window.CORE_PRICES;
 
         function toggleSubmitButton() {
             const checked = document.getElementById('agreeTerms').checked;
-            // 截圖按鈕
+            
             document.getElementById('copyBtn').disabled = !checked;
-            // 委託編號 badge：勾選後展開，並確保編號已生成
+            
             const badge = document.getElementById('orderBadgeVP');
             if (badge) badge.style.display = checked ? '' : 'none';
             if (checked) {
@@ -50,7 +45,7 @@ var prices = window.CORE_PRICES;
                     orderEl.textContent = generateOrderNumber('vp');
                 }
             }
-            // 一鍵複製：勾選後解鎖
+            
             const copyBtn = document.getElementById('btn-copy-summary-vp');
             if (copyBtn) {
                 copyBtn.disabled = !checked;
@@ -65,24 +60,24 @@ var prices = window.CORE_PRICES;
             let baseElement = document.querySelector('input[name="baseModel"]:checked');
             let basePrice = baseElement ? parseInt(baseElement.value) : 15000;
 
-            // ── v32 漏洞修復①：頂級方案已內含特效動畫，自動取消加購並鎖定 ──
+            
             const isTopPlan = (basePrice === 20000);
             const fxCb     = document.getElementById('specialFx');
             const fxLabel  = fxCb ? fxCb.closest('label') : null;
             if (fxCb) {
                 if (isTopPlan) {
-                    // 強制取消勾選 + 歸零 + disabled
+                    
                     fxCb.checked  = false;
                     fxCb.disabled = true;
                     quantities['specialFx'] = 0;
                     const fxQtyEl = document.getElementById('specialFxQty');
                     if (fxQtyEl) fxQtyEl.textContent = '0';
-                    // 視覺提示：半透明 + 不可點擊
+                    
                     if (fxLabel) {
                         fxLabel.style.opacity  = '0.42';
                         fxLabel.style.cursor   = 'not-allowed';
                         fxLabel.style.pointerEvents = 'none';
-                        // 在標題旁補充說明文字（只插入一次）
+                        
                         let incTag = fxLabel.querySelector('.fx-included-tag');
                         if (!incTag) {
                             const _d2 = (typeof currentLang!=='undefined'&&I18N[currentLang])?I18N[currentLang]:I18N['zh-TW'];
@@ -95,13 +90,13 @@ var prices = window.CORE_PRICES;
                         }
                     }
                 } else {
-                    // 解除 disabled，恢復正常
+                    
                     fxCb.disabled = false;
                     if (fxLabel) {
                         fxLabel.style.opacity  = '';
                         fxLabel.style.cursor   = '';
                         fxLabel.style.pointerEvents = '';
-                        // 移除說明標籤
+                        
                         const incTag = fxLabel.querySelector('.fx-included-tag');
                         if (incTag) incTag.remove();
                     }
@@ -131,7 +126,7 @@ var prices = window.CORE_PRICES;
 
             let subtotalForProject = basePrice + extra;
 
-            // 工程資料加購計算
+            
             if (document.getElementById('projectFile') && document.getElementById('projectFile').checked) {
                 let projectCost = Math.round(subtotalForProject * 1.5);
                 extra += projectCost;
@@ -158,7 +153,7 @@ var prices = window.CORE_PRICES;
             let paymentHtml = '';
             
             if (plan === 'one') { paymentHtml = `${_d.pay_one||'一次付清'}：<strong class="text-emerald-400">${getCurrencyPrefix()}${formatMoney(finalTotal)}</strong>`; } 
-            else if (plan === 'two') { /* two installments */
+            else if (plan === 'two') { 
                 let instFee = Math.round(finalTotal * 0.03); finalTotal += instFee; details.push({name: `${_d.pay_two||'兩期分款'} ${_d.pay_fee||'手續費'} (3%)`, price: instFee});
                 paymentHtml = `<div class="flex justify-between"><span>第一期 (50%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(Math.round(finalTotal*0.5))}</strong></div>`;
             } else if (plan === 'three') {
@@ -171,9 +166,9 @@ var prices = window.CORE_PRICES;
             document.getElementById('detailList').innerHTML = details.map(i => `<div class="flex justify-between py-1 border-b border-white/5"><span>${i.name}</span><span>${getCurrencyPrefix()}${formatMoney(i.price)}</span></div>`).join('');
 
             window.currentQuoteDetails = details; window.currentFinalTotal = finalTotal; window.currentPayment = paymentMethod; window.currentPaymentPlan = plan;
-            // v29：為一鍵複製功能提供別名
+            
             window.currentVpDetails = details; window.currentVpTotal = finalTotal;
-            // 同步加急說明 & 補充資訊到截圖面板
+            
             const rushText = document.getElementById('rushInfo')?.value || '';
             const suppText = document.getElementById('supplementInfo')?.value || '';
             const rushBlock = document.getElementById('quoteRushSummary');
@@ -183,35 +178,35 @@ var prices = window.CORE_PRICES;
             syncCheckboxVisuals();
         }
 
-        // getQuoteText() 已移除：舊版純文字報價摘要產生器，只有已刪除的
-        // copyQuote()/screenshotAndEmail() 會用到，目前的 screenshotQuote()
-        // 走的是 html2canvas 截圖路線，不需要文字版摘要了。
+        
+        
+        
 
-        // copyQuote() 已移除：舊版「純文字複製到剪貼簿」按鈕的邏輯，
-        // 已被目前 core.html 實際使用的 screenshotQuote()（截圖+自動產生
-        // 委託編號）取代，沒有任何按鈕在呼叫它了。
+        
+        
+        
 
         function resetForm() {
             document.querySelectorAll('#page-core input[type="checkbox"]').forEach(i => i.checked = false);
-            // Reset radio buttons to default plan (pro = 15000)
+            
             const defaultRadio = document.querySelector('#page-core input[name="baseModel"][value="15000"]');
             if (defaultRadio) defaultRadio.checked = true;
             const defaultPlan = document.querySelector('#page-core input[name="paymentPlan"][value="one"]');
             if (defaultPlan) defaultPlan.checked = true;
-            // Reset all quantities to 0
+            
             Object.keys(quantities).forEach(k => {
                 quantities[k] = 0;
                 const qEl = document.getElementById(k + 'Qty');
                 if (qEl) qEl.textContent = 0;
             });
-            // Hide rush container
+            
             const rushContainer = document.getElementById('rushContainer');
             if (rushContainer) rushContainer.classList.add('hidden');
             const rushInfo = document.getElementById('rushInfo');
             if (rushInfo) rushInfo.value = '';
             const suppInfo = document.getElementById('supplementInfo');
             if (suppInfo) suppInfo.value = '';
-            // 重置時清空編號，下次報價重新生成新號碼
+            
             const vpOrd = document.getElementById('orderIdVP');
             if (vpOrd) vpOrd.textContent = '—';
             calculate();
@@ -227,7 +222,7 @@ var prices = window.CORE_PRICES;
             body.classList.toggle('hidden', open);
             arrow.style.transform = open ? '' : 'rotate(180deg)';
             btn.setAttribute('aria-expanded', String(!open));
-            // 更新提示文字 i18n
+            
             const hintEl = btn.querySelector('[data-i18n="plan_compare_hint"]');
             if (hintEl) {
                 const _d = (typeof currentLang !== 'undefined' && I18N[currentLang]) ? I18N[currentLang] : I18N['zh-TW'];
@@ -235,21 +230,21 @@ var prices = window.CORE_PRICES;
             }
         }
 
-// v40 修復：金額滾動數字動畫的「包裝」邏輯，原本放在 common.js 裡，
-// 但 common.js 比這支檔案先載入，那時候 calculate 根本還沒定義，包裝了
-// 個寂寞，等這支檔案稍後才真正定義 calculate() 時，又會把包裝版本整個
-// 蓋掉——滾動動畫因此從沒真正生效過。現在把「包裝」的動作移來這裡，
-// 確保是在 calculate() 真正定義好之後才進行包裝，順序才正確。
-// （animateCounter() 本身仍是 common.js 提供的共用工具函式。）
-//
-// v41 修復：上一版這裡用了 debounce 包一層，邏輯有誤——debounce 延後
-// 執行的那個函式，會「重新」讀一次 el.textContent 當作 from（這時候
-// textContent 其實已經被 _origCalc() 更新成新數字了），導致 from 跟 to
-// 永遠相等、動畫條件永遠不成立，滾動動畫完全沒有觸發。
-// 這裡不需要 debounce：calculate() 只會在 checkbox/radio 的 onchange
-// 事件觸發，不是連續輸入，不會有需要節流的高頻率呼叫情境。正確做法是
-// 單純同步執行：先記錄舊值 → 呼叫 _origCalc() 讓它把新值寫進畫面 →
-// 立刻用「舊值→新值」呼叫 animateCounter()，把畫面重新接管成動畫過程。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const _origCalc = calculate;
 calculate = function() {
     const el = document.getElementById('totalPrice');
@@ -260,28 +255,28 @@ calculate = function() {
     if (from !== to) animateCounter(el, from, to);
 };
 
-// v37 修復：右側報價原本要等 window.onload（頁面所有資源都載入完成後，
-// 通常比畫面第一次顯示晚不少）才會第一次計算，這段時間畫面顯示的是
-// core.html 寫死的預設文字「NT$ 15,000」，等 window.onload 觸發計算後
-// 才「跳成」實際金額——這就是右側報價感覺閃一下/跳動的原因。
-// 這裡讓 calculate() 在這支腳本一載入就立刻執行一次（此時表單元素都
-// 已經在 DOM 中，可以安全讀取），畫面一開始顯示的就已經是正確金額，
-// 不會再有「先顯示預設文字、之後又跳成計算結果」的情況。
-// 注意：這裡刻意呼叫 _origCalc()（沒有滾動動畫的原始版本），不是
-// 上面包裝過的 calculate()——如果用包裝版本，畫面會先顯示 HTML 寫死的
-// 預設金額，被 animateCounter() 從那個假預設值「滾動」到正確金額，
-// 等於又重新做出一次一開始就想避免的視覺跳動。之後使用者互動觸發的
-// calculate() 才需要滾動動畫（讓數字變化更平滑），第一次不需要。
+
+
+
+
+
+
+
+
+
+
+
+
 _origCalc();
 
-// v48 修復（問題4：預估總金額顯示效果差）：第一次算出金額後，
-// 讓它「緩緩浮現」一次，取代原本「文字瞬間出現」的顯示方式。
-// 之後每次使用者互動改變金額，交給 animateCounter()（已內建
-// flashAmount() 閃光脈衝）處理，不會跟這裡的入場動畫互相干擾。
+
+
+
+
 revealAmountOnLoad(document.getElementById('totalPrice'));
 
-// v45：初始化浮動報價提示條（見 common.js 的 initFloatingQuoteBar()）
+
 initFloatingQuoteBar('quoteSummaryPanel', 'totalPrice');
 
-// v47：啟用報價欄捲動跟隨效果（見 common.js 的 initScrollFollowPanel()）
+
 initScrollFollowPanel('.sticky-summary', 'page-core');

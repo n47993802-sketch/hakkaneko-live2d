@@ -1,9 +1,4 @@
-/* ============================================================
-   阿卡貓 HakkaNeko 網站 — 語言包：ja
-   由 common.js 拆分而來，只需編輯此檔即可調整此語言的翻譯內容。
-   載入方式：於 index.html 中以 <script defer src="locales/ja.js"></script>
-   在 common.js 之前引入，會自動掛載到 window.I18N['ja']。
-   ============================================================ */
+
 (function() {
     window.I18N = window.I18N || {};
     window.I18N['ja'] = {
@@ -238,7 +233,7 @@
             footer_role: 'Live2D モデラー · 個人受注モデラー',
             footer_credit: 'このサイトはHakkaNekoが企画しました。デザインと動きはAIのサポートで作り、本人が確認してから公開しています。',
             kofi_btn: 'コーヒーをおごる', kofi_supporters_empty: '最初のサポーターになろう！',
-            // ── テンプレコラボ ── tmpl_desc: '既存のLive2Dテンプレートに衣装デザインを乗せるだけで、コスパ最高のVTuberデビューが実現します。',
+            
             tmpl_disclaimer_title: '<span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">assignment</span> こちらの見積もりは概算です', tmpl_disclaimer_body: 'こちらの金額は<strong class="text-amber-200">あくまで概算</strong>です。コラボテンプレートの実際のお見積りは、衣装のセット数・カスタマイズの複雑さ・現在の受付状況によって変わります。まずは概算をご確認いただき、正式なお見積りはフォームからお問い合わせください。',
                tmpl_s4_title: 'アクセサリー・表情オプション', tmpl_s5_title: '補足情報',
             tmpl_s2_hint: '1着目 NT$ 1,000、2着目以降 +NT$ 400。画像をクリックして選択、複数選択可。',
@@ -269,7 +264,7 @@
             tmpl_acc_label: 'ON/OFFできる小道具', tmpl_acc_note: 'メガネ / 花束 / 杖など', tmpl_acc_price: '1つ +NT$ 100',
             tmpl_expr_label: '簡単な表情調整', tmpl_expr_price: '1つ +NT$ 100', tmpl_total_hint: '手数料・送料別', tmpl_copy_header: '注文内容',
             tmpl_copy_note: '参考試算です。最終料金は確認後に決まります', tmpl_outfit_detail_add: '追加衣装',
-            // ── live2d-demo.html（キャラクター・インタラクションデモ、現在非公開）──
+            
             demo_placeholder_note: '現在 Live2D キャラクターインタラクション機能をテスト中です。詳細は今後調整される可能性があります。お試しいただきありがとうございます！',
             demo_artist_label: '原画イラストレーター', demo_artist_pending: '確認中／未公開',
             demo_purpose_label: '展示用途', demo_purpose_value: 'ポートフォリオ参考・インタラクティブデモ',
@@ -280,7 +275,7 @@
             demo_interact_mouse: 'マウス移動<br>視線が追従', demo_interact_head: '頭をクリック<br>表情が変化', demo_interact_body: '体をクリック<br>モーション発生',
             demo_slider_body: '体の揺れ幅', demo_slider_expr: '表情の強さ', demo_slider_breath: '呼吸の速さ',
             demo_blink_auto: '自動まばたき',
-            // ── portfolio.html（作品展示。キャラクター名／作品名は翻訳せず原文のまま）──
+            
             port_work1_title: '「晩餐歌」ミュージックPV Live2Dアニメーション', port_work1_desc: 'アニメーションの一部を担当し、海中を漂うような浮遊感を表現しました。',
             port_work2_title: '花咲小春 OP', port_work2_desc: '花咲小春用オープニングアニメーション',
             port_work3_title: '花咲小春 ED', port_work3_desc: '花咲小春用エンディングアニメーション',
@@ -288,7 +283,7 @@
             port_work5_title: '雪寶うさぎ アニメーション展示', port_work5_desc: 'こんなに可愛いうさぎの女王様、好きにならずにいられる？',
             port_work6_title: '厄倫蒂兒Earendel アニメーション展示', port_work6_desc: 'SodaArtアニメーション概念講座 第2期 学習課題',
             port_work7_title: '茸茸鼠 アニメーション展示', port_work7_desc: 'SodaArtアニメーション概念講座 第3期 コンテスト課題',
-            // ── core.html／anim.html 追加ラベル ──
+            
             opt_rush_from_label: 'NT$ ',
             del_moc3_label: 'moc3 モデルファイル', del_textures_label: 'テクスチャフォルダ', del_motions_label: 'motions フォルダ', del_cmo3_label: 'Cubism 工程ファイル（.cmo3）',
             pay_ecpay_label: 'ECPay／コンビニ決済',

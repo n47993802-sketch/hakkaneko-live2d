@@ -1,9 +1,4 @@
-/* ============================================================
-   阿卡貓 HakkaNeko 網站 — 語言包：en
-   由 common.js 拆分而來，只需編輯此檔即可調整此語言的翻譯內容。
-   載入方式：於 index.html 中以 <script defer src="locales/en.js"></script>
-   在 common.js 之前引入，會自動掛載到 window.I18N['en']。
-   ============================================================ */
+
 (function() {
     window.I18N = window.I18N || {};
     window.I18N['en'] = {
@@ -239,7 +234,7 @@
             footer_role: 'Live2D Rigger · Freelance Modeler',
             footer_credit: 'Site conceived by HakkaNeko. UI design and interactions were built with AI assistance, iterated, and personally reviewed before publishing.',
             kofi_btn: 'Buy Me a Coffee', kofi_supporters_empty: 'Be the first supporter!',
-            // ── Template Collab ── tmpl_desc: 'Personalize a pre-built Live2D template with custom outfit designs — the most cost-effective way to debut your VTuber look.',
+            
             tmpl_disclaimer_title: '<span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">assignment</span> Estimate only', tmpl_disclaimer_body: 'The price shown here is a <strong class="text-amber-200">rough estimate</strong> only — the final quote for template outfits depends on how many sets you choose, how complex your customizations are, and current queue status. Please use this calculator as a starting point, then confirm the official quote through the form.',
             tmpl_s1_title: 'Choose Template', tmpl_s2_title: 'Outfit Selection', tmpl_s3_title: 'Hair Adjustments', tmpl_s4_title: 'Accessories & Expressions', tmpl_s5_title: 'Additional Notes',
             tmpl_s2_hint: 'First outfit NT$ 1,000, each additional +NT$ 400. Click image to select, multi-select allowed.',
@@ -262,7 +257,7 @@
             tmpl_detail_outfit: 'Template Outfits', tmpl_detail_suit: 'set(s)', tmpl_detail_empty: 'No items selected yet',
             tmpl_copy_header: 'Commission Summary', tmpl_copy_type: 'Template Type', tmpl_copy_outfits: 'Outfits', tmpl_copy_none: '(none selected)',
             tmpl_copy_acc: 'Accessory Request', tmpl_copy_supp: 'Additional Notes', tmpl_copy_note: 'Preliminary estimate — final price confirmed after discussion',
-            // ── live2d-demo.html (character interaction demo, currently hidden) ──
+            
             demo_placeholder_note: "We're currently testing the Live2D character interaction feature — some details may still change. Thanks for trying it out!",
             demo_artist_label: 'Original artist', demo_artist_pending: 'TBA',
             demo_purpose_label: 'Purpose', demo_purpose_value: 'Portfolio reference · interactive demo',
@@ -273,7 +268,7 @@
             demo_interact_mouse: 'Move mouse<br>Gaze follows', demo_interact_head: 'Click head<br>Trigger expression', demo_interact_body: 'Click body<br>Trigger motion',
             demo_slider_body: 'Body sway amount', demo_slider_expr: 'Expression intensity', demo_slider_breath: 'Breathing speed',
             demo_blink_auto: 'Auto blink',
-            // ── portfolio.html (portfolio pieces; character/project names kept as-is, untranslated) ──
+            
             port_work1_title: '"Dinner Song" — Music PV Live2D Animation', port_work1_desc: "Handled part of the animation work, giving the character a sense of drifting underwater.",
             port_work2_title: 'Hanasaki Koharu — OP', port_work2_desc: "Opening animation for Hanasaki Koharu.",
             port_work3_title: 'Hanasaki Koharu — ED', port_work3_desc: "Ending animation for Hanasaki Koharu.",
@@ -281,15 +276,15 @@
             port_work5_title: 'Yukidama Usagi — Animation Showcase', port_work5_desc: "How could anyone not love such an adorable bunny queen?",
             port_work6_title: 'Earendel — Animation Showcase', port_work6_desc: 'SodaArt animation concept course — 2nd term coursework',
             port_work7_title: 'Mokemoke Mouse — Animation Showcase', port_work7_desc: 'SodaArt animation concept course — 3rd term competition entry',
-            // ── extra core.html / anim.html labels ──
+            
             opt_rush_from_label: 'From NT$ ',
             del_moc3_label: 'moc3 model file', del_textures_label: 'Texture folder', del_motions_label: 'motions folder', del_cmo3_label: 'Cubism project file (.cmo3)',
             pay_ecpay_label: 'ECPay / Convenience store',
             demo_copyright_l3: 'Infringement will be pursued through legal channels; severe cases may result in civil or criminal action.',
             rules_delivery_format: 'This commission only includes the exported <code class="bg-white/10 px-1 rounded">.moc3</code> runtime files, texture sets, and parameter configs needed to run the model. <strong class="text-red-300">The <code class="bg-white/10 px-1 rounded">.cmo3</code> source project file is not included</strong> (available separately through the full-buyout option).',
             rules_vts_optimize: 'Every model is deeply optimized for <strong class="text-white">VTube Studio</strong> (including parameters like <code class="bg-white/10 px-1 rounded">ParamEyeLOpen</code> for eye and face tracking) to ensure smooth playback and accurate tracking.',
-            // ── template.html：v39 補齊英文缺漏的 9 個 key（其餘三語言都已存在，
-            //    唯獨英文一直沒有，導致這幾個字串在英文版會顯示中文原文）──
+            
+            
             tmpl_acc_note: 'glasses / bouquet / staff, etc.',
             tmpl_custom_note: 'Requires detailed discussion with the artist and rigger',
             tmpl_custom_price: 'From NT$1,500',

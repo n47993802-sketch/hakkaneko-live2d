@@ -1,9 +1,4 @@
-/* ============================================================
-   阿卡貓 HakkaNeko 網站 — 語言包：zh-CN
-   由 common.js 拆分而來，只需編輯此檔即可調整此語言的翻譯內容。
-   載入方式：於 index.html 中以 <script defer src="locales/zh-CN.js"></script>
-   在 common.js 之前引入，會自動掛載到 window.I18N['zh-CN']。
-   ============================================================ */
+
 (function() {
     window.I18N = window.I18N || {};
     window.I18N['zh-CN'] = {
@@ -236,7 +231,7 @@
             footer_role: 'Live2D 建模师 · 个人接案建模师',
             footer_credit: '本站由 HakkaNeko 策划，界面设计与交互效果借助 AI 生成并经本人审核后发布。',
             kofi_btn: '请我喝杯咖啡', kofi_supporters_empty: '成为第一位赞助者！',
-            // ── 联名模板 ── tmpl_desc: '在现有 Live2D 模板骨架上进行个人化服装设计，用最具性价比的方式，打造属于你的 VTuber 外观。',
+            
             tmpl_disclaimer_title: '<span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">assignment</span> 试算结果仅供参考', tmpl_disclaimer_body: '此页面显示的估价为<strong class="text-amber-200">初步参考数字</strong>，联名模板的实际报价需依衣装套数、自定义需求复杂度与建模师当前排单情况而定。建议先完成试算，再通过表单确认正式报价。',
                tmpl_s4_title: '配件与表情加购', tmpl_s5_title: '其他补充信息',
             tmpl_s2_hint: '第一套 NT$ 1,000，后续每套追加 +NT$ 400。点击图片即可选取，可多选。',
@@ -267,7 +262,7 @@
             tmpl_acc_label: '可开关之配件小道具', tmpl_acc_note: '眼镜 / 花束 / 法仗等', tmpl_acc_price: '单个 +NT$ 100',
             tmpl_expr_label: '简单表情微调', tmpl_expr_price: '单个 +NT$ 100', tmpl_total_hint: '不含运费与手续费', tmpl_copy_header: '委托需求清单',
             tmpl_copy_note: '以上为初步估算，实际报价以确认后为准', tmpl_outfit_detail_add: '追加服装',
-            // ── live2d-demo.html（角色互动展示，目前隐藏中）──
+            
             demo_placeholder_note: '目前正在测试 Live2D 角色互动功能，部分细节可能还会调整，感谢您的耐心体验！',
             demo_artist_label: '原画绘师', demo_artist_pending: '询问中 / 待公开',
             demo_purpose_label: '展示用途', demo_purpose_value: '作品集参考 · 互动展示',
@@ -278,7 +273,7 @@
             demo_interact_mouse: '滑鼠移动<br>视线跟随', demo_interact_head: '点击头部<br>触发表情', demo_interact_body: '点击身体<br>触发动作',
             demo_slider_body: '身体摇摆幅度', demo_slider_expr: '表情强度', demo_slider_breath: '呼吸速度',
             demo_blink_auto: '眨眼自动',
-            // ── portfolio.html（作品展示，角色/作品名称维持原文不翻译）──
+            
             port_work1_title: '【晚餐歌】 音乐 PV 动画Live2D演出', port_work1_desc: '负责部分动画设计，让角色有著在海洋内的飘浮感。',
             port_work2_title: '花咲小春 OP', port_work2_desc: '花咲小春用片头动画',
             port_work3_title: '花咲小春 ED', port_work3_desc: '花咲小春用片尾动画',
@@ -286,7 +281,7 @@
             port_work5_title: '雪寶うさぎ 动画展示', port_work5_desc: '如此可爱的兔兔女王能够不喜欢吗？',
             port_work6_title: '厄伦蒂儿Earendel 动画展示', port_work6_desc: 'SodaArt 动画概念班课件 第二期学习课件',
             port_work7_title: '茸茸鼠 动画展示', port_work7_desc: 'SodaArt 动画概念班课件 第三期比赛课件',
-            // ── core.html／anim.html 补充标签 ──
+            
             opt_rush_from_label: '起跳 NT$ ',
             del_moc3_label: 'moc3 模型档', del_textures_label: '贴图资料夹', del_motions_label: 'motions 资料夹', del_cmo3_label: 'Cubism 工程原始档（.cmo3）',
             pay_ecpay_label: '绿界 / 超商',

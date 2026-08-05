@@ -1,24 +1,19 @@
-/* ============================================================
-   阿卡貓 HakkaNeko 網站 — 語言包：zh-TW
-   由 common.js 拆分而來，只需編輯此檔即可調整此語言的翻譯內容。
-   載入方式：於 index.html 中以 <script defer src="locales/zh-TW.js"></script>
-   在 common.js 之前引入，會自動掛載到 window.I18N['zh-TW']。
-   ============================================================ */
+
 (function() {
     window.I18N = window.I18N || {};
     window.I18N['zh-TW'] = {
             langFlag: 'tw', langCode: 'TW', htmlLang: 'zh-TW',
-            // Header
+            
             header_title: ' 的 Live2D 委託',
             header_sub: '透明專業流程 <span class="deco-star">✦</span> 夢想角色躍然而生',
-            // Nav
+            
             nav_intro: '自我介紹', nav_artists: '合作繪師',
             nav_commission: '委託資訊', nav_rules: '流程與規範',
             nav_core: 'V皮設計', nav_anim: '動畫設計',
             nav_template: '聯名模板',
             nav_creative: '創作空間', nav_portfolio: '作品展示',
             nav_channels: '推薦頻道', nav_fanart: '二創展示',
-            // Intro
+            
             intro_role: '個人接案建模師 · Live2D 導師',
             intro_bio: '自 2021 年起投入 Live2D 建模領域，不僅致力於商業委託，更在現實中擔任導師傳承技術。累計完成超過 1000 件委託，熱愛在 X 與同好交流、分享創作心得。憑藉對細節的極致追求與創意思維，我期待能與各類繪師攜手，賦予平面角色生動的靈魂。',
             intro_education: '學習經歷', intro_achievements: '特殊成就',
@@ -33,12 +28,12 @@
             collab_btn: '前往查看合作繪師',
             comm_open: '開放委託中', comm_closed: '委託暫停中',
             live_on: 'Twitch 直播中！', live_off: 'Twitch 未直播',
-            // Artists
+            
             artists_title: '合作繪師陣容',
             artists_subtitle: '與優秀的繪師們聯手，為您提供最優質的角色設計與美術支援。',
             artists_apply_label: '合作申請', artists_apply_btn: '申請加入合作繪師',
             artists_apply_notice: '此申請為建立合作繪師名單，並非受僱或工作邀約。阿卡貓將依風格與時程需求主動聯繫合適的繪師。', form_note: '角色說明 / 備注',
-            // Rules
+            
             rules_contact_title: '聯絡與排單詢問',
             rules_contact_desc: '委託時間需配合排單，建議先查看 Google 排單表或直接聯繫詢問檔期！',
             rules_schedule_btn: '排單狀態',
@@ -76,7 +71,7 @@
             rules_s6_li2: '<span class="bg-orange-500/20 text-orange-300 px-2 py-0.5 rounded mr-2 font-bold text-xs">模型保護</span>Live2D 工程檔為個人智慧財產，任何反編譯或未授權解包行為均屬侵權。',
             rules_s6_li3: '<span class="bg-orange-500/20 text-orange-300 px-2 py-0.5 rounded mr-2 font-bold text-xs">個人聲明</span>以上規範為個人委託條款，如有疑問歡迎直接聯繫溝通，本人保有最終解釋權。',
             rules_s6_footer: '※ 以上條款由創作者本人（阿卡貓 HakkaNeko）制定，不代表任何機構立場 ※',
-            // FAQ
+            
             faq_title: '常見問題 FAQ',
             faq_q1: '完成一件 Live2D 模型大概需要多久時間？', faq_a1: '依方案與當前排單情況而定，一般 Live2D 模型約需 4～8 週。動畫類委託視複雜度另計。建議先查看排單狀態表或直接詢問確切檔期。',
             faq_q2: '可以修改幾次？修改超過次數怎麼辦？', faq_a2: '建模確認階段提供 3 次修改機會，製作失誤免費修正不計次數。超過 3 次或屬於大幅度修改（如重新設計動態邏輯）需額外收費，費用依修改量洽談。',
@@ -84,7 +79,7 @@
             faq_q4: '可以委託廠商合作或實況組企劃嗎？', faq_a4: '歡迎廠商或實況組洽談，商業合作案請填寫委託項目表單，並在備注中說明合作性質與規模，我會優先安排回覆。',
             faq_q5: '付款方式有哪些？可以分期嗎？', faq_a5: '支援台灣銀行轉帳、PayPal（需加收手續費）及綠界金流。費用預設分頭款（50%）與尾款（50%）兩階段；亦可選擇兩期付款（加收 3%）或三期付款（加收 5%），詳見 V皮設計 / 動畫設計 頁面的付款說明。',
             faq_q6: '委託完成後，我擁有哪些使用權？', faq_a6: '委託完成後你擁有該模型的個人使用授權，可用於直播、影片等個人活動，公開使用需標註建模師署名。工程原始檔（.cmo3 等）需另行加購買斷方案，買斷後禁止轉讓或聲稱自製。',
-            // Plan cards
+            
             plan_basic: '標準方案', plan_basic_sub: '頭部重點動態 + 身體簡單動態。',
             plan_basic_tip: '<span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">inventory_2</span> 標準方案包含',
             plan_basic_i1: '・頭部動態（搖頭、點頭）', plan_basic_i2: '・眼睛眨眼 / 追蹤',
@@ -101,7 +96,7 @@
             plan_adv_i3: '・極致物理 / 多層碰撞', plan_adv_i4: '・細部配件獨立物理',
             plan_adv_i5: '・面捕表情優化調整', plan_adv_note: '※ 追求頂級質感的首選',
             plan_hover_tip: '滑鼠移至方案卡片可查看詳細包含內容',
-            // Plan compare table
+            
             plan_compare_title: '方案規格對照表',
             plan_compare_hint: '（點擊展開）', plan_compare_hint_open: '（點擊收合）',
             plan_compare_col_item: '規格項目',
@@ -110,16 +105,16 @@
             plan_compare_physics: '物理晃動', plan_compare_physics_basic: '基礎物理', plan_compare_physics_pro: '複雜物理', plan_compare_physics_pro_sub: '多層衣服 / 長髮', plan_compare_physics_top: '頂級物理', plan_compare_physics_top_sub: '物理碰撞 / 細緻動態',
             plan_compare_fx: '特效動畫', plan_compare_fx_addon: '＋ 額外加購', plan_compare_fx_top: '✦ 內含基礎特效',
             plan_compare_price: '起價', plan_compare_note: '以上為起跳參考金額，實際依插圖複雜度與拆分數量報價',
-            // Calculator sections
+            
             core_s1: '方案選擇', core_s2: '表情與配件', core_s3: '動態與特效',
             core_s4: '特殊需求', core_s5: '結帳與細節設定',
             anim_s1: '動畫類型選擇', anim_s2: '細節設定',
             pay_method: '選擇支付方式', pay_installment: '分期付款方式',
-            // Disclaimer
+            
             disclaimer_title: '<span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">assignment</span> 試算結果僅供參考',
             disclaimer_core: '此頁面所顯示的估價為<strong class="text-amber-200">初步參考數字</strong>，實際報價須依插圖的拆分數量、圖層複雜度與額外調整需求而定。建議在委託前提供完整 PSD 供確認拆分情況，以取得更準確的正式報價。',
             disclaimer_anim: '此頁面所顯示的估價為<strong class="text-amber-200">初步參考數字</strong>，實際報價須依動畫素材的拆分數量、圖層結構與複雜度而定。建議在委託前提供完整素材供確認拆分情況，以取得更準確的正式報價。',
-            // Option add-ons
+            
             opt_tongue: '吐舌', opt_tongue_desc: '額外表情切換，需搭配表情開關觸發。',
             opt_ear: '獸耳', opt_ear_desc: '動態獸耳搖擺，含物理彈性演算。',
             opt_tail: '尾巴', opt_tail_desc: '含尾巴擺動與物理連動效果。',
@@ -143,14 +138,14 @@
             opt_rush_desc3: '<i class="fa-solid fa-calendar-days text-yellow-400 mr-1"></i><span class="text-yellow-300 font-bold">截止日在 14–30 天</span>：一般加急，費用依工作量協調。',
             opt_rush_desc4: '<i class="fa-solid fa-circle-exclamation text-red-400/80 mr-1"></i>加急期間不接受大幅修改需求，請於委託前確認設計稿。',
             opt_supplement: '想要補充的資訊',
-            // Anim type
+            
             anim_type_sticker: '動態貼圖', anim_type_sticker_desc: '適合表情符號、小物件展示等輕量化需求。',
             anim_type_process: '動畫處理', anim_type_process_desc: '適合大型演出、表演設計、完整情境動畫。',
             opt_anim_rush_desc1: '<i class="fa-solid fa-bolt text-red-400 mr-1"></i>動畫加急費用視作品複雜度與交期而定，最終以溝通確認為準。',
             opt_anim_rush_desc2: '<i class="fa-solid fa-film text-orange-400 mr-1"></i><span class="text-orange-300 font-bold">動態貼圖加急</span>：起跳 NT$ 1,000，10 天內交件另計。',
             opt_anim_rush_desc3: '<i class="fa-solid fa-clapperboard text-yellow-400 mr-1"></i><span class="text-yellow-300 font-bold">動畫處理加急</span>：視片長與場景複雜度，起跳 NT$ 2,000 以上。',
             opt_anim_rush_desc4: '<i class="fa-solid fa-circle-exclamation text-red-400/80 mr-1"></i>加急確認後腳本或分鏡不得大幅更改，請提前備妥所需素材。',
-            // Anim fields
+            
             field_qty: '委託數量', field_physics: '要求的物理精細度',
             field_duration: '要求的動態時間 (秒)', field_chars: '動畫內人物數量 <span class="text-xs text-purple-300/60">（第2位起每位 +NT$ 1,000）</span>',
             field_performance: '是否有表演設計 (+NT$ 1,000)',
@@ -162,12 +157,12 @@
             rush_ph_anim: '請說明截止日期、活動名稱或使用場合，以便評估加急可行性⋯',
             supp_ph_anim: '希望加上特定舞蹈、影片連結...',
             unit_each: '個', unit_set: '組', unit_outfit: '套',
-            // Payment
+            
             pay_bank: '銀行匯款', pay_fee: '手續費', pay_foreign: '<span class="deco-star">✦</span> 接受外幣委託',
             pay_ecpay: '綠界 / 超商',
             pay_one: '一次付清', pay_two: '兩期分款', pay_two_note: '總價 +3%',
             pay_three: '三期分款', pay_three_note: '總價 +5%',
-            // Sidebar
+            
             sidebar_total: '預估總金額', sidebar_breakdown: '報價明細', sidebar_reset: '重置',
             sidebar_rush_label: '加急趕工說明', sidebar_supp_label: '補充資訊',
             sidebar_agree: '我已閱讀並同意「流程與規範」內的所有條款。',
@@ -178,7 +173,7 @@
             sidebar_port_btn: '前往作品展示查看參考範例',
             sidebar_send_btn: '填寫委託項目表單',
             sidebar_delivery_toggle: '查看交付格式說明',
-            // Order badge & copy summary i18n strings
+            
             order_badge_label: '委託編號',
             summary_vp_title: 'Live2D V皮設計 委託需求清單',
             summary_anim_title: 'Live2D 動畫設計 委託需求清單',
@@ -191,7 +186,7 @@
             label_rush_yes: '是 / 已加急',
             label_no: '否',
             label_none: '無',
-            // Delivery
+            
             del_moc3: '— 主要執行檔，可在 VTubeStudio 等軟體使用',
             del_textures: '— 模型所需全部材質貼圖（PNG）',
             del_physics: '— 物理設定檔（頭髮、飾品物理效果）',
@@ -206,9 +201,9 @@
             del_anim_cat: '<span class="material-symbols-outlined" aria-hidden="true">movie</span> 動畫 / PV', del_mp4_anim: '— 標準交付格式',
             del_webm_anim: '— 透明背景需求時使用',
             del_mov: '— Apple 環境或高品質輸出需求時使用',
-            // JS calculate labels
+            
             deposit_label: '頭款', balance_label: '尾款', per_inst_label: '各期',
-            // Portfolio
+            
             port_page_title: '作品展示',
             port_page_desc: '阿卡貓的 Live2D 模型、動畫、貼圖等相關作品集，持續更新中。',
             port_vtube_section: 'VTuber 模型展示',
@@ -220,20 +215,20 @@
             port_vtag: 'V皮展示', port_rigger: '建模', port_coming_soon: '即將公開',
             port_demo_label: '阿卡貓 HakkaNekoQQ 模型（測試中）',
             port_demo_note: '本模型為阿卡貓作品集展示用途，僅供參考，不作任何商業販售。',
-            // Intro extras
+            
             edu_soda1: 'SodaArt 建模班五、六期生', edu_soda2: 'SodaArt 動畫班二、三期生',
             edu_soda3: 'SodaArt 創作技巧延伸班一期生', edu_link: '連結',
             ach_juku_title: 'Live2D JUKU 公式 創作展示', ach_juku_date: '日期：2025 / 03 / 26',
             ach_view_btn: '查看展示作品 <i class="fa-solid fa-arrow-right ml-1"></i>', ach_portfolio_btn: '前往創作空間查看更多作品',
             intro_click_tip: '<span class="material-symbols-outlined" aria-hidden="true">touch_app</span> 點我試試看！',
-            // Channels
+            
             channels_title: '推薦頻道', channels_desc: '阿卡貓精選推薦的頻道們，有興趣歡迎去看看！',
             ch_live: '直播中', ch_offline: '離線',
             ch_followers: '位追蹤', ch_subscribers: '訂閱',
             channels_submit_label: '頻道推薦申請',
             channels_submit_notice: '若您希望將自己的頻道加入推薦清單，歡迎填寫申請表單，阿卡貓將於審核後聯繫您。',
             channels_submit_btn: '申請推薦頻道',
-            // Fanart
+            
             fanart_title: '二創展示', fanart_desc: '感謝大家的二創！每一份都是最棒的禮物 <span class="material-symbols-outlined" aria-hidden="true">favorite</span>',
             fanart_chara1: '【阿卡貓】角色設定', fanart_chara2: '【阿卡咪】角色設定（虛擬）',
             char_height: '身高', char_birthday: '生日', char_gender: '性別',
@@ -249,14 +244,14 @@
             fanart_submit_notice: '投稿即代表您同意阿卡貓在其網站及社群媒體轉載此作品並標明創作者。表單內可選擇是否匿名。',
             fanart_treasures: '我的寶物', fanart_treasures_label: '<span class="deco-star">✦</span> 我的寶物 <span class="deco-star">✦</span>',
             fanart_loading: '正在從 GitHub 載入二創作品⋯',
-            // Toast / alerts
+            
             toast_copied: '已複製到剪貼簿！',
             toast_screenshot_saved: '截圖已儲存！',
             toast_summary_copied: '委託清單已複製至剪貼簿！',
-            // Bubbles
+            
             intro_bubbles: ['你好呀！歡迎來到我的委託頁面！ ✨','有任何問題都可以寄信給我喔！','建模就是把角色的靈魂喚醒！ 🐱','委託開放中，快來找我委託！','做 Live2D 是我最快樂的事 💜','謝謝你點我！你是最棒的！ (≧▽≦)','每個角色都是獨一無二的作品 ✦','歡迎查看我的 X 作品集！'],
             collab_bubbles: ['別敲我！我是乖寶寶！','我沒有藏任何秘密！','你知道這個網站有藏著科樂美彩蛋嗎？','我需要更多的合作繪師！'],
-            // Misc JS labels
+            
             badge_loading: '載入中…', badge_loaded: '✓ 已載入', badge_fail: '載入失敗',
             github_rate: 'GitHub API 速率限制，請稍後再試',
             github_rate_short: 'GitHub 請求次數已達上限',
@@ -268,7 +263,7 @@
             footer_role: 'Live2D 建模師 · 個人接案建模師',
             footer_credit: '本網站由 阿卡貓 HakkaNeko 企劃，介面設計與互動效果均由 AI 輔助生成、迭代優化，並經本人審定後發布。',
             kofi_btn: '請我喝杯咖啡', kofi_supporters_empty: '成為第一位贊助者！',
-            // ── 聯名模板 ── tmpl_desc: '在現有 Live2D 模板骨架上進行個人化衣裝設計，用最具效益的方式，打造專屬你的 VTuber 外觀。',
+            
             tmpl_disclaimer_title: '<span class="material-symbols-outlined" aria-hidden="true" style="font-size:0.9em;vertical-align:-0.1em">assignment</span> 試算結果僅供參考', tmpl_disclaimer_body: '此頁面所顯示的估價為<strong class="text-amber-200">初步參考數字</strong>，聯名模板的實際報價須依衣裝套數、自訂需求複雜度與建模師當前排單情況而定。建議先完成試算後再透過表單確認正式報價。',
                tmpl_s4_title: '配件與表情加購', tmpl_s5_title: '其他補充資訊',
             tmpl_s2_hint: '第一套 NT$ 1,000，後續每套追加 +NT$ 400。點擊圖片即可選取，可複選。',
@@ -299,7 +294,7 @@
             tmpl_acc_label: '可開關之配件小道具', tmpl_acc_note: '眼鏡 / 花束 / 法仗等', tmpl_acc_price: '單個 +NT$ 100',
             tmpl_expr_label: '簡單表情微調', tmpl_expr_price: '單個 +NT$ 100', tmpl_total_hint: '不含運費與手續費', tmpl_copy_header: '委託需求清單',
             tmpl_copy_note: '以上為初步估算，實際報價以確認後為準', tmpl_outfit_detail_add: '追加衣裝',
-            // ── live2d-demo.html（角色互動展示，目前隱藏中）──
+            
             demo_placeholder_note: '目前正在測試 Live2D 角色互動功能，部分細節可能還會調整，感謝您的耐心體驗！',
             demo_artist_label: '原畫繪師', demo_artist_pending: '詢問中 / 待公開',
             demo_purpose_label: '展示用途', demo_purpose_value: '作品集參考 · 互動展示',
@@ -310,7 +305,7 @@
             demo_interact_mouse: '滑鼠移動<br>視線跟隨', demo_interact_head: '點擊頭部<br>觸發表情', demo_interact_body: '點擊身體<br>觸發動作',
             demo_slider_body: '身體搖擺幅度', demo_slider_expr: '表情強度', demo_slider_breath: '呼吸速度',
             demo_blink_auto: '眨眼自動',
-            // ── portfolio.html（作品展示・V皮/動畫作品，角色/作品名稱維持原文不翻譯）──
+            
             port_work1_title: '【晚餐歌】 音樂 PV 動畫Live2D演出', port_work1_desc: '負責部分動畫設計，讓角色有著在海洋內的飄浮感。',
             port_work2_title: '花咲小春 OP', port_work2_desc: '花咲小春用開頭動畫',
             port_work3_title: '花咲小春 ED', port_work3_desc: '花咲小春用結尾動畫',
@@ -318,7 +313,7 @@
             port_work5_title: '雪寶うさぎ 動畫展示', port_work5_desc: '如此可愛的兔兔女王能夠不喜歡嗎？',
             port_work6_title: '厄倫蒂兒Earendel 動畫展示', port_work6_desc: 'SodaArt 動畫概念班課件 第二期學習課件',
             port_work7_title: '茸茸鼠 動畫展示', port_work7_desc: 'SodaArt 動畫概念班課件 第三期比賽課件',
-            // ── core.html／anim.html 補充標籤 ──
+            
             opt_rush_from_label: '起跳 NT$ ',
             del_moc3_label: 'moc3 模型檔', del_textures_label: '貼圖資料夾', del_motions_label: 'motions 資料夾', del_cmo3_label: 'Cubism 工程原始檔（.cmo3）',
             pay_ecpay_label: '綠界 / 超商',

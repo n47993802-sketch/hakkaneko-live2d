@@ -2,9 +2,9 @@
 <html lang="zh-TW">
 <head>
     <script>
-    // 同一瀏覽階段（sessionStorage）內非第一次進站：
-    // 在畫面繪製前就先標記 html，讓 common.css 直接隱藏 Loader，避免閃爍。
-    // 必須放在 <head> 最上方、任何 CSS 載入之前執行。
+    
+    
+    
     (function(){
         try {
             if (sessionStorage.getItem('hakka_visited') === '1') {
@@ -38,32 +38,12 @@
     <meta name="twitter:image" content="https://n47993802-sketch.github.io/Live2D-/Happy2024.png">
     <meta name="twitter:site" content="@HakkaNekoLive2D">
     <title id="pageTitle">聯名模板委託 · 阿卡貓 HakkaNeko</title>
-    <!-- v32 修復記錄：
-         1. gif-hidden CSS 強化（transform3d移出可視區 + will-change + isolation）
-         2. carousel-card 補充 GPU compositing layer
-         3. 全語系 i18n 對齊：V皮設計/動畫設計/動態貼圖/動畫處理/標準/專業/頂級方案
-         4. svc_live2d→V皮設計, svc_anim→動畫設計（4語系全更新）
-         5. zh-CN 動態貼圖/動畫處理分類對齊；nav_anim→动画设计
-         6. en nav_core→V-Skin Design, en svc_live2d→V-Skin Design
-         7. ja nav_core→V皮デザイン
-         8. prices.specialFx=250 確認；fallback文字補強為'特效動畫'
-         9. copySummaryToClipboard 已完全 i18n 動態化（無中文死碼）
-         ── v32 新增修復 ──
-        10. 【估價計算機互斥】頂級方案(20000)選中時，自動 disabled+uncheck specialFx，
-            加入 ✦ 內含基礎特效 badge，防止重複計費漏洞。
-        11. 【一鍵複製格式優化】copySummaryToClipboard 改用 CRLF(\r\n) + lines 陣列架構，
-            確保 Discord / X (Twitter) / LINE 全平台換行完美呈現，不擠成一團。
-        12. 【Google Drive 作品集骨架屏】新增 .drive-skeleton-* CSS 體系（shimmer動畫、
-            spinner標題列、淡入效果），為 V皮/動態貼圖/動畫處理 區塊提供視覺緩衝。
-        13. 【Google Sites iframe 高度自動自適應】加入 ResizeObserver + postMessage 機制，
-            展開對照表等互動後自動計算 scrollHeight 並通知父層，消除雙滾動條與底部裁切。
-        14. 合作繪師「白(@BT871213)」卡片與結尾標籤完整閉合確認。
-    -->
+    
     
 
 
     <script>
-    // Google Sites iframe 相容性偵測
+    
     (function() {
         try {
             const inIframe = window.self !== window.top;
@@ -78,7 +58,7 @@
     <link rel="stylesheet" href="../../tailwind.min.css?v=20260805d">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-        <!-- DNS prefetch for external resources -->
+        
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -93,12 +73,12 @@
 <body class="antialiased min-h-screen pb-12 loading">
     <script>window.SITE_BASE = '../../';</script>
     <script>
-    // 提早套用日夜模式，避免「切換分頁時先閃一下深色、才變回淺色」的問題。
-    // 原本這段邏輯放在 common.js 裡，但 common.js 要等到 <body> 最底部
-    // 才會執行，使用者會先看到預設的深色畫面，過一瞬間才變成淺色。
-    // 這裡搬到 <body> 最開頭、任何畫面內容之前同步執行，
-    // 就能在瀏覽器第一次繪製前就決定好主題，不會有閃爍。
-    // （common.js 裡仍保留同一段邏輯作為備援，兩邊重複執行是安全的。）
+    
+    
+    
+    
+    
+    
     (function(){
         try {
             var saved = localStorage.getItem('hakka_theme');
@@ -109,7 +89,7 @@
         } catch(e) {}
     })();
     </script>
-    <!-- ── RPG Loader ── -->
+    
     <div id="rpgLoader">
         <img id="rpgCatImg" src="../../images/common/hakkaneko-pixel.gif" alt="HakkaNeko" style="width:64px;height:64px;image-rendering:pixelated;image-rendering:crisp-edges;">
         <div class="rpg-title">HakkaNeko · Live2D</div>
@@ -139,22 +119,21 @@
             </p>
 
             <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
-            <!-- 導覽列設定＋渲染：緊跟在 <nav> 容器後面、同步載入，
-                 讓按鈕在畫面第一次繪製前就已經填好，避免空白容器閃爍 -->
+            
             <script src="../../site-config.js?v=20260805d"></script>
             <script src="../../nav-config.js?v=20260805d"></script>
             <script src="../../nav-render.js?v=20260805d"></script>
         </div>
     </header>
 
-        <!-- 固定右上角：日夜模式 -->
+        
     <button onclick="toggleTheme()" id="themeFixedBtn"
         class="fixed top-4 right-[6.5rem] z-[999] w-10 h-10 rounded-full glass-panel no-reveal flex items-center justify-center shadow-lg hover:scale-110 transition-transform border border-white/10"
         title="切換白天/夜晚模式">
         <i id="themeIcon" class="fa-solid fa-sun text-yellow-400 text-sm"></i>
     </button>
 
-    <!-- 固定右上角：語言切換 -->
+    
     <div class="fixed top-4 right-4 z-[999]" id="langSwitcherWrap"><button onclick="toggleLangMenu()" id="langBtn"
             class="h-9 px-2.5 rounded-full glass-panel no-reveal flex items-center gap-1.5 shadow-lg hover:scale-105 transition-transform border border-white/10 text-purple-300 text-xs font-bold"
             title="切換語言 / Language">
@@ -188,18 +167,17 @@
     <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
     <div id="page-template" class="page-content flex flex-col lg:flex-row gap-8 items-start lg:items-stretch">
-        <!-- v45：浮動報價提示條，捲動超過原本報價區時顯示，取代原本不可靠的
-             position:sticky。點擊可以平滑捲回完整報價區塊。 -->
+        
         <div id="floatingQuoteBar" role="button" tabindex="0" aria-label="回到完整報價明細">
             <i class="fa-solid fa-receipt fqb-icon"></i>
             <span class="fqb-label" data-i18n="sidebar_total">預估總金額</span>
             <span class="fqb-price" id="floatingQuoteBarPrice">NT$ ···</span>
         </div>
 
-        <!-- ════ 左側：主內容 2/3 ════ -->
+        
         <div class="w-full lg:w-2/3 flex flex-col gap-6">
 
-            <!-- ── 免責聲明橫幅 ── -->
+            
             <div class="glass-panel rounded-2xl px-5 py-4 border border-amber-400/30 bg-amber-400/5 flex items-start gap-4">
                 <i class="fa-solid fa-triangle-exclamation text-amber-400 text-xl mt-0.5 shrink-0"></i>
                 <div>
@@ -210,33 +188,33 @@
                 </div>
             </div>
 
-            <!-- ══ 步驟一：選擇合作模板 ══ -->
+            
             <section class="glass-panel rounded-3xl p-6 md:p-8">
                 <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
                     <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">1</span>
                     <span data-i18n="tmpl_s1_title">選擇合作模板</span>
                 </h2>
 
-                <!-- 模板類型卡片 -->
+                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
 
-                    <!-- 換裝娃娃（殘光） -->
+                    
                     <label class="option-card model-card rounded-2xl p-5 border border-white/10 flex flex-col gap-3 cursor-pointer">
                         <input type="radio" name="tmplBaseType" value="kanso" onchange="tmplSwitchModel('kanso')" class="peer sr-only" checked>
-                        <!-- 預覽圖 -->
+                        
                         <div class="overflow-hidden rounded-xl border border-white/10 bg-black/40 relative" style="aspect-ratio:3/4;max-height:220px;">
                             <img src="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png"
                                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                                  style="transform:translate3d(0,0,0);" alt="換裝娃娃" loading="lazy">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         </div>
-                        <!-- 資訊 -->
+                        
                         <div class="text-center">
                             <div class="font-black text-base text-white mb-1" data-i18n="tmpl_card_kanso_name">換裝娃娃（殘光）</div>
                             <div class="text-xs text-purple-200/65 leading-relaxed mb-2" data-i18n="tmpl_card_kanso_desc">共用骨架換裝模板，已完成 Live2D 動態工程，直接套用衣裝貼圖即可使用。</div>
                             <div class="text-xs text-fuchsia-300 font-bold" data-i18n="tmpl_card_kanso_price">NT$ 1,000 起</div>
                         </div>
-                        <!-- 合作繪師 -->
+                        
                         <div class="border-t border-white/10 pt-3">
                             <p class="text-xs text-purple-400/50 mb-2 flex items-center gap-1.5">
                                 <i class="fa-solid fa-pen-nib text-fuchsia-400/60 text-[0.65rem]"></i>
@@ -254,25 +232,25 @@
                         </div>
                     </label>
 
-                    <!-- 長夜月搖（紅妻） -->
+                    
                     <label class="option-card model-card rounded-2xl p-5 border border-white/10 flex flex-col gap-3 cursor-pointer">
                         <input type="radio" name="tmplBaseType" value="chanye" onchange="tmplSwitchModel('chanye')" class="peer sr-only">
-                        <!-- 預覽圖 -->
+                        
                         <div class="overflow-hidden rounded-xl border border-white/10 bg-black/40 relative" style="aspect-ratio:3/4;max-height:220px;">
                             <img src="https://pbs.twimg.com/profile_images/2002045915809656832/kDFrBERD_400x400.png"
                                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                                  style="transform:translate3d(0,0,0);" alt="長夜月搖" loading="lazy">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         </div>
-                        <!-- 資訊 -->
+                        
                         <div class="text-center">
                             <div class="font-black text-base text-white mb-1" data-i18n="tmpl_card_chanye_name">長夜月搖（紅妻）</div>
                             <div class="text-xs text-purple-200/65 leading-relaxed mb-2" data-i18n="tmpl_card_chanye_desc">夜晚氛圍聯名模板，搭配紅妻特色畫風，適合偏暗色系角色設計。</div>
                             <div class="text-xs text-fuchsia-300 font-bold" data-i18n="tmpl_card_chanye_price">NT$ 1,000 起</div>
                         </div>
-                        <!-- 委託數量（長夜月搖特有） -->
-                        <!-- chanyeQtyWrap 已移至步驟三，此處保留空白佔位 -->
-                        <!-- 合作繪師 -->
+                        
+                        
+                        
                         <div class="border-t border-white/10 pt-3">
                             <p class="text-xs text-purple-400/50 mb-2 flex items-center gap-1.5">
                                 <i class="fa-solid fa-pen-nib text-fuchsia-400/60 text-[0.65rem]"></i>
@@ -294,17 +272,17 @@
 
             </section>
 
-            <!-- ══════ 換裝娃娃（殘光）專屬區塊 ══════ -->
+            
             <div id="tmpl-kanso-sections" class="flex flex-col gap-6">
 
-                <!-- 步驟二：服裝選擇與加購 -->
+                
                 <section class="glass-panel rounded-3xl p-6 md:p-8">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-2">
                         <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">2</span>
                         <span data-i18n="tmpl_s2_title">服裝選擇與加購</span>
                     </h2>
                     <p class="text-xs text-purple-400/60 mb-5 ml-11" data-i18n="tmpl_s2_hint">第一套 NT$ 1,000，後續每套追加 +NT$ 400。點擊圖片即可選取，可複選。</p>
-                    <!-- 圖片展示 + 左右箭頭 -->
+                    
                     <div class="relative mb-5">
                         <button onclick="tmplGifNav(-1)" aria-label="上一組"
                             class="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-fuchsia-700/70 border border-white/10 hover:border-fuchsia-400/50 text-white flex items-center justify-center transition-all shadow-lg">
@@ -326,7 +304,7 @@
                     </div>
                 </section>
 
-                <!-- 步驟三：髮型微調加購 -->
+                
                 <section class="glass-panel rounded-3xl p-6 md:p-8">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
                         <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">3</span>
@@ -368,7 +346,7 @@
                     </div>
                 </section>
 
-                <!-- 步驟四：配件與表情加購 -->
+                
                 <section class="glass-panel rounded-3xl p-6 md:p-8">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
                         <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">4</span>
@@ -421,7 +399,7 @@
                     </div>
                 </section>
 
-                <!-- 步驟五（換裝娃娃）：其他補充資訊 -->
+                
                 <section class="glass-panel rounded-3xl p-6 md:p-8">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
                         <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">5</span>
@@ -433,26 +411,26 @@
                         oninput="tmplCalculate()"></textarea>
                 </section>
 
-            </div><!-- #tmpl-kanso-sections 結束 -->
+            </div>
 
-            <!-- ══════ 長夜月搖（紅妻）專屬區塊 ══════ -->
+            
             <div id="tmpl-chanye-sections" class="flex flex-col gap-6" style="display:none !important;">
 
-                <!-- 步驟二（長夜月搖）：合作模板展示 -->
+                
                 <section class="glass-panel rounded-3xl p-6 md:p-8">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-4">
                         <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">2</span>
                         <span data-i18n="tmpl_chanye_s2_title">合作模板展示</span>
                     </h2>
                     <p class="text-xs text-purple-400/60 mb-5 ml-11" data-i18n="tmpl_chanye_s2_hint">以下為長夜月搖合作模板的參考展示圖，點擊可放大檢視。</p>
-                    <!-- 展示圖：左右箭頭 -->
+                    
                     <div class="relative mb-5">
                         <button onclick="tmplChanyeGifNav(-1)" aria-label="上一張"
                             class="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-rose-700/70 border border-white/10 hover:border-rose-400/50 text-white flex items-center justify-center transition-all shadow-lg">
                             <i class="fa-solid fa-chevron-left text-sm"></i>
                         </button>
                         <div id="tmplChanyeGifGrid" class="grid grid-cols-3 gap-4 px-2">
-                            <!-- JS 動態渲染 -->
+                            
                         </div>
                         <button onclick="tmplChanyeGifNav(1)" aria-label="下一張"
                             class="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-rose-700/70 border border-white/10 hover:border-rose-400/50 text-white flex items-center justify-center transition-all shadow-lg">
@@ -462,7 +440,7 @@
                     <div id="tmplChanyeGifDots" class="flex justify-center gap-2"></div>
                 </section>
 
-                <!-- 步驟三（長夜月搖）：需要委託的數量 -->
+                
                 <section class="glass-panel rounded-3xl p-6 md:p-8">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
                         <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">3</span>
@@ -490,7 +468,7 @@
                     </div>
                 </section>
 
-                <!-- 步驟四（長夜月搖）：其他補充資訊 -->
+                
                 <section class="glass-panel rounded-3xl p-6 md:p-8">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
                         <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 text-sm shrink-0">4</span>
@@ -502,16 +480,16 @@
                         oninput="tmplCalculate()"></textarea>
                 </section>
 
-            </div><!-- #tmpl-chanye-sections 結束 -->
+            </div>
 
-        </div><!-- 左側結束 -->
+        </div>
 
-        <!-- ════ 右側：估價摘要面板 1/3 ════ -->
+        
         <div class="w-full lg:w-1/3">
             <div class="sticky-summary">
                 <div id="tmplQuoteSummaryPanel" class="glass-panel rounded-3xl p-6 border-t-4 border-t-fuchsia-500 shadow-2xl relative overflow-hidden">
                     <div class="relative z-10">
-                        <!-- 委託編號（勾選同意後才顯示） -->
+                        
                         <div id="orderBadgeTmpl" style="display:none; margin-bottom:0.6rem;">
                             <div style="padding:7px 12px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(168,85,247,0.10);border:1px solid rgba(168,85,247,0.25);">
                                 <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;color:rgba(192,132,252,0.7);" data-i18n="order_badge_label">委託編號</span>
@@ -529,18 +507,18 @@
                         </div>
                         <div class="mb-4 space-y-1 text-sm" id="tmplDetailList"></div>
 
-                        <!-- 配件說明摘要 -->
+                        
                         <div id="tmplAccSummary" class="hidden mb-3 p-3 bg-fuchsia-500/10 rounded-xl border border-fuchsia-500/20 text-xs text-fuchsia-200">
                             <p class="font-bold text-fuchsia-300 mb-1"><i class="fa-solid fa-sparkles mr-1"></i><span data-i18n="tmpl_acc_summary_label">配件需求</span></p>
                             <p id="tmplAccSummaryText" class="text-fuchsia-200/80 leading-relaxed whitespace-pre-wrap"></p>
                         </div>
-                        <!-- 補充資訊摘要 -->
+                        
                         <div id="tmplSuppSummary" class="hidden mb-4 p-3 bg-purple-500/10 rounded-xl border border-purple-500/20 text-xs text-purple-200">
                             <p class="font-bold text-purple-300 mb-1"><i class="fa-solid fa-note-sticky mr-1"></i><span data-i18n="sidebar_supp_label">補充資訊</span></p>
                             <p id="tmplSuppSummaryText" class="text-purple-200/80 leading-relaxed whitespace-pre-wrap"></p>
                         </div>
 
-                        <!-- 同意條款 -->
+                        
                         <div data-html2canvas-ignore class="bg-black/40 rounded-xl p-4 mb-3 border border-purple-500/30">
                             <label class="flex items-start gap-3 cursor-pointer group">
                                 <input type="checkbox" id="tmplAgreeTerms" onchange="tmplToggleSubmit()" class="mt-1 w-4 h-4 rounded text-purple-500 shrink-0">
@@ -548,7 +526,7 @@
                             </label>
                         </div>
 
-                        <!-- 一鍵截圖 -->
+                        
                         <button data-html2canvas-ignore id="tmplScreenshotBtn" disabled
                             onclick="screenshotQuote('tmplQuoteSummaryPanel','template',this)"
                             class="btn-copy-summary mb-0"
@@ -557,7 +535,7 @@
                             <span data-i18n="sidebar_screenshot">一鍵截圖預估金額</span>
                         </button>
 
-                        <!-- 一鍵複製 -->
+                        
                         <button data-html2canvas-ignore id="tmplCopyBtn" disabled onclick="tmplCopySummary()"
                             class="btn-copy-summary mt-3"
                             style="background:linear-gradient(135deg,rgba(192,68,255,0.22) 0%,rgba(59,130,246,0.16) 100%);border-color:rgba(168,85,247,0.45);opacity:0.45;cursor:not-allowed;">
@@ -572,7 +550,7 @@
                     </div>
                 </div>
 
-                <!-- ── 截圖範圍外的按鈕 ── -->
+                
                 <div class="mt-4 space-y-3">
                     <button onclick="location.href='../../creative/portfolio/'" class="w-full py-3 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 text-purple-300 hover:text-white border border-white/10 transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-photo-film text-emerald-400"></i>
@@ -588,19 +566,19 @@
                     </div>
                 </div>
             </div>
-        </div><!-- 右側結束 -->
+        </div>
 
-    </div><!-- #page-template 結束 -->
+    </div>
 
     <footer class="relative z-10 mt-16 border-t border-white/5 bg-black/20 backdrop-blur-sm">
         <div class="max-w-5xl mx-auto px-4 py-10 text-center space-y-3">
-            <!-- 名字 & 身份 -->
+            
             <div class="flex items-center justify-center gap-3 mb-2">
                 <span class="font-black text-lg tracking-wide text-gradient" data-i18n="name_short">阿卡貓 HakkaNeko</span>
             </div>
             <p class="text-xs text-purple-400/60" data-i18n="footer_role">Live2D 建模師 · 個人接案建模師</p>
 
-            <!-- 社群連結 -->
+            
             <div class="flex flex-wrap justify-center gap-5 text-purple-400/50 text-sm my-2">
                 <a href="mailto:n47993802@gmail.com" class="hover:text-white transition flex items-center gap-1"><i class="fa-solid fa-envelope mr-1"></i>n47993802@gmail.com</a>
                 <a href="https://x.com/HakkaNekoLive2D" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-x-twitter mr-1"></i>@HakkaNekoLive2D</a>
@@ -608,7 +586,7 @@
                 <a href="https://discord.gg/sXeKwm4Bkz" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-discord mr-1"></i>阿卡貓聊天窩</a>
             </div>
 
-            <!-- Ko-fi 贊助 -->
+            
             <div class="pt-3 border-t border-white/5">
                 <div class="flex flex-wrap items-center justify-center gap-3">
                     <a href="https://ko-fi.com/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="kofi-btn"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/></svg><span data-i18n="kofi_btn">請我喝杯咖啡</span></a>
@@ -617,7 +595,7 @@
                 </div>
             </div>
 
-            <!-- 版權（最底部，最小最淡） -->
+            
             <div class="border-t border-white/5 pt-4 space-y-1">
                 <p class="text-xs text-purple-500/40">© <span id="footerYear"></span> <span class="text-purple-300/70" data-i18n="name_short">阿卡貓 HakkaNeko</span> · All Rights Reserved</p>
                 <p class="text-xs text-purple-500/30" data-i18n="footer_credit">本網站由 阿卡貓 HakkaNeko 企劃，介面設計與互動效果均由 AI 輔助生成、迭代優化，並經本人審定後發布。</p>
@@ -627,37 +605,36 @@
     </main>
 
     <div id="unifiedLightbox" role="dialog" aria-modal="true">
-        <!-- 背景點擊關閉 -->
+        
         <div class="absolute inset-0" onclick="ulbClose()"></div>
 
-        <!-- 關閉鈕 -->
+        
         <button onclick="ulbClose()" style="position:absolute;top:16px;right:20px;background:transparent;border:none;color:rgba(255,255,255,0.5);font-size:1.6rem;cursor:pointer;z-index:20;line-height:1;" aria-label="關閉"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
 
-        <!-- 左箭頭 -->
+        
         <button class="ulb-arrow" id="ulbPrev" onclick="ulbNav(-1)" aria-label="上一張">‹</button>
 
-        <!-- 中央內容 -->
+        
         <div style="position:relative;display:flex;flex-direction:column;align-items:center;max-width:min(88vw,720px);">
-            <!-- v28：點擊圖片本身在純覆蓋模式（stickers/logos）也關閉燈箱 -->
+            
             <img width="1500" height="500" loading="lazy" id="ulbImg" src="" alt=""
                  onclick="if(ulbCurrent&&(ulbCurrent.group==='stickers'||ulbCurrent.group==='logos'))ulbClose()">
             <p id="ulbLabel">點圖或旁邊關閉 ／ ESC</p>
             <div id="ulbDots"></div>
         </div>
 
-        <!-- 右箭頭 -->
+        
         <button class="ulb-arrow" id="ulbNext" onclick="ulbNav(1)" aria-label="下一張">›</button>
     </div>
 
-    <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
+    
     <script src="../../locales/zh-TW.js?v=20260805d"></script>
     <script src="../../locales/zh-CN.js?v=20260805d"></script>
     <script src="../../locales/en.js?v=20260805d"></script>
     <script src="../../locales/ja.js?v=20260805d"></script>
     <script src="../../effects/meteor-bg.js?v=20260805d"></script>
     <script src="../../common.js?v=20260805d"></script>
-    <!-- 聯名模板頁的衣裝資料＋互動邏輯：只有這一頁需要，載入順序要在
-         common.js 之後（互動邏輯裡會攔截 common.js 定義的 window.switchTab）。 -->
+    
     <script src="template-config.js?v=20260805d"></script>
     <script src="template-render.js?v=20260805d"></script>
 </body>

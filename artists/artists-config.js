@@ -1,21 +1,4 @@
-/* ============================================================
-   阿卡貓 HakkaNeko 網站 — 合作繪師名單設定檔
-   ============================================================
-   之前的問題：18 位繪師的頭貼／名字／連結，全部直接寫死在
-   artists.html 裡面一大串重複的 <a><img><h3> 標籤中，繪師換頭貼時
-   要從三百多行 HTML 裡面找到對應那一段才能改，很容易改錯或漏改。
 
-   現在改成：所有繪師資料集中在這一份檔案的一個陣列裡，
-   artists.html 只留一個空的容器 + artists-render.js 負責畫出來。
-
-   ⚠️ 之後繪師換頭貼時，只需要：
-   1. 找到下面對應繪師那一行（可以直接搜尋他的名字或 @帳號）
-   2. 把 avatar 欄位換成新的圖片網址即可，其他都不用動
-
-   如果之後想改成「放本機圖檔」而不是連去 X (Twitter) 的網址，
-   把 avatar 換成 'images/artists/檔名.jpg' 這種相對路徑即可，
-   兩種寫法 render 出來的結果完全一樣。
-   ============================================================ */
 window.ARTISTS_CONFIG = [
     { name: '紅妻(Wiffee)', handle: 'r7sundae', profileUrl: 'https://x.com/r7sundae', avatar: 'https://pbs.twimg.com/profile_images/1712634709900181504/xLp2LL1D_400x400.jpg' },
     { name: '莉比Ribi', handle: 'yazawaribii', profileUrl: 'https://x.com/yazawaribii', avatar: 'https://pbs.twimg.com/profile_images/2054602495230713856/1JqUDA6L_400x400.jpg' },

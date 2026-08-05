@@ -1,31 +1,113 @@
-
 window.NAV_CONFIG = [
-    { id: 'intro',   href: '',        icon: 'fa-user',    label: 'nav_intro',   text: '自我介紹', enabled: true },
-    { id: 'artists', href: 'artists/', icon: 'fa-palette', label: 'nav_artists', text: '合作繪師', enabled: true },
+  {
+    id: "intro",
+    href: "",
+    icon: "fa-user",
+    label: "nav_intro",
+    text: "自我介紹",
+    enabled: true,
+  },
+  {
+    id: "artists",
+    href: "artists/",
+    icon: "fa-palette",
+    label: "nav_artists",
+    text: "合作繪師",
+    enabled: true,
+  },
 
-    
-    {
-        id: 'comm', dropdown: true, icon: 'fa-file-contract', label: 'nav_commission', text: '委託資訊', enabled: true,
-        items: [
-            { id: 'rules',    href: 'commission/rules/',    icon: 'fa-book-open',           color: 'text-blue-400',    label: 'nav_rules',    text: '流程與規範', enabled: true },
-            { id: 'core',     href: 'commission/core/',     icon: 'fa-wand-magic-sparkles', color: 'text-purple-400',  label: 'nav_core',     text: 'V皮設計',    enabled: true },
-            { id: 'anim',     href: 'commission/anim/',     icon: 'fa-film',                color: 'text-pink-400',    label: 'nav_anim',     text: '動畫設計',    enabled: true },
-            
-            { id: 'template', href: 'commission/template/', icon: 'fa-shirt',               color: 'text-fuchsia-400', label: 'nav_template', text: '聯名模板',   enabled: false },
-        ]
-    },
+  {
+    id: "comm",
+    dropdown: true,
+    icon: "fa-file-contract",
+    label: "nav_commission",
+    text: "委託資訊",
+    enabled: true,
+    items: [
+      {
+        id: "rules",
+        href: "commission/rules/",
+        icon: "fa-book-open",
+        color: "text-blue-400",
+        label: "nav_rules",
+        text: "流程與規範",
+        enabled: true,
+      },
+      {
+        id: "core",
+        href: "commission/core/",
+        icon: "fa-wand-magic-sparkles",
+        color: "text-purple-400",
+        label: "nav_core",
+        text: "V皮設計",
+        enabled: true,
+      },
+      {
+        id: "anim",
+        href: "commission/anim/",
+        icon: "fa-film",
+        color: "text-pink-400",
+        label: "nav_anim",
+        text: "動畫設計",
+        enabled: true,
+      },
 
-    
-    {
-        id: 'creative', dropdown: true, icon: 'fa-star', label: 'nav_creative', text: '創作空間', enabled: true,
-        items: [
-            
-            
-            
-            { id: 'model',     href: 'creative/model/',     icon: 'fa-person-rays', color: 'text-blue-400',   label: 'nav_live2d_demo', text: '模型展示', enabled: true },
-            { id: 'portfolio', href: 'creative/portfolio/', icon: 'fa-photo-film',  color: 'text-emerald-400', label: 'nav_portfolio',   text: '作品展示', enabled: true },
-            { id: 'channels',  href: 'creative/channels/',  icon: 'fa-heart',       color: 'text-pink-400',    label: 'nav_channels',    text: '推薦頻道', enabled: true },
-            { id: 'fanart',    href: 'creative/fanart/',    icon: 'fa-star',        color: 'text-yellow-400',  label: 'nav_fanart',      text: '二創展示', enabled: true },
-        ]
-    },
+      {
+        id: "template",
+        href: "commission/template/",
+        icon: "fa-shirt",
+        color: "text-fuchsia-400",
+        label: "nav_template",
+        text: "聯名模板",
+        enabled: false,
+      },
+    ],
+  },
+
+  {
+    id: "creative",
+    dropdown: true,
+    icon: "fa-star",
+    label: "nav_creative",
+    text: "創作空間",
+    enabled: true,
+    items: [
+      {
+        id: "model",
+        href: "creative/model/",
+        icon: "fa-person-rays",
+        color: "text-blue-400",
+        label: "nav_live2d_demo",
+        text: "模型展示",
+        enabled: true,
+      },
+      {
+        id: "portfolio",
+        href: "creative/portfolio/",
+        icon: "fa-photo-film",
+        color: "text-emerald-400",
+        label: "nav_portfolio",
+        text: "作品展示",
+        enabled: true,
+      },
+      {
+        id: "channels",
+        href: "creative/channels/",
+        icon: "fa-heart",
+        color: "text-pink-400",
+        label: "nav_channels",
+        text: "推薦頻道",
+        enabled: true,
+      },
+      {
+        id: "fanart",
+        href: "creative/fanart/",
+        icon: "fa-star",
+        color: "text-yellow-400",
+        label: "nav_fanart",
+        text: "二創展示",
+        enabled: true,
+      },
+    ],
+  },
 ];

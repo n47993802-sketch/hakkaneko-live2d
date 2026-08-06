@@ -161,8 +161,90 @@ body.light-mode [class*="bg-gradient-to-"] svg,
 body.light-mode .bg-purple-600,
 body.light-mode .bg-purple-600 span,
 body.light-mode .bg-indigo-600,
-body.light-mode .bg-indigo-600 span {
+body.light-mode .bg-indigo-600 span,
+body.light-mode .kofi-btn {
   color: #fff !important;
+}
+
+body.light-mode .bg-gradient-to-r.from-purple-600.to-blue-600 {
+  background-image: linear-gradient(135deg, #7c3aed, #2563eb) !important;
+}
+
+body.light-mode .bg-gradient-to-r.from-purple-600.to-pink-600 {
+  background-image: linear-gradient(135deg, #9333ea, #ec4899) !important;
+}
+
+body.light-mode .bg-gradient-to-r.from-pink-600.to-purple-600 {
+  background-image: linear-gradient(135deg, #ec4899, #7c3aed) !important;
+}
+
+body.light-mode .bg-gradient-to-r.from-sky-600.to-blue-600 {
+  background-image: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+}
+
+body.light-mode .bg-indigo-600,
+body.light-mode .bg-purple-600 {
+  background-color: #4338ca !important;
+  color: #fff !important;
+}
+
+body.light-mode .kofi-btn {
+  background: linear-gradient(135deg, #ef4444, #f97316) !important;
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.18) !important;
+}
+
+body.light-mode .text-white.bg-white\/5,
+body.light-mode .text-white.bg-white\/10,
+body.light-mode .text-white.bg-white\/15 {
+  background-color: rgba(255, 255, 255, 0.34) !important;
+  color: #2c083f !important;
+  border-color: rgba(124, 58, 237, 0.22) !important;
+}
+
+body.light-mode .text-white.bg-white\/5:hover,
+body.light-mode .text-white.bg-white\/10:hover,
+body.light-mode .text-white.bg-white\/15:hover {
+  background-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+body.light-mode .kofi-btn {
+  background: linear-gradient(135deg, #fb7185, #f97316);
+  color: white;
+  box-shadow: 0 12px 32px rgba(251, 113, 133, 0.2);
+}
+body.light-mode .kofi-btn:hover {
+  filter: brightness(1.05);
+}
+
+body.light-mode .tab-btn {
+  color: #4c1d95 !important;
+}
+body.light-mode .tab-btn.active {
+  color: #1e0b34 !important;
+  background: rgba(235, 224, 255, 0.9) !important;
+  border-color: rgba(124, 58, 237, 0.25) !important;
+}
+
+body.light-mode .bg-white\/5,
+body.light-mode .bg-white\/10,
+body.light-mode .bg-white\/15 {
+  background-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+body.light-mode .bg-white\/5:hover,
+body.light-mode .bg-white\/10:hover,
+body.light-mode .bg-white\/15:hover {
+  background-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+body.light-mode .btn-copy-summary,
+body.light-mode .anchor-rules-link,
+body.light-mode .kofi-btn,
+body.light-mode .tab-btn,
+body.light-mode .bg-indigo-600,
+body.light-mode .bg-gradient-to-r.from-purple-600.to-blue-600,
+body.light-mode .bg-gradient-to-r.from-purple-600.to-pink-600 {
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 body.light-mode #supportersList {

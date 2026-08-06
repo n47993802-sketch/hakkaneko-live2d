@@ -198,6 +198,7 @@ function ensureToastElement() {
   toast.id = "toast";
   toast.setAttribute("role", "status");
   toast.setAttribute("aria-live", "polite");
+  toast.className = "global-toast";
   toast.style.position = "fixed";
   toast.style.right = "1rem";
   toast.style.bottom = "1rem";
@@ -209,10 +210,17 @@ function ensureToastElement() {
   toast.style.maxWidth = "min(90vw, 320px)";
   toast.style.padding = "0.75rem 1rem";
   toast.style.borderRadius = "999px";
-  toast.style.background = "rgba(15, 10, 30, 0.92)";
-  toast.style.color = "#f5e8ff";
-  toast.style.border = "1px solid rgba(168, 85, 247, 0.35)";
-  toast.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.25)";
+  const isLightToast = document.body.classList.contains("light-mode");
+  toast.style.background = isLightToast
+    ? "rgba(255, 255, 255, 0.92)"
+    : "rgba(15, 10, 30, 0.92)";
+  toast.style.color = isLightToast ? "#2f0f4f" : "#f5e8ff";
+  toast.style.border = isLightToast
+    ? "1px solid rgba(107, 33, 168, 0.18)"
+    : "1px solid rgba(168, 85, 247, 0.35)";
+  toast.style.boxShadow = isLightToast
+    ? "0 12px 36px rgba(89, 35, 139, 0.12)"
+    : "0 12px 30px rgba(0, 0, 0, 0.25)";
   toast.innerHTML = '<span class="text-sm font-medium"></span>';
 
   (document.body || document.documentElement).appendChild(toast);
@@ -221,6 +229,18 @@ function ensureToastElement() {
 
 function showToast(message, options = {}) {
   const toast = ensureToastElement();
+  const isLightToast = document.body.classList.contains("light-mode");
+  toast.style.background = isLightToast
+    ? "rgba(255, 255, 255, 0.92)"
+    : "rgba(15, 10, 30, 0.92)";
+  toast.style.color = isLightToast ? "#2f0f4f" : "#f5e8ff";
+  toast.style.border = isLightToast
+    ? "1px solid rgba(107, 33, 168, 0.18)"
+    : "1px solid rgba(168, 85, 247, 0.35)";
+  toast.style.boxShadow = isLightToast
+    ? "0 12px 36px rgba(89, 35, 139, 0.12)"
+    : "0 12px 30px rgba(0, 0, 0, 0.25)";
+
   const span = toast.querySelector("span");
   if (span) span.textContent = message;
 

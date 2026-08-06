@@ -702,7 +702,20 @@ function toggleFaq(btn) {
       button.addEventListener("click", function () {
         scheduleState.page = Number(button.getAttribute("data-schedule-page")) || 1;
         renderSchedule();
+        scrollScheduleToTop();
       });
+    });
+  }
+
+  function scrollScheduleToTop() {
+    const sectionEl =
+      document.getElementById("scheduleCards")?.closest("section") ||
+      document.getElementById("page-schedule");
+
+    if (!sectionEl) return;
+
+    window.requestAnimationFrame(function () {
+      sectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 

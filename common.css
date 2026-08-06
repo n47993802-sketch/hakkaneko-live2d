@@ -182,7 +182,15 @@ body.light-mode .bg-black\/60 {
   border-color: rgba(107, 33, 168, 0.4) !important;
 }
 body.light-mode .option-card {
-  background: rgba(248, 244, 253, 0.9);
+  background: rgba(248, 244, 253, 0.94);
+  border-color: rgba(107, 33, 168, 0.18) !important;
+}
+body.light-mode .option-card:hover {
+  box-shadow: 0 0 22px rgba(168, 85, 247, 0.12);
+}
+body.light-mode .option-card:has(input:checked) {
+  background: rgba(221, 214, 255, 0.96);
+  border-color: rgba(107, 33, 168, 0.45) !important;
 }
 body.light-mode .text-gradient {
   background: linear-gradient(to right, #7b11b8, #d4389a);
@@ -541,6 +549,10 @@ body {
 .btn-copy-summary:active {
   transform: translateY(0) scale(0.98);
 }
+.btn-copy-summary:focus-visible {
+  outline: 3px solid rgba(168, 85, 247, 0.55);
+  outline-offset: 3px;
+}
 .btn-copy-summary.copied {
   background: linear-gradient(
     135deg,
@@ -550,10 +562,32 @@ body {
   border-color: rgba(52, 211, 153, 0.5);
   color: #34d399;
 }
+.btn-copy-summary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: none;
+}
 body.light-mode .btn-copy-summary {
   color: #3b1f6e;
   border-color: rgba(100, 60, 150, 0.35);
-  background: rgba(200, 185, 240, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(237, 228, 255, 0.95) 0%,
+    rgba(223, 211, 255, 0.85) 100%
+  );
+}
+body.light-mode .btn-copy-summary:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(235, 224, 255, 1) 0%,
+    rgba(211, 187, 255, 0.95) 100%
+  );
+  color: #3b1f6e;
+}
+body.light-mode .btn-copy-summary:disabled {
+  background: rgba(238, 233, 255, 0.75);
+  color: #6d5599;
+  border-color: rgba(167, 139, 250, 0.4);
 }
 
 .anchor-rules-link {
@@ -581,10 +615,18 @@ body.light-mode .btn-copy-summary {
 }
 body.light-mode .anchor-rules-link {
   color: #6b21a8;
+  background: rgba(251, 243, 255, 0.88);
+  border: 1px solid rgba(107, 33, 168, 0.2);
 }
 body.light-mode .anchor-rules-link:hover {
   color: #1a1030;
-  background: rgba(100, 60, 150, 0.1);
+  background: rgba(230, 220, 255, 0.95);
+}
+
+.anchor-rules-link:focus-visible,
+.btn-copy-summary:focus-visible {
+  outline: 3px solid rgba(168, 85, 247, 0.45);
+  outline-offset: 3px;
 }
 
 .carousel-img-wrap {

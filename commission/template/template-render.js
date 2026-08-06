@@ -85,7 +85,7 @@
       return (
         '<label class="tmpl-outfit-check ' +
         (checked ? "active" : "") +
-        '" onclick="event.preventDefault(); tmplToggleOutfit(' +
+        '" onclick="tmplToggleOutfit(' +
         idx +
         ')">' +
         '<div class="check-box">' +

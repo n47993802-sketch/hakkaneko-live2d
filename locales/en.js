@@ -11,6 +11,7 @@
     nav_artists: "Artists",
     nav_commission: "Commission",
     nav_rules: "Terms & Process",
+    nav_schedule: "Schedule Cards",
     nav_core: "V-Skin Design",
     nav_anim: "Animation Design",
     nav_template: "Template Collab",
@@ -56,7 +57,7 @@
     rules_contact_title: "Contact & Availability",
     rules_contact_desc:
       "Slots are limited — check the Google schedule sheet or DM me to ask about availability!",
-    rules_schedule_btn: "Check Schedule",
+    rules_schedule_btn: "View Schedule Cards",
     rules_process_title: "Commission Process",
     rules_terms_title: "Terms & Copyright",
     rules_terms_notice:

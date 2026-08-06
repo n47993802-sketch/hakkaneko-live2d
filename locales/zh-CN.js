@@ -11,6 +11,7 @@
     nav_artists: "合作画师",
     nav_commission: "委托信息",
     nav_rules: "流程与条款",
+    nav_schedule: "排程卡片",
     nav_core: "V皮设计",
     nav_anim: "动画设计",
     nav_template: "联名模板",
@@ -52,7 +53,7 @@
     rules_contact_title: "联系方式与排期查询",
     rules_contact_desc:
       "委托名额有限，建议先查看 Google 排期表或直接联系询问空档！",
-    rules_schedule_btn: "查看排期",
+    rules_schedule_btn: "查看排程卡片",
     rules_process_title: "Live2D 委托流程",
     rules_terms_title: "委托条款与版权声明",
     rules_terms_notice: "注意：提交委托即视为已阅读并同意以下全部条款。",

@@ -950,7 +950,23 @@ function applyFormUrls() {
   });
 }
 
+function getScheduleUrl(key) {
+  const lang = typeof currentLang !== "undefined" ? currentLang : "zh-TW";
+  const suffix = lang === "en" ? "_en" : lang === "ja" ? "_ja" : lang === "zh-CN" ? "_zhCN" : "";
+  const scheduleUrls = window.SCHEDULE_URLS || {};
+  const url = scheduleUrls[key + suffix] || scheduleUrls[key];
+  return url && url.trim() !== "" ? url : "#";
+}
+
+function applyScheduleUrls() {
+  document.querySelectorAll("[data-schedule-key]").forEach(function (el) {
+    const key = el.getAttribute("data-schedule-key");
+    el.href = getScheduleUrl(key);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", applyFormUrls);
+document.addEventListener("DOMContentLoaded", applyScheduleUrls);
 
 (function () {
   const badge = document.getElementById("commissionBadge");

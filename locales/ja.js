@@ -11,6 +11,7 @@
     nav_artists: "コラボ絵師",
     nav_commission: "ご依頼について",
     nav_rules: "フローと規約",
+    nav_schedule: "スケジュールカード",
     nav_core: "V皮デザイン",
     nav_anim: "アニメーション制作",
     nav_template: "テンプレコラボ",
@@ -55,7 +56,7 @@
     rules_contact_title: "連絡先と受付状況",
     rules_contact_desc:
       "枠に限りがあるので、Googleスプレッドシートで空き状況を確認するか、気軽にDMで聞いてね！",
-    rules_schedule_btn: "受付状況を確認",
+    rules_schedule_btn: "排程カードを見る",
     rules_process_title: "依頼の流れ",
     rules_terms_title: "依頼規約と著作権について",
     rules_terms_notice:

@@ -34,6 +34,15 @@ window.NAV_CONFIG = [
         enabled: true,
       },
       {
+        id: "schedule",
+        href: "commission/schedule/",
+        icon: "fa-calendar-days",
+        color: "text-cyan-400",
+        label: "nav_schedule",
+        text: "排程卡片",
+        enabled: true,
+      },
+      {
         id: "core",
         href: "commission/core/",
         icon: "fa-wand-magic-sparkles",

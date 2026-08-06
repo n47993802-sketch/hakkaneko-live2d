@@ -13,6 +13,7 @@
     nav_artists: "合作繪師",
     nav_commission: "委託資訊",
     nav_rules: "流程與規範",
+    nav_schedule: "排程卡片",
     nav_core: "V皮設計",
     nav_anim: "動畫設計",
     nav_template: "聯名模板",
@@ -58,7 +59,7 @@
     rules_contact_title: "聯絡與排單詢問",
     rules_contact_desc:
       "委託時間需配合排單，建議先查看 Google 排單表或直接聯繫詢問檔期！",
-    rules_schedule_btn: "排單狀態",
+    rules_schedule_btn: "查看排程卡片",
     rules_process_title: "Live2D 委託流程",
     rules_terms_title: "委託規範與著作權聲明",
     rules_terms_notice: "注意：提交委託即視為已閱讀並同意以下全部條款。",

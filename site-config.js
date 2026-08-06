@@ -15,4 +15,12 @@ window.FORM_URLS = {
   fanart_en: "",
 };
 
+window.SCHEDULE_URLS = {
+  public:
+    "https://docs.google.com/spreadsheets/d/1D-3fx7SqNWTx_prA4Wd0ricCVnM7Zaox3Br0EWQ7Yfc/export?format=csv&gid=846301339",
+  public_en: "",
+  public_ja: "",
+  public_zhCN: "",
+};
+
 window.IS_COMMISSION_OPEN = true;

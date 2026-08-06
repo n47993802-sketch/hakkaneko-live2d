@@ -190,6 +190,57 @@ function generateOrderNumber(type) {
   return `HKN-${typeCode}-${y}-${m}${d}-${rand}`;
 }
 
+function ensureToastElement() {
+  let toast = document.getElementById("toast");
+  if (toast) return toast;
+
+  toast = document.createElement("div");
+  toast.id = "toast";
+  toast.setAttribute("role", "status");
+  toast.setAttribute("aria-live", "polite");
+  toast.style.position = "fixed";
+  toast.style.right = "1rem";
+  toast.style.bottom = "1rem";
+  toast.style.zIndex = "9999";
+  toast.style.opacity = "0";
+  toast.style.transform = "translateY(20px)";
+  toast.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+  toast.style.pointerEvents = "none";
+  toast.style.maxWidth = "min(90vw, 320px)";
+  toast.style.padding = "0.75rem 1rem";
+  toast.style.borderRadius = "999px";
+  toast.style.background = "rgba(15, 10, 30, 0.92)";
+  toast.style.color = "#f5e8ff";
+  toast.style.border = "1px solid rgba(168, 85, 247, 0.35)";
+  toast.style.boxShadow = "0 12px 30px rgba(0, 0, 0, 0.25)";
+  toast.innerHTML = '<span class="text-sm font-medium"></span>';
+
+  (document.body || document.documentElement).appendChild(toast);
+  return toast;
+}
+
+function showToast(message, options = {}) {
+  const toast = ensureToastElement();
+  const span = toast.querySelector("span");
+  if (span) span.textContent = message;
+
+  toast.style.opacity = "1";
+  toast.style.transform = "translateY(0)";
+
+  const duration = options.duration || 3500;
+  const resetText = options.resetText || "";
+  window.clearTimeout(toast._toastTimer);
+  toast._toastTimer = window.setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(20px)";
+    if (resetText && span) {
+      window.setTimeout(() => {
+        span.textContent = resetText;
+      }, 300);
+    }
+  }, duration);
+}
+
 function screenshotQuote(panelId, type, btnEl) {
   const panel = document.getElementById(panelId);
   if (!panel) return;
@@ -246,37 +297,171 @@ function restoreBtnLoading(state) {
   if (state.iconEl) state.iconEl.className = state.prevIconClass;
   if (state.textEl) state.textEl.textContent = state.prevText;
 }
+
+function buildQuoteScreenshotCard(panel, orderId) {
+  const titleText =
+    panel.querySelector('[data-i18n="sidebar_total"]')?.textContent.trim() ||
+    "預估總金額";
+  const breakdownText =
+    panel.querySelector('[data-i18n="sidebar_breakdown"]')?.textContent.trim() ||
+    "報價明細";
+  const totalValue =
+    panel.querySelector("#totalPrice, #animTotalPrice, #tmplTotalPrice")?.textContent.trim() ||
+    "NT$ 0";
+  const depositInfo = panel.querySelector("#depositInfo")?.innerHTML.trim() || "";
+  const detailContainer =
+    panel.querySelector("#detailList, #animDetailList, #tmplDetailList");
+  const rushText =
+    panel.querySelector("#quoteRushSummaryText")?.textContent.trim() ||
+    document.getElementById("rushInfo")?.value.trim() || "";
+  const suppText =
+    panel.querySelector("#quoteSuppSummaryText")?.textContent.trim() ||
+    document.getElementById("supplementInfo")?.value.trim() || "";
+  const details = [];
+  if (detailContainer) {
+    Array.from(detailContainer.children).forEach((row) => {
+      if (!(row instanceof HTMLElement)) return;
+      const cols = row.querySelectorAll("span");
+      const name = cols[0]?.textContent.trim() || row.textContent.trim();
+      const value = cols[1]?.textContent.trim() || "";
+      if (name) {
+        details.push({ name, value });
+      }
+    });
+  }
+
+  const card = document.createElement("div");
+  card.style.position = "absolute";
+  card.style.left = "-9999px";
+  card.style.top = "-9999px";
+  card.style.zIndex = "-9999";
+  card.style.background = "#220847";
+  card.style.color = "#f8f4ff";
+  card.style.padding = "28px";
+  card.style.width = "720px";
+  card.style.borderRadius = "32px";
+  card.style.boxSizing = "border-box";
+  card.style.fontFamily = "Noto Sans TC, Arial, sans-serif";
+  card.style.lineHeight = "1.45";
+  card.style.overflow = "hidden";
+  card.style.boxShadow = "0 20px 70px rgba(0, 0, 0, 0.35)";
+  card.style.border = "1px solid rgba(255,255,255,0.06)";
+  card.style.background = "linear-gradient(180deg, rgba(34,14,77,0.96), rgba(18,7,50,0.96))";
+  card.style.pointerEvents = "none";
+
+  const depositBlock = depositInfo
+    ? `<div style="margin-bottom:18px;padding:18px 20px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:22px;font-size:0.95rem;line-height:1.6;">
+        ${depositInfo}
+      </div>`
+    : "";
+
+  const activeNotes = [];
+  if (rushText) {
+    activeNotes.push({
+      label: "加急趕工說明",
+      content: rushText,
+      color: "#fbcfe8",
+      bg: "rgba(248, 113, 255, 0.12)",
+      border: "rgba(248, 113, 255, 0.2)",
+    });
+  }
+  if (suppText) {
+    activeNotes.push({
+      label: "補充資訊",
+      content: suppText,
+      color: "#c4b5fd",
+      bg: "rgba(192, 132, 252, 0.12)",
+      border: "rgba(192, 132, 252, 0.2)",
+    });
+  }
+
+  card.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:24px;">
+      <div style="min-width:0;flex:1;">
+        <div style="font-size:0.78rem;font-weight:700;letter-spacing:0.18em;color:#d8b4fe;margin-bottom:10px;">表單編號</div>
+        <div style="font-size:1.05rem;font-weight:900;color:#fff;word-break:break-all;">${orderId}</div>
+      </div>
+      <div style="text-align:right;flex:1;min-width:0;">
+        <div style="font-size:0.9rem;font-weight:700;color:#d8b4fe;margin-bottom:10px;">${titleText}</div>
+        <div style="font-size:3.2rem;font-weight:900;letter-spacing:-0.05em;color:#fff;">${totalValue}</div>
+      </div>
+    </div>
+    ${depositBlock}
+    <div>
+      <div style="font-size:1rem;font-weight:800;color:#f3e8ff;letter-spacing:0.02em;margin-bottom:18px;">${breakdownText}</div>
+      <div style="display:grid;gap:10px;">
+        ${details
+          .map(
+            (item, idx) =>
+              `<div style="display:flex;justify-content:space-between;gap:16px;font-size:0.95rem;color:#f8f4ff;padding:10px 6px;border-bottom:1px solid rgba(255,255,255,0.04);">
+                 <span style="flex:1;min-width:0;line-height:1.4;">${item.name}</span>
+                 <span style="font-weight:700;white-space:nowrap;">${item.value}</span>
+               </div>`,
+          )
+          .join("")}
+      </div>
+    </div>
+    ${
+      activeNotes.length
+        ? `<div style="margin-top:26px;display:grid;gap:14px;">
+            ${activeNotes
+              .map(
+                (note) =>
+                  `<div style="padding:16px 18px;background:${note.bg};border:1px solid ${note.border};border-radius:20px;">
+                     <div style="font-size:0.85rem;font-weight:700;color:${note.color};margin-bottom:8px;">${note.label}</div>
+                     <div style="font-size:0.92rem;color:#f8f4ff;line-height:1.6;">${note.content}</div>
+                   </div>`,
+              )
+              .join("")}
+          </div>`
+        : ""
+    }
+  `;
+
+  return card;
+}
+
 function doScreenshot(panel, orderId, btnState) {
-  const toast = document.getElementById("toast");
-  const prevToastOpacity = toast.style.opacity;
+  const toast = ensureToastElement();
   toast.style.opacity = "0";
   toast.style.pointerEvents = "none";
 
-  const list = panel.querySelector('[style*="max-height"], .max-h-\\[250px\\]');
-  const prevMax = list ? list.style.maxHeight : null;
-  if (list) list.style.maxHeight = "none";
+  const tempCard = buildQuoteScreenshotCard(panel, orderId);
+  document.body.appendChild(tempCard);
 
-  html2canvas(panel, {
-    backgroundColor: "#0f0a1e",
-    scale: 2,
-    useCORS: true,
-    logging: false,
-    windowWidth: panel.scrollWidth,
-    x: 0,
-    y: 0,
-    scrollX: 0,
-    scrollY: 0,
-    foreignObjectRendering: false,
-  })
+  if (typeof window.html2canvas !== "function") {
+    tempCard.remove();
+    restoreBtnLoading(btnState);
+    alert("截圖功能目前無法載入，請稍後再試或改用瀏覽器截圖。");
+    return;
+  }
+
+  const scale = Math.min(3, Math.max(2, window.devicePixelRatio || 1));
+  const cardWidth = tempCard.offsetWidth;
+  const cardHeight = tempCard.offsetHeight;
+
+  window
+    .html2canvas(tempCard, {
+      backgroundColor: null,
+      scale,
+      useCORS: true,
+      logging: false,
+      width: cardWidth,
+      height: cardHeight,
+      windowWidth: cardWidth,
+      windowHeight: cardHeight,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0,
+      foreignObjectRendering: false,
+      ignoreElements: (el) => el.closest("[data-html2canvas-ignore]") !== null,
+    })
     .then((canvas) => {
-      if (list && prevMax !== null) list.style.maxHeight = prevMax;
+      tempCard.remove();
       restoreBtnLoading(btnState);
       const link = document.createElement("a");
-      const baseName =
-        typeof currentLang !== "undefined" && I18N[currentLang]
-          ? I18N[currentLang].quote_filename || "阿卡貓報價單"
-          : "阿卡貓報價單";
-      link.download = `${baseName}_${orderId}.png`;
+      link.download = `${orderId}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
 
@@ -287,19 +472,10 @@ function doScreenshot(panel, orderId, btnState) {
       const savedMsg =
         (dict.toast_screenshot_saved || "截圖已儲存！") + ` 編號：${orderId}`;
       const defaultMsg = dict.toast_copied || "已複製到剪貼簿！";
-      toast.querySelector("span").textContent = savedMsg;
-      toast.style.opacity = "1";
-      toast.style.transform = "translateY(0)";
-      setTimeout(() => {
-        toast.style.opacity = "0";
-        toast.style.transform = "translateY(20px)";
-        setTimeout(() => {
-          toast.querySelector("span").textContent = defaultMsg;
-        }, 300);
-      }, 4000);
+      showToast(savedMsg, { duration: 4000, resetText: defaultMsg });
     })
     .catch((e) => {
-      if (list && prevMax !== null) list.style.maxHeight = prevMax;
+      tempCard.remove();
       restoreBtnLoading(btnState);
       alert("截圖失敗，請改用瀏覽器的截圖功能。");
     });
@@ -663,13 +839,7 @@ function copyToClipboardFallback(text) {
   textArea.select();
   try {
     document.execCommand("copy");
-    const toast = document.getElementById("toast");
-    toast.style.opacity = "1";
-    toast.style.transform = "translate(-50%, 0)";
-    setTimeout(() => {
-      toast.style.opacity = "0";
-      toast.style.transform = "translate(-50%, -20px)";
-    }, 3500);
+    showToast("已複製到剪貼簿！", { duration: 3500 });
   } catch (err) {
     alert("瀏覽器阻擋複製，請手動框選文字複製！");
   }
@@ -876,6 +1046,7 @@ function initPage() {
     setTimeout(() => checkMyLiveStatus(), 0);
     setInterval(checkMyLiveStatus, 3 * 60 * 1000);
   }
+  _safe(initNoteToggles);
 }
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initPage);
@@ -940,6 +1111,26 @@ function copySummaryToClipboard(type) {
     lines.push(
       `▸ ${_d.summary_total || "預算總計"}：${getCurrencyPrefix()}${formatMoney(total)}`,
     );
+    // 如果為分期付款，補上各期金額說明（顯示完整數字）
+    const paymentPlan =
+      window.currentPaymentPlan ||
+      document.querySelector('input[name="paymentPlan"]:checked')?.value ||
+      "one";
+    if (paymentPlan === "two") {
+      const first = Math.round(total * 0.5);
+      const second = total - first;
+      lines.push(`▸ 分期付款：兩期`);
+      lines.push(`   第一期 (50%): ${getCurrencyPrefix()}${formatMoney(first)}`);
+      lines.push(`   第二期 (50%): ${getCurrencyPrefix()}${formatMoney(second)}`);
+    } else if (paymentPlan === "three") {
+      const first = Math.round(total * 0.4);
+      const second = Math.round(total * 0.3);
+      const third = total - first - second;
+      lines.push(`▸ 分期付款：三期`);
+      lines.push(`   第一期 (40%): ${getCurrencyPrefix()}${formatMoney(first)}`);
+      lines.push(`   第二期 (30%): ${getCurrencyPrefix()}${formatMoney(second)}`);
+      lines.push(`   第三期 (30%): ${getCurrencyPrefix()}${formatMoney(third)}`);
+    }
     lines.push(DIV);
   } else {
     const details = window.currentAnimDetails || [];
@@ -989,13 +1180,8 @@ function copySummaryToClipboard(type) {
 
   const text = lines.join(NL);
 
-  const X_LIMIT = 240;
-  const textForCopy =
-    text.replace(/\r\n/g, "\n").length > X_LIMIT
-      ? text +
-        NL +
-        `⚠️ 字數超過 ${X_LIMIT} 字，貼至 X(Twitter) 時請手動摘錄關鍵欄位以避免被截切。`
-      : text;
+  // 不再自動附加 X(Twitter) 警告文字，直接使用原始文字
+  const textForCopy = text.replace(/\r\n/g, "\n");
 
   const btnId = type === "vp" ? "btn-copy-summary-vp" : "btn-copy-summary-anim";
   const btn = document.getElementById(btnId);
@@ -1013,21 +1199,12 @@ function copySummaryToClipboard(type) {
     }, 2200);
   }
 
-  const toast = document.getElementById("toast");
-  if (toast) {
-    const msg = _d.toast_summary_copied || "委託清單已複製至剪貼簿！";
-    toast.querySelector("span").textContent = msg;
-    toast.style.opacity = "1";
-    toast.style.transform = "translateY(0)";
-    setTimeout(function () {
-      toast.style.opacity = "0";
-      toast.style.transform = "translateY(20px)";
-      setTimeout(function () {
-        toast.querySelector("span").textContent =
-          _d.toast_copied || "已複製到剪貼簿！";
-      }, 300);
-    }, 3500);
-  }
+  const toast = ensureToastElement();
+  const msg = _d.toast_summary_copied || "委託清單已複製至剪貼簿！";
+  showToast(msg, {
+    duration: 3500,
+    resetText: _d.toast_copied || "已複製到剪貼簿！",
+  });
 }
 
 function scrollToRules() {
@@ -1239,6 +1416,102 @@ function revealAmountOnLoad(el) {
   }
 
   whenPanelVisible(el, play);
+}
+
+function initNoteToggles() {
+  const notes = [
+    { wrapperId: "quoteRushSummary", textId: "quoteRushSummaryText" },
+    { wrapperId: "quoteSuppSummary", textId: "quoteSuppSummaryText" },
+  ];
+
+  notes.forEach((n) => {
+    const wrap = document.getElementById(n.wrapperId);
+    const textEl = document.getElementById(n.textId);
+    if (!wrap || !textEl) return;
+
+    // if there's no content, keep it hidden
+    if (!textEl.textContent.trim()) {
+      wrap.classList.add("hidden");
+    }
+
+    // find the title paragraph
+    const title = wrap.querySelector(".font-bold") || wrap.querySelector("p");
+    if (!title) return;
+
+    // create toggle button
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "note-toggle";
+    btn.setAttribute("aria-expanded", "true");
+    btn.innerHTML = '<i class="fa-solid fa-chevron-down note-arrow" aria-hidden="true"></i>';
+    btn.style.background = "transparent";
+    btn.style.border = "none";
+    btn.style.padding = "0";
+    btn.style.marginLeft = "0.5rem";
+    btn.style.cursor = "pointer";
+
+    // make title layout flex and append toggle
+    title.style.display = "flex";
+    title.style.justifyContent = "space-between";
+    title.style.alignItems = "center";
+    title.appendChild(btn);
+    // make the whole title act like a button (not only the small chevron)
+    title.style.cursor = "pointer";
+    title.setAttribute("role", "button");
+    title.tabIndex = 0;
+
+    // wrap the textEl inside a note-body for easy collapse
+    const body = document.createElement("div");
+    body.className = "note-body";
+    // move textEl into body
+    wrap.replaceChild(body, textEl);
+    body.appendChild(textEl);
+
+    // initial state: expanded when there is content
+    function setOpen(open) {
+      if (open) {
+        body.classList.remove("hidden");
+        btn.setAttribute("aria-expanded", "true");
+        const arrow = btn.querySelector(".note-arrow");
+        if (arrow) arrow.style.transform = "rotate(0deg)";
+      } else {
+        body.classList.add("hidden");
+        btn.setAttribute("aria-expanded", "false");
+        const arrow = btn.querySelector(".note-arrow");
+        if (arrow) arrow.style.transform = "rotate(-90deg)";
+      }
+    }
+
+    // 初始為收合狀態
+    setOpen(false);
+
+    // 如果內容變動（使用者輸入），自動顯示按鈕並展開
+    const mo = new MutationObserver(() => {
+      const hasContent = textEl.textContent.trim().length > 0;
+      wrap.classList.toggle("hidden", !hasContent);
+      if (hasContent) setOpen(false); // keep closed but ensure visible
+    });
+    mo.observe(textEl, { childList: true, characterData: true, subtree: true });
+
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setOpen(body.classList.contains("hidden"));
+    });
+
+    // clicking the title toggles as well (bigger hit area)
+    title.addEventListener("click", function (e) {
+      // if click landed on an interactive element inside title, ignore
+      if (e.target && (e.target.tagName === "A" || e.target.tagName === "BUTTON")) return;
+      setOpen(body.classList.contains("hidden"));
+    });
+    // keyboard accessibility: Enter/Space toggles
+    title.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setOpen(body.classList.contains("hidden"));
+      }
+    });
+  });
 }
 
 function animateCounter(el, from, to) {

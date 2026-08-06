@@ -1,3 +1,48 @@
+#quoteSummaryPanel #detailList,
+#animQuoteSummaryPanel #animDetailList,
+#tmplQuoteSummaryPanel #tmplDetailList,
+#quoteSummaryPanel .mb-6.space-y-2.text-sm,
+#animQuoteSummaryPanel .mb-6.space-y-2.text-sm,
+#tmplQuoteSummaryPanel .mb-4.space-y-1.text-sm {
+  max-height: 11.5rem; /* 約 7.5 行 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 6px;
+}
+
+#quoteSummaryPanel #depositInfo {
+  white-space: normal;
+  overflow: visible;
+}
+
+.note-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  color: rgba(216, 180, 254, 0.85);
+}
+.note-toggle .note-arrow {
+  transition: transform 0.18s ease;
+  font-size: 0.8rem;
+}
+.note-body.hidden {
+  display: none !important;
+}
+
+/* 改良滾動條樣式（非必要） */
+#quoteSummaryPanel #detailList::-webkit-scrollbar,
+#animQuoteSummaryPanel #animDetailList::-webkit-scrollbar,
+#tmplQuoteSummaryPanel #tmplDetailList::-webkit-scrollbar {
+  width: 8px;
+}
+#quoteSummaryPanel #detailList::-webkit-scrollbar-thumb,
+#animQuoteSummaryPanel #animDetailList::-webkit-scrollbar-thumb,
+#tmplQuoteSummaryPanel #tmplDetailList::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap");
 
 .deco-star {
@@ -902,6 +947,21 @@ body.light-mode .tab-btn.active {
 
 .sticky-summary {
   will-change: transform;
+}
+
+/* Ensure quote panel buttons stay clickable even when panel height changes */
+#quoteSummaryPanel .btn-copy-summary,
+#quoteSummaryPanel button,
+.sticky-summary button {
+  position: relative;
+  z-index: 1200;
+  pointer-events: auto;
+}
+
+/* Fallback: ensure floating bar and back-to-top are above other content */
+#floatingQuoteBar,
+#backToTop {
+  z-index: 1200;
 }
 
 #floatingQuoteBar {

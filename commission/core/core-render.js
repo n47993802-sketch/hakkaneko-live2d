@@ -244,7 +244,14 @@ function calculate() {
       name: `${_d.pay_two || "兩期分款"} ${_d.pay_fee || "手續費"} (3%)`,
       price: instFee,
     });
-    paymentHtml = `<div class="flex justify-between"><span>第一期 (50%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(Math.round(finalTotal * 0.5))}</strong></div>`;
+    const firstTwo = Math.round(finalTotal * 0.5);
+    const secondTwo = finalTotal - firstTwo;
+    paymentHtml = `
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between"><span>第一期 (50%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(firstTwo)}</strong></div>
+        <div class="flex justify-between"><span>第二期 (50%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(secondTwo)}</strong></div>
+      </div>
+    `;
   } else if (plan === "three") {
     let instFee = Math.round(finalTotal * 0.05);
     finalTotal += instFee;
@@ -252,7 +259,16 @@ function calculate() {
       name: `${_d.pay_three || "三期分款"} ${_d.pay_fee || "手續費"} (5%)`,
       price: instFee,
     });
-    paymentHtml = `<div class="flex justify-between"><span>第一期 (40%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(Math.round(finalTotal * 0.4))}</strong></div>`;
+    const firstThree = Math.round(finalTotal * 0.4);
+    const secondThree = Math.round(finalTotal * 0.3);
+    const thirdThree = finalTotal - firstThree - secondThree;
+    paymentHtml = `
+      <div class="flex flex-col gap-1">
+        <div class="flex justify-between"><span>第一期 (40%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(firstThree)}</strong></div>
+        <div class="flex justify-between"><span>第二期 (30%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(secondThree)}</strong></div>
+        <div class="flex justify-between"><span>第三期 (30%):</span> <strong class="text-white">${getCurrencyPrefix()}${formatMoney(thirdThree)}</strong></div>
+      </div>
+    `;
   }
 
   document.getElementById("depositInfo").innerHTML = paymentHtml;

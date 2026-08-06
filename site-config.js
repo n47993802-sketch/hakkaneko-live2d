@@ -1,4 +1,4 @@
-window.ASSET_BASE = "https://n47993802-sketch.github.io/Live2D-";
+window.ASSET_BASE = "https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main";
 
 window.FORM_URLS = {
   commission_vp: "https://forms.gle/4C5KzcuAiEAndyMf6",

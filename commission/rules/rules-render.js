@@ -23,7 +23,13 @@ function toggleFaq(btn) {
 (function () {
   const CACHE_TTL_MS = 5 * 60 * 1000;
   const CACHE_KEY_PREFIX = "hakka_schedule_cache_v2:";
+  const VIEW_STATE_QUERY_KEYS = {
+    filter: "filter",
+    page: "page",
+  };
   const PAGE_SIZE = 8;
+  const DUE_SOON_DAYS = 3;
+  const DAY_MS = 24 * 60 * 60 * 1000;
   const FILTERS = {
     all: "all",
     pending: "pending",
@@ -54,8 +60,13 @@ function toggleFaq(btn) {
       finishLabel: "完成日期",
       noteLabel: "備註",
       overdue: "逾期",
+      dueSoon: "即將到期",
       notSet: "未設定",
       notFilled: "未填",
+      statusNotStarted: "未開始",
+      statusInProgress: "製作中",
+      statusDone: "已完成",
+      statusQueued: "等待中",
       scheduleError: "公開排程載入失敗，請確認 CSV 連結是否可匿名存取。",
       cachedError: "公開排程更新失敗，已顯示快取資料。",
       noUrl: "尚未設定公開排程網址。",
@@ -82,8 +93,13 @@ function toggleFaq(btn) {
       finishLabel: "完成日期",
       noteLabel: "备注",
       overdue: "逾期",
+      dueSoon: "即将到期",
       notSet: "未设定",
       notFilled: "未填",
+      statusNotStarted: "未开始",
+      statusInProgress: "制作中",
+      statusDone: "已完成",
+      statusQueued: "等待中",
       scheduleError: "公开排程载入失败，请确认 CSV 连结是否可匿名存取。",
       cachedError: "公开排程更新失败，已显示快取资料。",
       noUrl: "尚未设定公开排程网址。",
@@ -111,8 +127,13 @@ function toggleFaq(btn) {
       finishLabel: "Finished",
       noteLabel: "Note",
       overdue: "Overdue",
+      dueSoon: "Due Soon",
       notSet: "Not set",
       notFilled: "TBD",
+      statusNotStarted: "Not Started",
+      statusInProgress: "In Progress",
+      statusDone: "Completed",
+      statusQueued: "Queued",
       scheduleError:
         "Failed to load the public schedule. Please confirm the CSV is anonymously accessible.",
       cachedError: "Schedule refresh failed; showing cached data.",
@@ -140,8 +161,13 @@ function toggleFaq(btn) {
       finishLabel: "完了日",
       noteLabel: "備考",
       overdue: "期限切れ",
+      dueSoon: "期限間近",
       notSet: "未設定",
       notFilled: "未入力",
+      statusNotStarted: "未開始",
+      statusInProgress: "制作中",
+      statusDone: "完了済み",
+      statusQueued: "待機中",
       scheduleError: "公開スケジュールの読み込みに失敗しました。CSV の匿名アクセスを確認してください。",
       cachedError: "更新に失敗したため、キャッシュを表示しています。",
       noUrl: "公開スケジュールの URL がまだ設定されていません。",
@@ -161,6 +187,78 @@ function toggleFaq(btn) {
 
   function getCopy() {
     return SCHEDULE_COPY[getCurrentLang()] || SCHEDULE_COPY["zh-TW"];
+  }
+
+  function normalizeStatusKey(status) {
+    const value = safeText(status).toLowerCase().replace(/\s+/g, "");
+
+    if (
+      value === "已完成" ||
+      value === "完成" ||
+      value === "completed" ||
+      value === "done"
+    ) {
+      return "done";
+    }
+
+    if (
+      value === "製作中" ||
+      value === "制作中" ||
+      value === "進行中" ||
+      value === "进行中" ||
+      value === "inprogress" ||
+      value === "working"
+    ) {
+      return "inProgress";
+    }
+
+    if (
+      value === "未開始" ||
+      value === "未开始" ||
+      value === "未著手" ||
+      value === "notstarted"
+    ) {
+      return "notStarted";
+    }
+
+    if (
+      value === "等待中" ||
+      value === "排隊中" ||
+      value === "queued" ||
+      value === "queue"
+    ) {
+      return "queued";
+    }
+
+    return "other";
+  }
+
+  function readViewStateFromQuery() {
+    try {
+      const params = new URLSearchParams(window.location.search || "");
+      const filter = params.get(VIEW_STATE_QUERY_KEYS.filter);
+      const page = Number(params.get(VIEW_STATE_QUERY_KEYS.page));
+
+      if (filter && Object.values(FILTERS).includes(filter)) {
+        scheduleState.filter = filter;
+      }
+
+      if (Number.isInteger(page) && page > 0) {
+        scheduleState.page = page;
+      }
+    } catch (error) {}
+  }
+
+  function writeViewStateToQuery() {
+    try {
+      const params = new URLSearchParams(window.location.search || "");
+      params.set(VIEW_STATE_QUERY_KEYS.filter, scheduleState.filter);
+      params.set(VIEW_STATE_QUERY_KEYS.page, String(scheduleState.page));
+
+      const query = params.toString();
+      const next = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash || ""}`;
+      window.history.replaceState(null, "", next);
+    } catch (error) {}
   }
 
   function safeText(value) {
@@ -420,8 +518,8 @@ function toggleFaq(btn) {
 
   function sortRows(rows) {
     return rows.slice().sort(function (left, right) {
-      const leftDone = safeText(left.status) === "已完成";
-      const rightDone = safeText(right.status) === "已完成";
+      const leftDone = normalizeStatusKey(left.status) === "done";
+      const rightDone = normalizeStatusKey(right.status) === "done";
 
       if (leftDone !== rightDone) {
         return leftDone ? 1 : -1;
@@ -434,6 +532,15 @@ function toggleFaq(btn) {
 
       if (leftDate !== rightDate) return leftDate - rightDate;
 
+      const leftNumber = safeText(left.commissionNumber);
+      const rightNumber = safeText(right.commissionNumber);
+      if (leftNumber !== rightNumber) {
+        return leftNumber.localeCompare(rightNumber, "zh-Hant", {
+          numeric: true,
+          sensitivity: "base",
+        });
+      }
+
       const leftLabel = safeText(left.item || left.client || left.month);
       const rightLabel = safeText(right.item || right.client || right.month);
       return leftLabel.localeCompare(rightLabel, "zh-Hant");
@@ -443,13 +550,13 @@ function toggleFaq(btn) {
   function filterRows(rows, filter) {
     if (filter === FILTERS.done) {
       return rows.filter(function (row) {
-        return safeText(row.status) === "已完成";
+        return normalizeStatusKey(row.status) === "done";
       });
     }
 
     if (filter === FILTERS.pending) {
       return rows.filter(function (row) {
-        return safeText(row.status) !== "已完成";
+        return normalizeStatusKey(row.status) !== "done";
       });
     }
 
@@ -457,35 +564,54 @@ function toggleFaq(btn) {
   }
 
   function statusStyles(status) {
-    const value = safeText(status);
-    if (value === "未開始") {
-      return "bg-slate-500/20 text-slate-200 border-slate-400/30";
+    const key = normalizeStatusKey(status);
+    if (key === "notStarted") {
+      return "bg-red-500/20 text-red-200 border-red-400/30";
     }
-    if (value === "製作中") {
+    if (key === "inProgress") {
       return "bg-orange-500/20 text-orange-200 border-orange-400/30";
     }
-    if (value === "已完成") {
+    if (key === "done") {
       return "bg-emerald-500/20 text-emerald-200 border-emerald-400/30";
     }
-    if (value === "等待中") {
+    if (key === "queued") {
       return "bg-purple-500/20 text-purple-200 border-purple-400/30";
     }
     return "bg-sky-500/20 text-sky-100 border-sky-400/30";
   }
 
   function statusLabel(status) {
+    const key = normalizeStatusKey(status);
+    const copy = getCopy();
+
+    if (key === "notStarted") return copy.statusNotStarted;
+    if (key === "inProgress") return copy.statusInProgress;
+    if (key === "done") return copy.statusDone;
+    if (key === "queued") return copy.statusQueued;
+
     const value = safeText(status);
-    return value || getCopy().notFilled;
+    return value || copy.notFilled;
   }
 
   function isOverdue(row) {
-    if (safeText(row.status) === "已完成") return false;
+    if (normalizeStatusKey(row.status) === "done") return false;
     const deadline = parseDateLike(row.deadlineDate);
     if (!deadline) return false;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return deadline < today.getTime();
+  }
+
+  function isDueSoon(row) {
+    if (normalizeStatusKey(row.status) === "done") return false;
+    const deadline = parseDateLike(row.deadlineDate);
+    if (!deadline) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffDays = Math.floor((deadline - today.getTime()) / DAY_MS);
+    return diffDays >= 0 && diffDays <= DUE_SOON_DAYS;
   }
 
   function renderTabs(totalRows) {
@@ -496,10 +622,10 @@ function toggleFaq(btn) {
     const counts = {
       all: totalRows.length,
       pending: totalRows.filter(function (row) {
-        return safeText(row.status) !== "已完成";
+        return normalizeStatusKey(row.status) !== "done";
       }).length,
       done: totalRows.filter(function (row) {
-        return safeText(row.status) === "已完成";
+        return normalizeStatusKey(row.status) === "done";
       }).length,
     };
 
@@ -597,17 +723,32 @@ function toggleFaq(btn) {
     const copy = getCopy();
     const deadline = safeText(row.deadlineDate) || copy.notSet;
     const finishDate = safeText(row.finishDate) || copy.notSet;
-    const commissionNumber = safeText(row.commissionNumber) || copy.notFilled;
+    const commissionNumber = safeText(row.commissionNumber) || "-";
     const month = safeText(row.month) || "未分類";
     const overdue = isOverdue(row);
+    const dueSoon = !overdue && isDueSoon(row);
+    const articlePadding = "p-3";
+    const titleClass = "mt-1 text-base font-black text-white leading-snug";
+    const listClass = "mt-2 space-y-1.5 text-xs text-purple-100/90";
+    const itemClass = "flex items-start gap-2 rounded-xl bg-white/5 px-2.5 py-1.5";
+    const deadlineToneClass = overdue
+      ? "text-red-300"
+      : dueSoon
+        ? "text-amber-200"
+        : "text-purple-100";
+    const deadlineBadge = overdue
+      ? `<span class="inline-flex rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-bold text-red-200">${escapeHtml(copy.overdue)}</span>`
+      : dueSoon
+        ? `<span class="inline-flex rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-200">${escapeHtml(copy.dueSoon)}</span>`
+        : "";
 
     return `
-      <article class="rounded-2xl border border-white/10 bg-black/25 p-4 shadow-xl shadow-cyan-950/10 backdrop-blur-sm hover:border-cyan-400/30 transition-colors">
+      <article class="rounded-2xl border border-white/10 bg-black/25 ${articlePadding} shadow-xl shadow-cyan-950/10 backdrop-blur-sm hover:border-cyan-400/30 transition-colors">
         <div class="flex items-start justify-between gap-3 mb-4">
           <div>
             <div class="text-xs font-bold tracking-[0.2em] text-cyan-300/75 uppercase">${escapeHtml(month)}</div>
-            <h3 class="mt-1 text-lg font-black text-white leading-snug">${escapeHtml(
-              row.item || copy.notFilled,
+            <h3 class="${titleClass}">${escapeHtml(
+              commissionNumber,
             )}</h3>
           </div>
           <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold ${statusStyles(
@@ -615,29 +756,24 @@ function toggleFaq(btn) {
           )}">${escapeHtml(statusLabel(row.status))}</span>
         </div>
 
-        <div class="rounded-2xl bg-white/5 px-4 py-3 text-sm text-purple-100/90">
-          <div class="text-[11px] uppercase tracking-[0.2em] text-purple-300/50 mb-2">${escapeHtml(copy.commissionLabel)}</div>
-          <div class="font-bold text-white">${escapeHtml(commissionNumber)}</div>
-        </div>
-
-        <ul class="mt-3 space-y-2 text-sm text-purple-100/90">
-          <li class="flex items-start gap-2 rounded-xl bg-white/5 px-3 py-2">
+        <ul class="${listClass}">
+          <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
             <span><span class="text-purple-300/60">${escapeHtml(copy.clientLabel)}：</span>${escapeHtml(row.client || copy.notFilled)}</span>
           </li>
-          <li class="flex items-start gap-2 rounded-xl bg-white/5 px-3 py-2">
+          <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
             <span><span class="text-purple-300/60">${escapeHtml(copy.itemLabel || "委託品項")}：</span>${escapeHtml(row.item || copy.notFilled)}</span>
           </li>
-          <li class="flex items-start gap-2 rounded-xl bg-white/5 px-3 py-2">
+          <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
-            <span><span class="text-purple-300/60">${escapeHtml(copy.deadlineLabel)}：</span><span class="${overdue ? "text-red-300" : "text-purple-100"}">${escapeHtml(deadline)}${overdue ? ` <span class="inline-flex rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-bold text-red-200">${escapeHtml(copy.overdue)}</span>` : ""}</span></span>
+            <span><span class="text-purple-300/60">${escapeHtml(copy.deadlineLabel)}：</span><span class="${deadlineToneClass}">${escapeHtml(deadline)}${deadlineBadge ? ` ${deadlineBadge}` : ""}</span></span>
           </li>
-          <li class="flex items-start gap-2 rounded-xl bg-white/5 px-3 py-2">
+          <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
             <span><span class="text-purple-300/60">${escapeHtml(copy.finishLabel)}：</span>${escapeHtml(finishDate)}</span>
           </li>
-          <li class="flex items-start gap-2 rounded-xl bg-white/5 px-3 py-2">
+          <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
             <span><span class="text-purple-300/60">${escapeHtml(copy.noteLabel)}：</span>${escapeHtml(row.note || copy.notFilled)}</span>
           </li>
@@ -659,14 +795,15 @@ function toggleFaq(btn) {
     const visibleRows = sortRows(filterRows(totalRows, scheduleState.filter));
     const paged = splitRows(visibleRows);
     const pendingCount = totalRows.filter(function (row) {
-      return safeText(row.status) !== "已完成";
+      return normalizeStatusKey(row.status) !== "done";
     }).length;
     const doneCount = totalRows.filter(function (row) {
-      return safeText(row.status) === "已完成";
+      return normalizeStatusKey(row.status) === "done";
     }).length;
 
     renderTabs(totalRows);
     renderPager(visibleRows);
+    writeViewStateToQuery();
 
     metaEl.textContent = scheduleState.updatedAt
       ? `${copy.updatedDate}${scheduleState.updatedAt}`
@@ -772,11 +909,11 @@ function toggleFaq(btn) {
       metaEl.textContent = `${copy.lastUpdated}-`;
       console.error("[schedule] load failed", error);
     }
-    }
   }
 
   function bindScheduleRefresh() {
     const refreshBtn = document.getElementById("scheduleRefreshBtn");
+
     if (refreshBtn) {
       refreshBtn.addEventListener("click", function () {
         loadSchedule(true);
@@ -795,6 +932,7 @@ function toggleFaq(btn) {
   }
 
   function initSchedulePage() {
+    readViewStateFromQuery();
     bindScheduleRefresh();
     loadSchedule(false);
   }

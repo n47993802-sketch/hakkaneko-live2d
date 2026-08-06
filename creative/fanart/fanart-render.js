@@ -1,36 +1,67 @@
-const FANART_API =
+const FANART_MANIFEST_API =
+  "https://data.jsdelivr.com/v1/package/gh/n47993802-sketch/Live2D-@main/flat";
+const FANART_GITHUB_API =
   "https://api.github.com/repos/n47993802-sketch/Live2D-/contents/fanart";
 const FANART_RAW =
-  "https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/fanart/";
+  "https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/fanart/";
 let fanartLoaded = false;
+
+function isImageName(name) {
+  return /\.(png|jpg|jpeg|gif|webp)$/i.test(name || "");
+}
+
+function normalizeFanartFromManifest(payload) {
+  if (!payload || !Array.isArray(payload.files)) return [];
+  return payload.files
+    .map((entry) => String(entry && entry.name ? entry.name : ""))
+    .filter((name) => name.indexOf("/fanart/") !== -1)
+    .map((name) => name.split("/").pop())
+    .filter((name) => !!name && isImageName(name))
+    .map((name) => ({ name }));
+}
+
+function normalizeFanartFromGithub(payload) {
+  if (!Array.isArray(payload)) return [];
+  return payload
+    .filter((entry) => entry && isImageName(entry.name))
+    .map((entry) => ({ name: entry.name }));
+}
+
+async function fetchFanartList() {
+  try {
+    const manifestRes = await fetch(FANART_MANIFEST_API, { cache: "default" });
+    if (manifestRes.ok) {
+      const manifestJson = await manifestRes.json();
+      const manifestFiles = normalizeFanartFromManifest(manifestJson);
+      if (manifestFiles.length) return manifestFiles;
+    }
+  } catch (e) {}
+
+  const ghRes = await fetch(FANART_GITHUB_API, { cache: "default" });
+  if (ghRes.status === 403 || ghRes.status === 429) {
+    const _d =
+      typeof currentLang !== "undefined" && I18N[currentLang]
+        ? I18N[currentLang]
+        : I18N["zh-TW"];
+    throw new Error(
+      (_d.github_rate || "GitHub API 速率限制，請稍後再試") +
+        " (Rate limit)",
+    );
+  }
+  if (!ghRes.ok) throw new Error("HTTP " + ghRes.status);
+
+  const ghJson = await ghRes.json();
+  const ghFiles = normalizeFanartFromGithub(ghJson);
+  if (!ghFiles.length) throw new Error("資料夾內沒有圖片");
+  return ghFiles;
+}
 
 async function loadFanart() {
   if (fanartLoaded) return;
   const grid = document.getElementById("fanartGrid");
   if (!grid) return;
   try {
-    const res = await fetch(FANART_API, { cache: "default" });
-    if (res.status === 403 || res.status === 429) {
-      {
-        const _d =
-          typeof currentLang !== "undefined" && I18N[currentLang]
-            ? I18N[currentLang]
-            : I18N["zh-TW"];
-        throw new Error(
-          (_d.github_rate || "GitHub API 速率限制，請稍後再試") +
-            " (Rate limit)",
-        );
-      }
-    }
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const files = await res.json();
-
-    if (!Array.isArray(files)) {
-      throw new Error(files.message || "回應格式錯誤");
-    }
-    const imgs = files.filter((f) =>
-      /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name),
-    );
+    const imgs = await fetchFanartList();
     if (!imgs.length) throw new Error("資料夾內沒有圖片");
     fanartLoaded = true;
 

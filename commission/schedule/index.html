@@ -42,7 +42,7 @@
     />
     <meta
       property="og:image"
-      content="https://n47993802-sketch.github.io/Live2D-/Happy2024.png"
+      content="https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/Happy2024.png"
     />
     <meta property="og:image:width" content="965" />
     <meta property="og:image:height" content="1305" />
@@ -56,7 +56,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://n47993802-sketch.github.io/Live2D-/Happy2024.png"
+      content="https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/Happy2024.png"
     />
     <meta name="twitter:site" content="@HakkaNekoLive2D" />
     <title id="pageTitle">排程卡片 · 阿卡貓 HakkaNeko</title>
@@ -175,7 +175,7 @@
           class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"
         ></nav>
 
-        <script src="../../site-config.js?v=20260805d"></script>
+        <script src="../../site-config.js?v=20260807c"></script>
         <script src="../../nav-config.js?v=20260805d"></script>
         <script src="../../nav-render.js?v=20260805d"></script>
       </div>
@@ -268,16 +268,14 @@
                 <i class="fa-solid fa-layer-group text-cyan-300"></i>
                 <h2 class="text-2xl font-bold text-white">排程卡片</h2>
               </div>
-              <p class="text-sm text-purple-200/80 leading-relaxed max-w-3xl">
-                這裡會直接讀取公開 CSV，將每筆委託整理成卡片，並可切換全部、未完成、已完成三個分頁，依截止日期排序查看。
-              </p>
             </div>
             <div id="scheduleMeta" class="text-xs text-purple-300/60 md:text-right leading-relaxed">
               讀取中...
             </div>
           </div>
 
-          <div class="flex justify-end mb-4">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <div id="scheduleTabs" class="flex flex-wrap gap-2"></div>
             <button
               type="button"
               id="scheduleRefreshBtn"
@@ -287,8 +285,6 @@
               重新整理
             </button>
           </div>
-
-          <div id="scheduleTabs" class="mb-4 flex flex-wrap gap-2"></div>
 
           <div id="scheduleStatus" class="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-purple-200/80">
             正在載入排程資料...
@@ -393,6 +389,6 @@
     <script src="../../locales/ja.js?v=20260806a"></script>
     <script src="../../effects/meteor-bg.js?v=20260806a"></script>
     <script src="../../common.js?v=20260806a"></script>
-    <script src="../rules/rules-render.js?v=20260806a"></script>
+    <script src="../rules/rules-render.js?v=20260807b"></script>
   </body>
 </html>

@@ -107,7 +107,7 @@
     return function (o) {
       return {
         src: BASE + "/portfolio/" + folder + "/" + o.file + ".webm",
-        poster: BASE + "/portfolio/" + folder + "/" + o.file + ".webp",
+        poster: "",
         label: o.label,
         sub: o.sub,
         tags: o.tags,

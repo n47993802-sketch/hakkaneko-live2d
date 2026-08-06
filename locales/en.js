@@ -551,7 +551,7 @@
     demo_status_waiting: "Waiting to load",
     demo_input_hint_title: 'Click "Load Model" to start interacting',
     demo_input_hint_desc:
-      "The character's gaze will follow your mouse automatically.",
+      "Hold the left mouse button and drag to make the character's gaze follow.",
     demo_interact_mouse: "Move mouse<br>Gaze follows",
     demo_interact_head: "Click head<br>Trigger expression",
     demo_interact_body: "Click body<br>Trigger motion",

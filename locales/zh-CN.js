@@ -522,7 +522,7 @@
     demo_copyright_l2: "禁止未经授权截取、复制、盗用或假冒为自制作品。",
     demo_status_waiting: "等待载入",
     demo_input_hint_title: "点击「载入模型」开始互动",
-    demo_input_hint_desc: "滑鼠移动后角色将自动追踪视线",
+    demo_input_hint_desc: "按住左键拖曳，角色视线将跟随鼠标移动",
     demo_interact_mouse: "滑鼠移动<br>视线跟随",
     demo_interact_head: "点击头部<br>触发表情",
     demo_interact_body: "点击身体<br>触发动作",

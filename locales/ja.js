@@ -552,7 +552,7 @@
     demo_input_hint_title:
       "「モデルを読み込む」をクリックしてインタラクションを開始",
     demo_input_hint_desc:
-      "マウスを動かすとキャラクターの視線が自動で追従します",
+      "左クリックを押しながらドラッグすると、視線がマウスに追従します",
     demo_interact_mouse: "マウス移動<br>視線が追従",
     demo_interact_head: "頭をクリック<br>表情が変化",
     demo_interact_body: "体をクリック<br>モーション発生",

@@ -85,7 +85,7 @@ window.NAV_CONFIG = [
         color: "text-blue-400",
         label: "nav_live2d_demo",
         text: "模型展示",
-        enabled: true,
+        enabled: false,
       },
       {
         id: "portfolio",

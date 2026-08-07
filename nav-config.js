@@ -15,7 +15,6 @@ window.NAV_CONFIG = [
     text: "合作繪師",
     enabled: true,
   },
-
   {
     id: "comm",
     dropdown: true,
@@ -60,7 +59,6 @@ window.NAV_CONFIG = [
         text: "動畫設計",
         enabled: true,
       },
-
       {
         id: "template",
         href: "commission/template/",
@@ -72,7 +70,6 @@ window.NAV_CONFIG = [
       },
     ],
   },
-
   {
     id: "creative",
     dropdown: true,
@@ -88,7 +85,7 @@ window.NAV_CONFIG = [
         color: "text-blue-400",
         label: "nav_live2d_demo",
         text: "模型展示",
-        enabled: false,
+        enabled: true,
       },
       {
         id: "portfolio",

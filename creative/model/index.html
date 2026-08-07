@@ -1,522 +1,966 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
-<head>
+  <head>
     <script>
-    // 同一瀏覽階段（sessionStorage）內非第一次進站：
-    // 在畫面繪製前就先標記 html，讓 common.css 直接隱藏 Loader，避免閃爍。
-    // 必須放在 <head> 最上方、任何 CSS 載入之前執行。
-    (function(){
+      (function () {
         try {
-            if (sessionStorage.getItem('hakka_visited') === '1') {
-                document.documentElement.classList.add('hakka-skip-loader');
-            }
-        } catch(e) {}
-    })();
+          if (sessionStorage.getItem("hakka_visited") === "1") {
+            document.documentElement.classList.add("hakka-skip-loader");
+          }
+        } catch (e) {}
+      })();
     </script>
-        <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/gif" href="../../images/common/hakkaneko-pixel.gif">
-    <meta name="description" content="即時角色互動 Live2D 模型展示（開發中）。">
-    <meta name="keywords" content="Live2D, VTuber, 建模, 委託, 阿卡貓, HakkaNeko, 動畫設計, 模型製作">
-    <meta name="author" content="阿卡貓 HakkaNeko">
-    <meta name="theme-color" content="#a855f7">
-    <meta name="robots" content="noindex, follow">
-    <link rel="canonical" href="https://hakkanekolive2d.cc/creative/model/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="阿卡貓 HakkaNeko">
-    <meta property="og:url" content="https://hakkanekolive2d.cc/creative/model/">
-    <meta property="og:title" content="模型展示 · 阿卡貓 HakkaNeko">
-    <meta property="og:description" content="即時角色互動 Live2D 模型展示（開發中）。">
-    <meta property="og:image" content="https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/Happy2024.png">
-    <meta property="og:image:width" content="965">
-    <meta property="og:image:height" content="1305">
-    <meta property="og:image:alt" content="阿卡貓 HakkaNeko 吉祥物插畫">
-    <meta property="og:locale" content="zh_TW">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="模型展示 · 阿卡貓 HakkaNeko">
-    <meta name="twitter:description" content="即時角色互動 Live2D 模型展示（開發中）。">
-    <meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/Happy2024.png">
-    <meta name="twitter:site" content="@HakkaNekoLive2D">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/gif"
+      href="../../images/common/hakkaneko-pixel.gif"
+    />
+    <meta
+      name="description"
+      content="即時角色互動 Live2D 模型展示（開發中）。"
+    />
+    <meta
+      name="keywords"
+      content="Live2D, VTuber, 建模, 委託, 阿卡貓, HakkaNeko, 動畫設計, 模型製作"
+    />
+    <meta name="author" content="阿卡貓 HakkaNeko" />
+    <meta name="theme-color" content="#a855f7" />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://hakkanekolive2d.cc/creative/model/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="阿卡貓 HakkaNeko" />
+    <meta
+      property="og:url"
+      content="https://hakkanekolive2d.cc/creative/model/"
+    />
+    <meta property="og:title" content="模型展示 · 阿卡貓 HakkaNeko" />
+    <meta
+      property="og:description"
+      content="即時角色互動 Live2D 模型展示（開發中）。"
+    />
+    <meta
+      property="og:image"
+      content="https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/Happy2024.png"
+    />
+    <meta property="og:image:width" content="965" />
+    <meta property="og:image:height" content="1305" />
+    <meta property="og:image:alt" content="阿卡貓 HakkaNeko 吉祥物插畫" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="模型展示 · 阿卡貓 HakkaNeko" />
+    <meta
+      name="twitter:description"
+      content="即時角色互動 Live2D 模型展示（開發中）。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/Happy2024.png"
+    />
+    <meta name="twitter:site" content="@HakkaNekoLive2D" />
     <title id="pageTitle">模型展示 · 阿卡貓 HakkaNeko</title>
 
     <script>
-    // Google Sites iframe 相容性偵測
-    (function() {
+      (function () {
         try {
-            const inIframe = window.self !== window.top;
-            if (inIframe) {
-                document.documentElement.classList.add('in-iframe');
-            }
-        } catch(e) {
-            document.documentElement.classList.add('in-iframe');
+          const inIframe = window.self !== window.top;
+          if (inIframe) {
+            document.documentElement.classList.add("in-iframe");
+          }
+        } catch (e) {
+          document.documentElement.classList.add("in-iframe");
         }
-    })();
+      })();
     </script>
-    <link rel="stylesheet" href="../../tailwind.min.css?v=20260805e">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-        <!-- DNS prefetch for external resources -->
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="//pbs.twimg.com">
-    <link rel="dns-prefetch" href="//static-cdn.jtvnw.net">
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="../../common.css?v=20260805e">
-</head>
-<body class="antialiased min-h-screen pb-12 loading">
-    <script>window.SITE_BASE = '../../';</script>
+    <link rel="stylesheet" href="../../tailwind.min.css?v=20260805e" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
+    />
+
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="//pbs.twimg.com" />
+    <link rel="dns-prefetch" href="//static-cdn.jtvnw.net" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="../../common.css?v=20260805e" />
+  </head>
+  <body class="antialiased min-h-screen pb-12 loading">
     <script>
-    // 提早套用日夜模式，避免「切換分頁時先閃一下深色、才變回淺色」的問題。
-    // 原本這段邏輯放在 common.js 裡，但 common.js 要等到 <body> 最底部
-    // 才會執行，使用者會先看到預設的深色畫面，過一瞬間才變成淺色。
-    // 這裡搬到 <body> 最開頭、任何畫面內容之前同步執行，
-    // 就能在瀏覽器第一次繪製前就決定好主題，不會有閃爍。
-    // （common.js 裡仍保留同一段邏輯作為備援，兩邊重複執行是安全的。）
-    (function(){
-        try {
-            var saved = localStorage.getItem('hakka_theme');
-            var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-            if (saved === 'light' || (saved === null && prefersLight)) {
-                document.body.classList.add('light-mode');
-            }
-        } catch(e) {}
-    })();
+      window.SITE_BASE = "../../";
     </script>
-    <!-- ── RPG Loader ── -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("hakka_theme");
+          var prefersLight = window.matchMedia(
+            "(prefers-color-scheme: light)",
+          ).matches;
+          if (saved === "light" || (saved === null && prefersLight)) {
+            document.body.classList.add("light-mode");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <div id="rpgLoader">
-        <img id="rpgCatImg" src="../../images/common/hakkaneko-pixel.gif" alt="HakkaNeko" style="width:64px;height:64px;image-rendering:pixelated;image-rendering:crisp-edges;">
-        <div class="rpg-title">HakkaNeko · Live2D</div>
-        <div class="rpg-bar-wrap">
-            <div class="rpg-bar-fill" id="rpgBarFill"></div>
-            <div class="rpg-bar-glow"></div>
-        </div>
-        <div class="rpg-status" id="rpgStatus">LOADING</div>
-        <div class="rpg-dots">
-            <div class="rpg-dot"></div>
-            <div class="rpg-dot"></div>
-            <div class="rpg-dot"></div>
-        </div>
+      <img
+        id="rpgCatImg"
+        src="../../images/common/hakkaneko-pixel.gif"
+        alt="HakkaNeko"
+        style="
+          width: 64px;
+          height: 64px;
+          image-rendering: pixelated;
+          image-rendering: crisp-edges;
+        "
+      />
+      <div class="rpg-title">HakkaNeko · Live2D</div>
+      <div class="rpg-bar-wrap">
+        <div class="rpg-bar-fill" id="rpgBarFill"></div>
+        <div class="rpg-bar-glow"></div>
+      </div>
+      <div class="rpg-status" id="rpgStatus">LOADING</div>
+      <div class="rpg-dots">
+        <div class="rpg-dot"></div>
+        <div class="rpg-dot"></div>
+        <div class="rpg-dot"></div>
+      </div>
     </div>
 
-
-<canvas id="meteor-canvas"></canvas>
+    <canvas id="meteor-canvas"></canvas>
 
     <header class="pt-16 pb-8 text-center relative z-10">
-        <div class="max-w-5xl mx-auto px-4">
-            <h1 class="text-4xl md:text-5xl font-black mb-3 tracking-tight v2-title">
-                <img src="../../images/common/hakkaneko-pixel.gif" alt="阿卡貓" style="width:1em;height:1em;vertical-align:-0.15em;image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;" class="mr-2">
-                <span class="text-gradient" data-i18n="name_brand">阿卡貓</span><span data-i18n="header_title"> 的 Live2D 委託</span>
-            </h1>
-            <p class="text-base md:text-lg text-purple-300/70 font-medium tracking-widest mb-5" data-i18n="header_sub">
-                透明專業流程 <span class="deco-star">✦</span> 夢想角色躍然而生
-            </p>
+      <div class="max-w-5xl mx-auto px-4">
+        <h1
+          class="text-4xl md:text-5xl font-black mb-3 tracking-tight v2-title"
+        >
+          <img
+            src="../../images/common/hakkaneko-pixel.gif"
+            alt="阿卡貓"
+            style="
+              width: 1em;
+              height: 1em;
+              vertical-align: -0.15em;
+              image-rendering: pixelated;
+              image-rendering: crisp-edges;
+              display: inline-block;
+            "
+            class="mr-2"
+          />
+          <span class="text-gradient" data-i18n="name_brand">阿卡貓</span
+          ><span data-i18n="header_title"> 的 Live2D 委託</span>
+        </h1>
+        <p
+          class="text-base md:text-lg text-purple-300/70 font-medium tracking-widest mb-5"
+          data-i18n="header_sub"
+        >
+          透明專業流程 <span class="deco-star">✦</span> 夢想角色躍然而生
+        </p>
 
-            <nav id="mainNav" class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"></nav>
-            <!-- 導覽列設定＋渲染：緊跟在 <nav> 容器後面、同步載入，
-                 讓按鈕在畫面第一次繪製前就已經填好，避免空白容器閃爍 -->
-            <script src="../../site-config.js?v=20260807c"></script>
-            <script src="../../nav-config.js?v=20260805e"></script>
-            <script src="../../nav-render.js?v=20260805e"></script>
-        </div>
+        <nav
+          id="mainNav"
+          class="inline-flex bg-[#130a2a]/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-purple-900/20 flex-wrap justify-center gap-1 relative z-50"
+        ></nav>
+
+        <script src="../../site-config.js?v=20260807c"></script>
+        <script src="../../nav-config.js?v=20260805e"></script>
+        <script src="../../nav-render.js?v=20260805e"></script>
+      </div>
     </header>
 
-        <!-- 固定右上角：日夜模式 -->
-    <button onclick="toggleTheme()" id="themeFixedBtn"
-        class="fixed top-4 right-[6.5rem] z-[999] w-10 h-10 rounded-full glass-panel no-reveal flex items-center justify-center shadow-lg hover:scale-110 transition-transform border border-white/10"
-        title="切換白天/夜晚模式">
-        <i id="themeIcon" class="fa-solid fa-sun text-yellow-400 text-sm"></i>
+    <button
+      onclick="toggleTheme()"
+      id="themeFixedBtn"
+      class="fixed top-4 right-[6.5rem] z-[999] w-10 h-10 rounded-full glass-panel no-reveal flex items-center justify-center shadow-lg hover:scale-110 transition-transform border border-white/10"
+      title="切換白天/夜晚模式"
+    >
+      <i id="themeIcon" class="fa-solid fa-sun text-yellow-400 text-sm"></i>
     </button>
 
-    <!-- 固定右上角：語言切換 -->
-    <div class="fixed top-4 right-4 z-[999]" id="langSwitcherWrap"><button onclick="toggleLangMenu()" id="langBtn"
-            class="h-9 px-2.5 rounded-full glass-panel no-reveal flex items-center gap-1.5 shadow-lg hover:scale-105 transition-transform border border-white/10 text-purple-300 text-xs font-bold"
-            title="切換語言 / Language">
-            <span id="langFlag" class="text-base leading-none"></span>
-            <span id="langCode" class="text-[0.65rem] font-bold tracking-wide opacity-80">TW</span>
+    <div class="fixed top-4 right-4 z-[999]" id="langSwitcherWrap">
+      <button
+        onclick="toggleLangMenu()"
+        id="langBtn"
+        class="h-9 px-2.5 rounded-full glass-panel no-reveal flex items-center gap-1.5 shadow-lg hover:scale-105 transition-transform border border-white/10 text-purple-300 text-xs font-bold"
+        title="切換語言 / Language"
+      >
+        <span id="langFlag" class="text-base leading-none"></span>
+        <span
+          id="langCode"
+          class="text-[0.65rem] font-bold tracking-wide opacity-80"
+          >TW</span
+        >
+      </button>
+      <div
+        id="langMenu"
+        class="hidden absolute top-12 glass-panel no-reveal rounded-2xl p-2 shadow-2xl border border-purple-500/30"
+        style="
+          background: #120824;
+          right: auto;
+          left: 50%;
+          transform: translateX(-50%);
+          min-width: 160px;
+          white-space: nowrap;
+        "
+      >
+        <button
+          onclick="setLang('zh-TW')"
+          class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap"
+        >
+          <span class="text-base"
+            ><span class="fi fi-tw" aria-hidden="true"></span
+          ></span>
+          <span class="flex-1">繁體中文</span>
+          <span class="text-[0.6rem] opacity-50 font-mono">TW</span>
         </button>
-        <div id="langMenu" class="hidden absolute top-12 glass-panel no-reveal rounded-2xl p-2 shadow-2xl border border-purple-500/30" style="background:#120824; right:auto; left:50%; transform:translateX(-50%); min-width:160px; white-space:nowrap;">
-            <button onclick="setLang('zh-TW')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
-                <span class="text-base"><span class="fi fi-tw" aria-hidden="true"></span></span>
-                <span class="flex-1">繁體中文</span>
-                <span class="text-[0.6rem] opacity-50 font-mono">TW</span>
-            </button>
-            <button onclick="setLang('zh-CN')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
-                <span class="text-base"><span class="fi fi-cn" aria-hidden="true"></span></span>
-                <span class="flex-1">简体中文</span>
-                <span class="text-[0.6rem] opacity-50 font-mono">CN</span>
-            </button>
-            <button onclick="setLang('en')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
-                <span class="text-base"><span class="fi fi-us" aria-hidden="true"></span></span>
-                <span class="flex-1">English</span>
-                <span class="text-[0.6rem] opacity-50 font-mono">EN</span>
-            </button>
-            <button onclick="setLang('ja')" class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap">
-                <span class="text-base"><span class="fi fi-jp" aria-hidden="true"></span></span>
-                <span class="flex-1">日本語</span>
-                <span class="text-[0.6rem] opacity-50 font-mono">JP</span>
-            </button>
-        </div>
+        <button
+          onclick="setLang('zh-CN')"
+          class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap"
+        >
+          <span class="text-base"
+            ><span class="fi fi-cn" aria-hidden="true"></span
+          ></span>
+          <span class="flex-1">简体中文</span>
+          <span class="text-[0.6rem] opacity-50 font-mono">CN</span>
+        </button>
+        <button
+          onclick="setLang('en')"
+          class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap"
+        >
+          <span class="text-base"
+            ><span class="fi fi-us" aria-hidden="true"></span
+          ></span>
+          <span class="flex-1">English</span>
+          <span class="text-[0.6rem] opacity-50 font-mono">EN</span>
+        </button>
+        <button
+          onclick="setLang('ja')"
+          class="lang-opt w-full text-left px-3 py-2 rounded-xl text-xs text-purple-200 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors font-bold whitespace-nowrap"
+        >
+          <span class="text-base"
+            ><span class="fi fi-jp" aria-hidden="true"></span
+          ></span>
+          <span class="flex-1">日本語</span>
+          <span class="text-[0.6rem] opacity-50 font-mono">JP</span>
+        </button>
+      </div>
     </div>
 
     <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div id="page-model" class="page-content block max-w-5xl mx-auto px-4 pb-16">
-
-        <!-- 測試中橫幅 -->
-        <div class="glass-panel p-5 mb-6 border-yellow-400/30 bg-yellow-400/8 flex items-center gap-4">
-            <div class="text-3xl animate-bounce"><span class="material-symbols-outlined" aria-hidden="true">experiment</span></div>
-            <div>
-                <h3 class="font-bold text-yellow-300 mb-1">此頁面測試中 · Testing</h3>
-                <p class="text-xs text-purple-200/70" data-i18n="demo_placeholder_note">目前正在測試 Live2D 角色互動功能，部分細節可能還會調整，感謝您的耐心體驗！</p>
-            </div>
-        </div>
-
-        <!-- 模型資訊卡 -->
-        <div class="glass-panel p-5 mb-6 border-purple-500/20">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-lg shrink-0"><i class="fa-solid fa-pen-nib"></i></div>
-                    <div><div class="text-xs text-purple-300/60 mb-0.5" data-i18n="demo_artist_label">原畫繪師</div><div class="font-bold text-white text-sm" data-i18n="demo_artist_pending">詢問中 / 待公開</div></div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-lg shrink-0"><i class="fa-solid fa-cube"></i></div>
-                    <div><div class="text-xs text-purple-300/60 mb-0.5" data-i18n="intro_role_short">Live2D 建模師</div><div class="font-bold text-white text-sm" data-i18n="name_short">阿卡貓 HakkaNeko</div></div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-lg shrink-0"><i class="fa-solid fa-lightbulb"></i></div>
-                    <div><div class="text-xs text-purple-300/60 mb-0.5" data-i18n="demo_purpose_label">展示用途</div><div class="font-bold text-white text-sm" data-i18n="demo_purpose_value">作品集參考 · 互動展示</div></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 版權警告 -->
-        <div class="glass-panel p-4 mb-6 border-red-500/25 bg-red-500/5 flex items-start gap-3">
-            <i class="fa-solid fa-shield-halved text-red-400 text-xl mt-0.5 shrink-0"></i>
-            <div>
-                <div class="font-bold text-red-300 text-sm mb-1">著作權聲明 · 請勿竊取</div>
-                <p class="text-xs text-purple-200/70 leading-relaxed">
-                    <span data-i18n="demo_copyright_l1">本展示模型之角色設計、Live2D 工程檔及所有相關美術資產均受著作權法保護。</span>
-                    <span data-i18n="demo_copyright_l2">禁止未經授權截取、複製、盜用或假冒為自製作品。</span>
-                    <strong class="text-red-300" data-i18n="demo_copyright_l3">發現侵權行為將依法追究，情節嚴重者保留提出民事及刑事訴訟之權利。</strong>
-                </p>
-            </div>
-        </div>
-
-        <!-- v66 新增：兩段頁面專屬樣式——
-             1) #characterViewPanel:hover：角色視窗所在的卡片沿用全站
-                glass-panel 的 hover 飄浮位移效果，但滑鼠移到角色視窗上
-                互動時不應該有卡片跟著浮起來的感覺，這裡用 !important
-                把「這一張卡片」的 hover transform 單獨關掉，不影響其他
-                頁面/其他卡片原本的 hover 效果。
-             2) #modelShowcaseGrid:fullscreen：「放大檢視」全螢幕時，
-                讓左側角色視窗＋右側控制面板這整塊區域填滿螢幕、置中，
-                並補上背景色（全螢幕模式下瀏覽器預設背景是黑色，這裡
-                改用跟頁面一致的深紫色系，視覺上比較不突兀）。 -->
-        <style>
-            #characterViewPanel:hover {
-                transform: none !important;
-            }
-            #modelShowcaseGrid:fullscreen,
-            #modelShowcaseGrid:-webkit-full-screen {
-                width: 100vw;
-                height: 100vh;
-                max-width: none;
-                padding: 24px;
-                overflow-y: auto;
-                background: #0f052a;
-                align-content: center;
-            }
-            #modelShowcaseGrid:fullscreen #live2dWrapper,
-            #modelShowcaseGrid:-webkit-full-screen #live2dWrapper {
-                height: min(70vh, 640px);
-            }
-            /* 新增：使用類別切換放大檢視（model-enlarged），讓左側模型視窗變大
-               並同時顯示右側控制面板（適用於嵌入或 iframe 場景）。*/
-            body.model-enlarged #modelShowcaseGrid {
-                position: fixed;
-                inset: 0;
-                z-index: 9999;
-                width: 100vw;
-                height: 100vh;
-                padding: 24px;
-                overflow-y: auto;
-                background: #0f052a;
-                display: grid;
-                grid-template-columns: minmax(420px, 1fr) 360px;
-                gap: 24px;
-                align-items: start;
-            }
-            /* 放大檢視只有兩欄，左側面板原本套用的 Tailwind
-               lg:col-span-2（在 3 欄版面裡佔 2/3 寬）在這裡若不覆寫，
-               會直接變成「跨滿兩欄」，把右側控制面板整個擠到下一行、
-               超出畫面外——這正是「放大檢視跟右側面板沒有並排」的
-               根本原因，這裡明確把左右兩欄各自釘在第 1、2 欄。 */
-            body.model-enlarged #modelShowcaseGrid > .lg\:col-span-2 {
-                grid-column: 1 / 2;
-            }
-            body.model-enlarged #modelShowcaseGrid > .space-y-4 {
-                grid-column: 2 / 3;
-                max-height: calc(100vh - 48px);
-                overflow-y: auto;
-            }
-            body.model-enlarged #modelShowcaseGrid #live2dWrapper {
-                height: min(78vh, 820px) !important;
-            }
-        </style>
-        <!-- v66：加上 id="modelShowcaseGrid"，讓「放大檢視」全螢幕的對象
-             是左側角色視窗＋右側控制面板整個區塊，而不是只有角色視窗 -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="modelShowcaseGrid">
-
-            <!-- 左側：模型展示區 -->
-            <div class="lg:col-span-2">
-                <!-- v66：加上 id="characterViewPanel"，用來把滑鼠移入時的
-                     卡片飄浮（hover 位移）效果單獨關閉，見下方 <style> -->
-                <div class="glass-panel p-4 h-full" id="characterViewPanel">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-bold text-purple-300 flex items-center gap-2">
-                            <i class="fa-solid fa-eye text-pink-400"></i> 角色視窗
-                        </span>
-                        <div class="flex items-center gap-2">
-                            <!-- v64 更新：重置視角，還原中鍵拖曳位移與滾輪縮放 -->
-                            <button onclick="resetView()" title="重置視角（還原位置/縮放）"
-                                class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1">
-                                <i class="fa-solid fa-arrows-rotate"></i> 重置視角
-                            </button>
-                            <!-- v65 新增：放大檢視，切換全螢幕方便近距離觀察模型 -->
-                            <button id="enlargeViewBtn" onclick="toggleEnlargeView()" title="放大檢視（全螢幕）"
-                                class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1">
-                                <i class="fa-solid fa-expand" id="enlargeViewIcon"></i> <span id="enlargeViewLabel">放大檢視</span>
-                            </button>
-                            <span id="demoStatusBadge" class="text-xs bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full" data-i18n="demo_status_waiting">等待載入</span>
-                        </div>
-                    </div>
-
-                    <!-- Canvas 區域 -->
-                    <!-- v63：cursor 改成 grab（左鍵拖曳位移用），JS 裡拖曳中會再動態切成 grabbing -->
-                    <div id="live2dWrapper" class="relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#0f052a] to-[#06030f] border border-white/10"
-                         style="height: 420px; cursor: grab;">
-                        <!-- 示意佔位圖 -->
-                        <div id="live2dPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-purple-300/40">
-                            <i class="fa-solid fa-person-rays text-7xl"></i>
-                            <p class="text-sm font-bold" data-i18n="demo_input_hint_title">點擊「載入模型」開始互動</p>
-                            <p class="text-xs" data-i18n="demo_input_hint_desc">按住左鍵拖曳，角色視線將跟隨滑鼠移動</p>
-                        </div>
-                        <canvas id="live2dCanvas" class="w-full h-full" style="display:none;"></canvas>
-                    </div>
-
-                    <!-- 操作提示 -->
-                    <!-- v65 更新：滑鼠控制方式全面改版——
-                         左鍵＝頭部/身體 X·Y 軸（視線跟隨）、右鍵＝Z 軸（歪頭）、
-                         中鍵＝移動位置、滾輪＝縮放；移除了舊版「滑鼠移動視線跟隨」
-                         「點擊頭部觸發表情」「點擊身體觸發動作」三項提示。 -->
-                    <div class="mt-3 grid grid-cols-3 gap-2 text-center">
-                        <div class="bg-black/20 rounded-xl p-2">
-                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">sync</span></div>
-                            <div class="text-xs text-purple-300/70">按住左鍵拖曳<br>【X、Y軸跟隨】</div>
-                        </div>
-                        <div class="bg-black/20 rounded-xl p-2">
-                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">screen_rotation</span></div>
-                            <div class="text-xs text-purple-300/70">按住右鍵拖曳<br>【Z軸跟隨】</div>
-                        </div>
-                        <div class="bg-black/20 rounded-xl p-2">
-                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">drag_pan</span></div>
-                            <div class="text-xs text-purple-300/70">按住中鍵拖曳<br>移動位置</div>
-                        </div>
-                        <div class="bg-black/20 rounded-xl p-2">
-                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">zoom_in</span></div>
-                            <div class="text-xs text-purple-300/70">滑鼠滾輪<br>縮放大小</div>
-                        </div>
-                        <div class="bg-black/20 rounded-xl p-2">
-                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">fullscreen</span></div>
-                            <div class="text-xs text-purple-300/70">放大檢視鈕<br>全螢幕觀看</div>
-                        </div>
-                        <div class="bg-black/20 rounded-xl p-2">
-                            <div class="text-lg mb-0.5"><span class="material-symbols-outlined" aria-hidden="true">bolt</span></div>
-                            <div class="text-xs text-purple-300/70">右側面板按鈕<br>手動觸發動畫</div>
-                        </div>
-                        <!-- v66 新增：手機模式雙指 Z 軸控制提示 -->
-                        <!-- 手機雙指提示已移除（說明簡化） -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- 右側：控制面板 -->
-            <div class="space-y-4">
-
-                <!-- 載入模型 -->
-                <div class="glass-panel p-5">
-                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-cat text-pink-400"></i> 展示模型
-                    </h3>
-                    <div class="bg-black/30 rounded-xl px-3 py-2.5 text-xs text-purple-300/70 border border-white/10 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-lock text-purple-400 text-xs"></i>
-                        <span data-i18n="port_demo_label">阿卡貓 HakkaNekoQQ 模型（測試中）</span>
-                    </div>
-                    <button onclick="loadLive2DModel()" class="w-full py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-rotate"></i> 載入模型
-                    </button>
-                </div>
-
-                <!-- 動畫觸發：v66 起只保留「待機」「揮手」，點下後觸發一次性動作 -->
-                <div class="glass-panel p-5">
-                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-yellow-400"></i> 觸發動畫
-                    </h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="triggerMotion('Idle')" class="py-2 px-3 rounded-lg text-xs font-bold bg-purple-600/30 hover:bg-purple-600/60 text-purple-200 border border-purple-500/30 transition-all"><span class="material-symbols-outlined" aria-hidden="true">bedtime</span> 待機</button>
-                        <button onclick="triggerMotion('TapBody')" class="py-2 px-3 rounded-lg text-xs font-bold bg-pink-600/30 hover:bg-pink-600/60 text-pink-200 border border-pink-500/30 transition-all"><span class="material-symbols-outlined" aria-hidden="true">waving_hand</span> 揮手</button>
-                    </div>
-                </div>
-
-                <!-- v66 新增：表情參數——開心／驚訝改成 0~1 連續滑桿，
-                     取代原本「點一下觸發一次動作」的按鈕，可以持續調整表情強度。 -->
-                <div class="glass-panel p-5">
-                    <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-face-smile text-pink-400"></i> 表情參數
-                    </h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-xs text-purple-300 mb-1.5">
-                                <span>開心</span><span id="expressionHappyVal" class="text-white font-bold">0%</span>
-                            </div>
-                            <input type="range" id="expressionHappy" min="0" max="100" value="0"
-                                oninput="updateParam('expressionHappy', this.value)"
-                                class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-blue-500 cursor-pointer">
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs text-purple-300 mb-1.5">
-                                <span>驚訝</span><span id="expressionSurprisedVal" class="text-white font-bold">0%</span>
-                            </div>
-                            <input type="range" id="expressionSurprised" min="0" max="100" value="0"
-                                oninput="updateParam('expressionSurprised', this.value)"
-                                class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-indigo-500 cursor-pointer">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 參數控制：v66 起移除「呼吸速度」「物理強度」兩個滑桿，
-                     只保留下方的整組開關（物理演算／呼吸自動等） -->
-                <div class="glass-panel p-5">
-                    <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-emerald-400"></i> 即時參數
-                    </h3>
-
-                    <!-- 開關 -->
-                    <div class="mt-4 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs text-purple-300" data-i18n="demo_blink_auto">眨眼自動</span>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" id="autoBlink" checked onchange="toggleSwitch('blink', this.checked)" class="sr-only peer">
-                                <div class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"></div>
-                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
-                            </label>
-                        </div>
-                        <!-- v63 新增：自動呼吸開關 -->
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs text-purple-300">呼吸自動</span>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" id="autoBreath" checked onchange="toggleSwitch('breathAuto', this.checked)" class="sr-only peer">
-                                <div class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"></div>
-                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
-                            </label>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs text-purple-300">物理演算</span>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" id="physicsOn" checked onchange="toggleSwitch('physics', this.checked)" class="sr-only peer">
-                                <div class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"></div>
-                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
-                            </label>
-                        </div>
-                        <!-- 已移除：頭部控制 / 身體控制 開關（改為固定套用） -->
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- 注意事項 -->
-        <div class="glass-panel p-5 mt-6 border-purple-400/20 bg-purple-400/5">
-            <h3 class="text-sm font-bold text-purple-300 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-circle-exclamation"></i> 展示說明
+      <div
+        id="page-model"
+        class="page-content block max-w-5xl mx-auto px-4 pb-16"
+      >
+        <div
+          class="glass-panel p-5 mb-6 border-yellow-400/30 bg-yellow-400/8 flex items-center gap-4"
+        >
+          <div class="text-3xl animate-bounce">
+            <span class="material-symbols-outlined" aria-hidden="true"
+              >experiment</span
+            >
+          </div>
+          <div>
+            <h3 class="font-bold text-yellow-300 mb-1">
+              此頁面測試中 · Testing
             </h3>
-            <ul class="text-xs text-purple-200/70 space-y-1.5 leading-relaxed list-none">
-                <li><i class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"></i><span data-i18n="port_demo_note">本模型為阿卡貓作品集展示用途，僅供參考，不作任何商業販售。</span></li>
-                <li><i class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"></i>所有互動功能（視線追蹤、動畫觸發）均由本站提供，角色資料由建模師本人管理。</li>
-                <li><i class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"></i>若您也有意委託製作同等品質的 Live2D 模型，歡迎至 V皮設計 分頁試算報價。</li>
-                <li><i class="fa-solid fa-circle text-red-400/60 text-[6px] mr-2"></i>嚴禁截圖、錄影後冒用為他人作品或商業使用，違者將依著作權法追究。</li>
-            </ul> </div>
-    </div>
-
-    <footer class="relative z-10 mt-16 border-t border-white/5 bg-black/20 backdrop-blur-sm">
-        <div class="max-w-5xl mx-auto px-4 py-10 text-center space-y-3">
-            <!-- 名字 & 身份 -->
-            <div class="flex items-center justify-center gap-3 mb-2">
-                <span class="font-black text-lg tracking-wide text-gradient" data-i18n="name_short">阿卡貓 HakkaNeko</span>
-            </div>
-            <p class="text-xs text-purple-400/60" data-i18n="footer_role">Live2D 建模師 · 個人接案建模師</p>
-
-            <!-- 社群連結 -->
-            <div class="flex flex-wrap justify-center gap-5 text-purple-400/50 text-sm my-2">
-                <a href="mailto:n47993802@gmail.com" class="hover:text-white transition flex items-center gap-1"><i class="fa-solid fa-envelope mr-1"></i>n47993802@gmail.com</a>
-                <a href="https://x.com/HakkaNekoLive2D" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-x-twitter mr-1"></i>@HakkaNekoLive2D</a>
-                <a href="https://www.twitch.tv/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-twitch mr-1"></i>hakkanekolive2d</a>
-                <a href="https://discord.gg/sXeKwm4Bkz" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><i class="fa-brands fa-discord mr-1"></i>阿卡貓聊天窩</a>
-            </div>
-
-            <!-- Ko-fi 贊助 -->
-            <div class="pt-3 border-t border-white/5">
-                <div class="flex flex-wrap items-center justify-center gap-3">
-                    <a href="https://ko-fi.com/hakkanekolive2d" target="_blank" rel="noopener noreferrer" class="kofi-btn"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/></svg><span data-i18n="kofi_btn">請我喝杯咖啡</span></a>
-                    <span class="text-purple-500/30 hidden sm:inline">·</span>
-                    <span id="supportersList" class="text-[0.65rem] text-purple-400/40 italic" data-i18n="kofi_supporters_empty">成為第一位贊助者！</span>
-                </div>
-            </div>
-
-            <!-- 版權（最底部，最小最淡） -->
-            <div class="border-t border-white/5 pt-4 space-y-1">
-                <p class="text-xs text-purple-500/40">© <span id="footerYear"></span> <span class="text-purple-300/70" data-i18n="name_short">阿卡貓 HakkaNeko</span> · All Rights Reserved</p>
-                <p class="text-xs text-purple-500/30" data-i18n="footer_credit">本網站由 阿卡貓 HakkaNeko 企劃，介面設計與互動效果均由 AI 輔助生成、迭代優化，並經本人審定後發布。</p>
-            </div>
+            <p
+              class="text-xs text-purple-200/70"
+              data-i18n="demo_placeholder_note"
+            >
+              目前正在測試 Live2D
+              角色互動功能，部分細節可能還會調整，感謝您的耐心體驗！
+            </p>
+          </div>
         </div>
-    </footer>
+
+        <div class="glass-panel p-5 mb-6 border-purple-500/20">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-lg shrink-0"
+              >
+                <i class="fa-solid fa-pen-nib"></i>
+              </div>
+              <div>
+                <div
+                  class="text-xs text-purple-300/60 mb-0.5"
+                  data-i18n="demo_artist_label"
+                >
+                  原畫繪師
+                </div>
+                <div
+                  class="font-bold text-white text-sm"
+                  data-i18n="demo_artist_pending"
+                >
+                  詢問中 / 待公開
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-lg shrink-0"
+              >
+                <i class="fa-solid fa-cube"></i>
+              </div>
+              <div>
+                <div
+                  class="text-xs text-purple-300/60 mb-0.5"
+                  data-i18n="intro_role_short"
+                >
+                  Live2D 建模師
+                </div>
+                <div
+                  class="font-bold text-white text-sm"
+                  data-i18n="name_short"
+                >
+                  阿卡貓 HakkaNeko
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-lg shrink-0"
+              >
+                <i class="fa-solid fa-lightbulb"></i>
+              </div>
+              <div>
+                <div
+                  class="text-xs text-purple-300/60 mb-0.5"
+                  data-i18n="demo_purpose_label"
+                >
+                  展示用途
+                </div>
+                <div
+                  class="font-bold text-white text-sm"
+                  data-i18n="demo_purpose_value"
+                >
+                  作品集參考 · 互動展示
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="glass-panel p-4 mb-6 border-red-500/25 bg-red-500/5 flex items-start gap-3"
+        >
+          <i
+            class="fa-solid fa-shield-halved text-red-400 text-xl mt-0.5 shrink-0"
+          ></i>
+          <div>
+            <div class="font-bold text-red-300 text-sm mb-1">
+              著作權聲明 · 請勿竊取
+            </div>
+            <p class="text-xs text-purple-200/70 leading-relaxed">
+              <span data-i18n="demo_copyright_l1"
+                >本展示模型之角色設計、Live2D
+                工程檔及所有相關美術資產均受著作權法保護。</span
+              >
+              <span data-i18n="demo_copyright_l2"
+                >禁止未經授權截取、複製、盜用或假冒為自製作品。</span
+              >
+              <strong class="text-red-300" data-i18n="demo_copyright_l3"
+                >發現侵權行為將依法追究，情節嚴重者保留提出民事及刑事訴訟之權利。</strong
+              >
+            </p>
+          </div>
+        </div>
+
+        <style>
+          #characterViewPanel {
+            overflow: visible;
+            isolation: isolate;
+          }
+
+          #characterViewPanel .model-toolbar {
+            position: relative;
+            z-index: 50;
+          }
+
+          #characterViewPanel #live2dWrapper {
+            position: relative;
+            z-index: 10;
+          }
+
+          .view-help-trigger:hover + .view-help-popover,
+          .view-help-trigger:focus + .view-help-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+          }
+
+          #characterViewPanel:hover {
+            transform: none !important;
+          }
+          #modelShowcaseGrid:fullscreen,
+          #modelShowcaseGrid:-webkit-full-screen {
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            padding: 24px;
+            overflow-y: auto;
+            background: #0f052a;
+            align-content: center;
+          }
+          #modelShowcaseGrid:fullscreen #live2dWrapper,
+          #modelShowcaseGrid:-webkit-full-screen #live2dWrapper {
+            height: min(76vh, 760px);
+          }
+          body.model-enlarged #modelShowcaseGrid {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            width: 100vw;
+            height: 100vh;
+            padding: 24px;
+            overflow-y: auto;
+            background: #0f052a;
+            display: grid;
+            grid-template-columns: minmax(420px, 1fr) 360px;
+            gap: 24px;
+            align-items: start;
+          }
+          body.model-enlarged #modelShowcaseGrid > .lg\:col-span-2 {
+            grid-column: 1 / 2;
+          }
+          body.model-enlarged #modelShowcaseGrid > .space-y-4 {
+            grid-column: 2 / 3;
+            max-height: calc(100vh - 48px);
+            overflow-y: auto;
+          }
+          body.model-enlarged #modelShowcaseGrid #live2dWrapper {
+            height: min(84vh, 920px) !important;
+          }
+        </style>
+
+        <div
+          class="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          id="modelShowcaseGrid"
+        >
+          <div class="lg:col-span-2">
+            <div class="glass-panel p-4 h-full" id="characterViewPanel">
+              <div class="model-toolbar flex items-center justify-between mb-3 gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span
+                    class="text-sm font-bold text-purple-300 flex items-center gap-2"
+                  >
+                    <i class="fa-solid fa-eye text-pink-400"></i> 角色視窗
+                  </span>
+                  <span
+                    id="demoStatusBadge"
+                    class="text-xs bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full"
+                    data-i18n="demo_status_waiting"
+                    >等待載入</span
+                  >
+                </div>
+                <div class="flex items-center gap-2 flex-wrap justify-end">
+                  <button
+                    onclick="resetView()"
+                    title="重置視角（還原位置/縮放）"
+                    class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                  >
+                    <i class="fa-solid fa-arrows-rotate"></i> 重置視角
+                  </button>
+                  <button
+                    id="enlargeViewBtn"
+                    onclick="toggleEnlargeView()"
+                    title="放大檢視（全螢幕）"
+                    class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                  >
+                    <i class="fa-solid fa-expand" id="enlargeViewIcon"></i>
+                    <span id="enlargeViewLabel">放大檢視</span>
+                  </button>
+                  <div class="relative overflow-visible">
+                    <button
+                      type="button"
+                      title="視角操作說明"
+                      class="view-help-trigger text-xs bg-cyan-500/15 hover:bg-cyan-500/30 text-cyan-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                    >
+                      <i class="fa-solid fa-circle-question"></i>
+                      視角操作說明
+                    </button>
+                    <div
+                      class="view-help-popover pointer-events-none absolute right-0 top-[calc(100%+8px)] w-52 rounded-xl border border-purple-400/35 bg-[#170a2f]/95 backdrop-blur-md px-3 py-2.5 text-[10px] leading-4 text-purple-100 opacity-0 invisible translate-y-1 transition-all z-[120] shadow-xl shadow-purple-950/45"
+                    >
+                      <div class="text-[11px] font-bold text-white mb-2">
+                        視角操作說明
+                      </div>
+                      <div class="space-y-1.5 leading-relaxed text-purple-100/95">
+                        <div class="flex items-start gap-2">
+                          <i class="fa-solid fa-arrows-up-down-left-right text-[10px] text-purple-300 mt-0.5"></i>
+                          <div>
+                            <div>按住左鍵拖曳</div>
+                            <div class="text-purple-200/80">X、Y軸跟隨</div>
+                          </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                          <i class="fa-solid fa-computer-mouse text-[10px] text-purple-300 mt-0.5"></i>
+                          <div>
+                            <div>按住右鍵拖曳</div>
+                            <div class="text-purple-200/80">Z軸跟隨</div>
+                          </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                          <i class="fa-solid fa-hand text-[10px] text-purple-300 mt-0.5"></i>
+                          <div>
+                            <div>中鍵拖曳畫面</div>
+                            <div class="text-purple-200/80">手動搬位置</div>
+                          </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                          <i class="fa-solid fa-up-down text-[10px] text-purple-300 mt-0.5"></i>
+                          <div>
+                            <div>滑鼠滾輪</div>
+                            <div class="text-purple-200/80">縮放大小</div>
+                          </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                          <i class="fa-solid fa-arrows-rotate text-[10px] text-purple-300 mt-0.5"></i>
+                          <div>
+                            <div>重製視角</div>
+                            <div class="text-purple-200/80">還原位置與縮放</div>
+                          </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                          <i class="fa-solid fa-expand text-[10px] text-purple-300 mt-0.5"></i>
+                          <div>
+                            <div>放大檢視</div>
+                            <div class="text-purple-200/80">切換全螢幕檢視</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                id="live2dWrapper"
+                class="relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#0f052a] to-[#06030f] border border-white/10"
+                style="height: 540px; cursor: grab"
+              >
+                <div
+                  id="live2dPlaceholder"
+                  class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-purple-300/40"
+                >
+                  <i class="fa-solid fa-person-rays text-7xl"></i>
+                  <p
+                    class="text-sm font-bold"
+                    data-i18n="demo_input_hint_title"
+                  >
+                    點擊「載入模型」開始互動
+                  </p>
+                  <p class="text-xs" data-i18n="demo_input_hint_desc">
+                    按住左鍵拖曳，角色視線將跟隨滑鼠移動
+                  </p>
+                </div>
+                <canvas
+                  id="live2dCanvas"
+                  class="w-full h-full"
+                  style="display: none"
+                ></canvas>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="glass-panel p-5">
+              <h3
+                class="text-sm font-bold text-white mb-3 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-cat text-pink-400"></i> 展示模型
+              </h3>
+              <select
+                id="modelSelect"
+                onchange="switchModel(this.value)"
+                class="mb-3 w-full rounded-xl bg-[#120824] border border-purple-500/30 px-3 py-2.5 text-sm text-white outline-none focus:border-purple-400"
+              >
+                <option value="hakkanekoqq">阿卡貓 HakkaNekoQQ</option>
+                <option value="test">Test</option>
+              </select>
+              <button
+                onclick="loadLive2DModel()"
+                class="w-full py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white transition-all flex items-center justify-center gap-2"
+              >
+                <i class="fa-solid fa-rotate"></i> 載入模型
+              </button>
+            </div>
+
+            <div class="glass-panel p-5">
+              <h3
+                class="text-sm font-bold text-white mb-3 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-bolt text-yellow-400"></i> 觸發動畫
+              </h3>
+              <div id="motionControls" class="grid grid-cols-2 gap-2">
+                <button
+                  onclick="triggerMotion('Idle')"
+                  class="py-2 px-3 rounded-lg text-xs font-bold bg-purple-600/30 hover:bg-purple-600/60 text-purple-200 border border-purple-500/30 transition-all"
+                >
+                  <span class="material-symbols-outlined" aria-hidden="true"
+                    >bedtime</span
+                  >
+                  待機
+                </button>
+                <button
+                  onclick="triggerMotion('TapBody')"
+                  class="py-2 px-3 rounded-lg text-xs font-bold bg-pink-600/30 hover:bg-pink-600/60 text-pink-200 border border-pink-500/30 transition-all"
+                >
+                  <span class="material-symbols-outlined" aria-hidden="true"
+                    >waving_hand</span
+                  >
+                  揮手
+                </button>
+              </div>
+            </div>
+
+            <div class="glass-panel p-5">
+              <h3
+                class="text-sm font-bold text-white mb-4 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-face-smile text-pink-400"></i> 表情參數
+              </h3>
+              <div id="expressionControls" class="space-y-4">
+                <div>
+                  <div
+                    class="flex justify-between text-xs text-purple-300 mb-1.5"
+                  >
+                    <span>開心</span
+                    ><span id="expressionHappyVal" class="text-white font-bold"
+                      >0%</span
+                    >
+                  </div>
+                  <input
+                    type="range"
+                    id="expressionHappy"
+                    min="0"
+                    max="100"
+                    value="0"
+                    oninput="updateParam('expressionHappy', this.value)"
+                    class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-blue-500 cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <div
+                    class="flex justify-between text-xs text-purple-300 mb-1.5"
+                  >
+                    <span>驚訝</span
+                    ><span
+                      id="expressionSurprisedVal"
+                      class="text-white font-bold"
+                      >0%</span
+                    >
+                  </div>
+                  <input
+                    type="range"
+                    id="expressionSurprised"
+                    min="0"
+                    max="100"
+                    value="0"
+                    oninput="updateParam('expressionSurprised', this.value)"
+                    class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 accent-indigo-500 cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-panel p-5">
+              <h3
+                class="text-sm font-bold text-white mb-4 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-sliders text-emerald-400"></i> 即時參數
+              </h3>
+
+              <div class="mt-4 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span
+                    class="text-xs text-purple-300"
+                    data-i18n="demo_blink_auto"
+                    >眨眼自動</span
+                  >
+                  <label
+                    class="relative inline-flex items-center cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      id="autoBlink"
+                      checked
+                      onchange="toggleSwitch('blink', this.checked)"
+                      class="sr-only peer"
+                    />
+                    <div
+                      class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"
+                    ></div>
+                    <div
+                      class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"
+                    ></div>
+                  </label>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-purple-300">呼吸自動</span>
+                  <label
+                    class="relative inline-flex items-center cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      id="autoBreath"
+                      checked
+                      onchange="toggleSwitch('breathAuto', this.checked)"
+                      class="sr-only peer"
+                    />
+                    <div
+                      class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"
+                    ></div>
+                    <div
+                      class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"
+                    ></div>
+                  </label>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-purple-300">物理演算</span>
+                  <label
+                    class="relative inline-flex items-center cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      id="physicsOn"
+                      checked
+                      onchange="toggleSwitch('physics', this.checked)"
+                      class="sr-only peer"
+                    />
+                    <div
+                      class="w-10 h-5 bg-purple-900/60 peer-checked:bg-purple-600 rounded-full peer transition-colors"
+                    ></div>
+                    <div
+                      class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"
+                    ></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="glass-panel p-5 mt-6 border-purple-400/20 bg-purple-400/5">
+          <h3
+            class="text-sm font-bold text-purple-300 mb-3 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i> 展示說明
+          </h3>
+          <ul
+            class="text-xs text-purple-200/70 space-y-1.5 leading-relaxed list-none"
+          >
+            <li>
+              <i
+                class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"
+              ></i
+              ><span data-i18n="port_demo_note"
+                >本模型為阿卡貓作品集展示用途，僅供參考，不作任何商業販售。</span
+              >
+            </li>
+            <li>
+              <i
+                class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"
+              ></i
+              >所有互動功能（視線追蹤、動畫觸發）均由本站提供，角色資料由建模師本人管理。
+            </li>
+            <li>
+              <i
+                class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"
+              ></i
+              >若您也有意委託製作同等品質的 Live2D 模型，歡迎至 V皮設計
+              分頁試算報價。
+            </li>
+            <li>
+              <i class="fa-solid fa-circle text-red-400/60 text-[6px] mr-2"></i
+              >嚴禁截圖、錄影後冒用為他人作品或商業使用，違者將依著作權法追究。
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <footer
+        class="relative z-10 mt-16 border-t border-white/5 bg-black/20 backdrop-blur-sm"
+      >
+        <div class="max-w-5xl mx-auto px-4 py-10 text-center space-y-3">
+          <div class="flex items-center justify-center gap-3 mb-2">
+            <span
+              class="font-black text-lg tracking-wide text-gradient"
+              data-i18n="name_short"
+              >阿卡貓 HakkaNeko</span
+            >
+          </div>
+          <p class="text-xs text-purple-400/60" data-i18n="footer_role">
+            Live2D 建模師 · 個人接案建模師
+          </p>
+
+          <div
+            class="flex flex-wrap justify-center gap-5 text-purple-400/50 text-sm my-2"
+          >
+            <a
+              href="mailto:n47993802@gmail.com"
+              class="hover:text-white transition flex items-center gap-1"
+              ><i class="fa-solid fa-envelope mr-1"></i>n47993802@gmail.com</a
+            >
+            <a
+              href="https://x.com/HakkaNekoLive2D"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-white transition"
+              ><i class="fa-brands fa-x-twitter mr-1"></i>@HakkaNekoLive2D</a
+            >
+            <a
+              href="https://www.twitch.tv/hakkanekolive2d"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-white transition"
+              ><i class="fa-brands fa-twitch mr-1"></i>hakkanekolive2d</a
+            >
+            <a
+              href="https://discord.gg/sXeKwm4Bkz"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-white transition"
+              ><i class="fa-brands fa-discord mr-1"></i>阿卡貓聊天窩</a
+            >
+          </div>
+
+          <div class="pt-3 border-t border-white/5">
+            <div class="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="https://ko-fi.com/hakkanekolive2d"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="kofi-btn"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"
+                  /></svg
+                ><span data-i18n="kofi_btn">請我喝杯咖啡</span></a
+              >
+              <span class="text-purple-500/30 hidden sm:inline">·</span>
+              <span
+                id="supportersList"
+                class="text-[0.65rem] text-purple-400/40 italic"
+                data-i18n="kofi_supporters_empty"
+                >成為第一位贊助者！</span
+              >
+            </div>
+          </div>
+
+          <div class="border-t border-white/5 pt-4 space-y-1">
+            <p class="text-xs text-purple-500/40">
+              © <span id="footerYear"></span>
+              <span class="text-purple-300/70" data-i18n="name_short"
+                >阿卡貓 HakkaNeko</span
+              >
+              · All Rights Reserved
+            </p>
+            <p class="text-xs text-purple-500/30" data-i18n="footer_credit">
+              本網站由 阿卡貓 HakkaNeko 企劃，介面設計與互動效果均由 AI
+              輔助生成、迭代優化，並經本人審定後發布。
+            </p>
+          </div>
+        </div>
+      </footer>
     </main>
 
     <div id="unifiedLightbox" role="dialog" aria-modal="true">
-        <!-- 背景點擊關閉 -->
-        <div class="absolute inset-0" onclick="ulbClose()"></div>
+      <div class="absolute inset-0" onclick="ulbClose()"></div>
 
-        <!-- 關閉鈕 -->
-        <button onclick="ulbClose()" style="position:absolute;top:16px;right:20px;background:transparent;border:none;color:rgba(255,255,255,0.5);font-size:1.6rem;cursor:pointer;z-index:20;line-height:1;" aria-label="關閉"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+      <button
+        onclick="ulbClose()"
+        style="
+          position: absolute;
+          top: 16px;
+          right: 20px;
+          background: transparent;
+          border: none;
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 1.6rem;
+          cursor: pointer;
+          z-index: 20;
+          line-height: 1;
+        "
+        aria-label="關閉"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
 
-        <!-- 左箭頭 -->
-        <button class="ulb-arrow" id="ulbPrev" onclick="ulbNav(-1)" aria-label="上一張">‹</button>
+      <button
+        class="ulb-arrow"
+        id="ulbPrev"
+        onclick="ulbNav(-1)"
+        aria-label="上一張"
+      >
+        ‹
+      </button>
 
-        <!-- 中央內容 -->
-        <div style="position:relative;display:flex;flex-direction:column;align-items:center;max-width:min(88vw,720px);">
-            <!-- v28：點擊圖片本身在純覆蓋模式（stickers/logos）也關閉燈箱 -->
-            <img width="1500" height="500" loading="lazy" id="ulbImg" src="" alt=""
-                 onclick="if(ulbCurrent&&(ulbCurrent.group==='stickers'||ulbCurrent.group==='logos'))ulbClose()">
-            <p id="ulbLabel">點圖或旁邊關閉 ／ ESC</p>
-            <div id="ulbDots"></div>
-        </div>
+      <div
+        style="
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          max-width: min(88vw, 720px);
+        "
+      >
+        <img
+          width="1500"
+          height="500"
+          loading="lazy"
+          id="ulbImg"
+          src=""
+          alt=""
+          onclick="
+            if (
+              ulbCurrent &&
+              (ulbCurrent.group === 'stickers' || ulbCurrent.group === 'logos')
+            )
+              ulbClose();
+          "
+        />
+        <p id="ulbLabel">點圖或旁邊關閉 ／ ESC</p>
+        <div id="ulbDots"></div>
+      </div>
 
-        <!-- 右箭頭 -->
-        <button class="ulb-arrow" id="ulbNext" onclick="ulbNav(1)" aria-label="下一張">›</button>
+      <button
+        class="ulb-arrow"
+        id="ulbNext"
+        onclick="ulbNav(1)"
+        aria-label="下一張"
+      >
+        ›
+      </button>
     </div>
 
-    <!-- 多國語言字典：務必在 common.js 之前載入，且四個檔案彼此順序不影響結果 -->
     <script src="../../locales/zh-TW.js?v=20260805e"></script>
     <script src="../../locales/zh-CN.js?v=20260805e"></script>
     <script src="../../locales/en.js?v=20260805e"></script>
     <script src="../../locales/ja.js?v=20260805e"></script>
     <script src="../../effects/meteor-bg.js?v=20260805e"></script>
     <script src="../../common.js?v=20260805e"></script>
-    <!-- 角色互動邏輯：只有這一頁需要，載入順序要在 common.js 之後。 -->
-    <script src="model-render.js?v=20260806c"></script>
-</body>
+
+    <script src="model-config.js?v=20260807c"></script>
+    <script src="model-render.js?v=20260807c"></script>
+  </body>
 </html>

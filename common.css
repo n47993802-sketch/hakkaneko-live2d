@@ -105,6 +105,44 @@
   user-select: none;
 }
 
+/* 全站預設防止拖曳反白，避免互動時誤選文字 */
+html,
+body,
+a,
+button,
+label,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+i,
+strong,
+small,
+div {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 表單與可編輯內容仍保留選字能力 */
+input,
+textarea,
+select,
+option,
+[contenteditable="true"],
+.allow-text-select {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 :root {
   --bg-primary: #06030f;
   --accent-primary: #a855f7;

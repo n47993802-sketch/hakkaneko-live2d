@@ -5,7 +5,7 @@ model-config.js 控制說明
 
 用途
 - 集中管理模型展示資料，不必再改 model-render.js 內部邏輯。
-- 目前頁面會讀取：模型清單、動畫按鈕、表情區設定。
+- 目前頁面會讀取：模型清單、動畫按鈕、表情區設定、即時參數（呼吸）。
 
 注意
 - 你先前提到的 TrackingA / TrackingB 只是參考，這份預設設定沒有強制寫入這兩筆。
@@ -26,6 +26,10 @@ window.MODEL_RENDER_CONFIG = {
         {
           key: "motionKey",
           name: "MotionGroupName",
+          group: "MotionGroupName",
+          index: 0,
+          priority: 3,
+          file: "models/XXX/Motions/your.motion3.json",
           label: "按鈕文字",
           icon: "material_symbol_name",
           buttonClass: "按鈕樣式 class 字串"
@@ -39,14 +43,18 @@ window.MODEL_RENDER_CONFIG = {
           file: encodeURI("https://.../1.exp3.json")
         }
       ],
-      sliderLabels: {
-        expressionHappy: "開心",
-        expressionSurprised: "驚訝"
-      },
-      sliderStyles: {
-        expressionHappy: "accent-blue-500",
-        expressionSurprised: "accent-indigo-500"
-      }
+      sliderControls: [
+        {
+          key: "mouthX",
+          label: "歪嘴",
+          paramIds: ["MouthX"],
+          min: -1,
+          max: 1,
+          step: 0.01,
+          defaultValue: 0,
+          accentClass: "accent-emerald-500"
+        }
+      ]
     }
   },
   expressionParams: {
@@ -63,17 +71,23 @@ window.MODEL_RENDER_CONFIG = {
 - defaultModelKey: 預設載入的模型 key。
 - modelOrder: 下拉選單顯示順序。
 - models: 每個模型的完整設定。
-- motions.name: 目前是呼叫 live2dModel.motion(name) 的 group 名稱，不是檔名。
+- motions.name/group: 動畫群組名稱。建議兩者填一致。
+- motions.file: 指向 motion3.json，可在 model3 沒宣告 motions 時用來補齊定義。
+- motions.index: 群組中的索引（通常 0 起）。
+- motions.priority: 建議 3（強制優先級）。
 - expressions.file: exp3.json 路徑，按下按鈕時套用。
 - expressionMode:
   - presets: 顯示按鈕型表情。
   - sliders: 顯示拉桿型表情。
-- expressionParams: sliders 模式會用到的參數映射。
-- runtimeParams: 目前先保留作為資料註記，後續可接到即時參數控制。
+- sliderControls: sliders 模式專用，定義參數 ID、範圍、步進、預設值。
+- runtimeParams.autoBreath: 呼吸自動控制會寫入的參數 ID（目前每 3 秒循環）。
+- runtimeParams.autoBlink: 保留給自動眨眼用途。
 
 常見錯誤排查
 1) 按鈕有出現但點了沒反應
-- 檢查 motions.name 是否對應 model3.json 內真正的 Motion Group 名稱。
+- 檢查 motions.group 是否對應模型中的真正 Motion Group。
+- 檢查 motions.file 是否對應正確 motion3.json。
+- 若 model3.json 沒有 FileReferences.Motions，系統會用 motions.file 動態補齊；仍失敗時看 Console 的 [Motion Debug] 訊息。
 
 2) 表情按鈕點了沒變化
 - 檢查 exp3.json URL 是否可直接開啟。

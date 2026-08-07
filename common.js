@@ -7,6 +7,21 @@ if (!window.I18N) {
 const I18N = window.I18N;
 let currentLang = "zh-TW";
 
+// Set to false to re-enable browser context menu site-wide.
+window.DISABLE_CONTEXT_MENU = window.DISABLE_CONTEXT_MENU !== false;
+
+if (!window.__hknContextMenuGuardBound) {
+  window.__hknContextMenuGuardBound = true;
+  document.addEventListener(
+    "contextmenu",
+    function (e) {
+      if (!window.DISABLE_CONTEXT_MENU) return;
+      e.preventDefault();
+    },
+    { capture: true },
+  );
+}
+
 (function () {
   function currentPageId() {
     if (!window.SITE_BASE) return "intro";

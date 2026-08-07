@@ -444,6 +444,19 @@
           body.model-enlarged #modelShowcaseGrid #live2dWrapper {
             height: min(84vh, 920px) !important;
           }
+
+          .model-control-panel,
+          .model-control-panel h3,
+          .model-control-panel span,
+          .model-control-panel button,
+          .model-control-panel label,
+          .model-control-panel p,
+          .model-control-panel i {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+          }
         </style>
 
         <div
@@ -578,7 +591,7 @@
           </div>
 
           <div class="space-y-4">
-            <div class="glass-panel p-5">
+            <div class="glass-panel p-5 model-control-panel">
               <h3
                 class="text-sm font-bold text-white mb-3 flex items-center gap-2"
               >
@@ -600,7 +613,7 @@
               </button>
             </div>
 
-            <div class="glass-panel p-5">
+            <div class="glass-panel p-5 model-control-panel">
               <h3
                 class="text-sm font-bold text-white mb-3 flex items-center gap-2"
               >
@@ -628,12 +641,20 @@
               </div>
             </div>
 
-            <div class="glass-panel p-5">
-              <h3
-                class="text-sm font-bold text-white mb-4 flex items-center gap-2"
-              >
-                <i class="fa-solid fa-face-smile text-pink-400"></i> 表情參數
-              </h3>
+            <div class="glass-panel p-5 model-control-panel">
+              <div class="mb-4 flex items-center justify-between gap-2">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-face-smile text-pink-400"></i> 表情參數
+                </h3>
+                <button
+                  type="button"
+                  onclick="resetExpressionControls()"
+                  class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                  title="重製表情參數"
+                >
+                  <i class="fa-solid fa-rotate-left"></i> 重製
+                </button>
+              </div>
               <div id="expressionControls" class="space-y-4">
                 <div>
                   <div
@@ -678,7 +699,7 @@
               </div>
             </div>
 
-            <div class="glass-panel p-5">
+            <div class="glass-panel p-5 model-control-panel">
               <h3
                 class="text-sm font-bold text-white mb-4 flex items-center gap-2"
               >
@@ -960,7 +981,7 @@
     <script src="../../effects/meteor-bg.js?v=20260805e"></script>
     <script src="../../common.js?v=20260805e"></script>
 
-    <script src="model-config.js?v=20260807c"></script>
-    <script src="model-render.js?v=20260807c"></script>
+    <script src="model-config.js?v=20260807l"></script>
+    <script src="model-render.js?v=20260807l"></script>
   </body>
 </html>

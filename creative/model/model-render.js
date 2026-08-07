@@ -3,6 +3,7 @@ let live2dModel = null;
 let live2dInited = false;
 let interactionBound = false;
 let tickerBound = false;
+let breathPhase = 0;
 let demoParams = {
   blink: true,
   physics: true,
@@ -58,6 +59,9 @@ const RANGE = {
 
 const ZOOM_MIN = 0.3,
   ZOOM_MAX = 3;
+const MOTION_PRIORITY_FORCE = 3;
+const BREATH_CYCLE_SECONDS = 3;
+const BREATH_ANGULAR_SPEED = (Math.PI * 2) / BREATH_CYCLE_SECONDS;
 
 const MODEL_CONFIG =
   typeof window !== "undefined" && window.MODEL_RENDER_CONFIG
@@ -81,6 +85,7 @@ try {
 } catch (e) {}
 
 const EXPRESSION_PARAMS = MODEL_CONFIG.expressionParams || {};
+const RUNTIME_PARAMS = MODEL_CONFIG.runtimeParams || {};
 
 const expressionPresetCache = new Map();
 let activeExpressionKey = null;
@@ -101,6 +106,120 @@ function getMotionButtons(spec) {
 
 function getExpressionButtons(spec) {
   return spec && Array.isArray(spec.expressions) ? spec.expressions : [];
+}
+
+function supportsPresetExpressions(spec) {
+  return spec && (spec.expressionMode === "presets" || spec.expressionMode === "mixed");
+}
+
+function supportsSliderExpressions(spec) {
+  return spec && (spec.expressionMode === "sliders" || spec.expressionMode === "mixed");
+}
+
+function buildParamExpressionPreset(expression) {
+  if (!expression) return null;
+  const ids = Array.isArray(expression.paramIds)
+    ? expression.paramIds.filter(Boolean)
+    : expression.paramId
+      ? [expression.paramId]
+      : [];
+  if (!ids.length) return null;
+
+  const min = Number.isFinite(Number(expression.min)) ? Number(expression.min) : 0;
+  const max = Number.isFinite(Number(expression.max)) ? Number(expression.max) : 1;
+  const onValue = Number.isFinite(Number(expression.onValue))
+    ? Number(expression.onValue)
+    : max;
+  const clampMin = Math.min(min, max);
+  const clampMax = Math.max(min, max);
+  const value = clamp(onValue, clampMin, clampMax);
+
+  return {
+    Parameters: ids.map((id) => ({
+      Id: id,
+      Value: value,
+    })),
+  };
+}
+
+function getSliderControls(spec) {
+  if (spec && Array.isArray(spec.sliderControls) && spec.sliderControls.length) {
+    return spec.sliderControls
+      .filter((item) => item && item.key)
+      .map((item) => {
+        const min = Number.isFinite(Number(item.min)) ? Number(item.min) : 0;
+        const max = Number.isFinite(Number(item.max)) ? Number(item.max) : 1;
+        const step = Number.isFinite(Number(item.step)) && Number(item.step) > 0
+          ? Number(item.step)
+          : 0.01;
+        const defaultValue = Number.isFinite(Number(item.defaultValue))
+          ? Number(item.defaultValue)
+          : min;
+        const paramIds = Array.isArray(item.paramIds)
+          ? item.paramIds.filter(Boolean)
+          : item.paramId
+            ? [item.paramId]
+            : [];
+        return {
+          key: item.key,
+          label: item.label || item.key,
+          min,
+          max,
+          step,
+          defaultValue: clamp(defaultValue, Math.min(min, max), Math.max(min, max)),
+          accentClass: item.accentClass || "accent-blue-500",
+          paramIds,
+        };
+      });
+  }
+
+  return [
+    {
+      key: "expressionHappy",
+      label: spec?.sliderLabels?.expressionHappy || "開心",
+      min: 0,
+      max: 1,
+      step: 0.01,
+      defaultValue: Number(demoParams.expressionHappy || 0),
+      accentClass: spec?.sliderStyles?.expressionHappy || "accent-blue-500",
+      paramIds: EXPRESSION_PARAMS.happy || [],
+    },
+    {
+      key: "expressionSurprised",
+      label: spec?.sliderLabels?.expressionSurprised || "驚訝",
+      min: 0,
+      max: 1,
+      step: 0.01,
+      defaultValue: Number(demoParams.expressionSurprised || 0),
+      accentClass: spec?.sliderStyles?.expressionSurprised || "accent-indigo-500",
+      paramIds: EXPRESSION_PARAMS.surprised || [],
+    },
+  ];
+}
+
+function getRuntimeBreathParamIds() {
+  const ids = Array.isArray(RUNTIME_PARAMS.autoBreath)
+    ? RUNTIME_PARAMS.autoBreath.filter(Boolean)
+    : [];
+  return ids.length ? ids : ["ParamBreath"];
+}
+
+function formatSliderValue(value) {
+  const num = Number(value) || 0;
+  if (Math.abs(num - Math.round(num)) < 1e-9) return String(Math.round(num));
+  return num.toFixed(2).replace(/\.00$/, "");
+}
+
+function applySliderControlValue(slider, value) {
+  if (!live2dModel || !slider) return;
+  const im = live2dModel.internalModel;
+  const coreModel = im && im.coreModel;
+  if (!coreModel) return;
+  if (!Array.isArray(slider.paramIds) || slider.paramIds.length === 0) return;
+
+  slider.paramIds.forEach((id) => {
+    setParamSafe(coreModel, id, value);
+  });
 }
 
 function getMotionByKey(spec, motionKey) {
@@ -159,7 +278,10 @@ function renderModelControls() {
 
   const expressionControls = document.getElementById("expressionControls");
   if (expressionControls) {
-    if (spec.expressionMode === "presets") {
+    const showPresets = supportsPresetExpressions(spec);
+    const showSliders = supportsSliderExpressions(spec);
+
+    if (showPresets && !showSliders) {
       const expressions = getExpressionButtons(spec);
       expressionControls.innerHTML = `
                         <div class="space-y-2">
@@ -184,31 +306,76 @@ function renderModelControls() {
                             </div>
                         </div>
                     `;
-    } else {
-      const happyLabel = spec.sliderLabels?.expressionHappy || "開心";
-      const surprisedLabel = spec.sliderLabels?.expressionSurprised || "驚訝";
-      const happyAccent =
-        spec.sliderStyles?.expressionHappy || "accent-blue-500";
-      const surprisedAccent =
-        spec.sliderStyles?.expressionSurprised || "accent-indigo-500";
+    } else if (!showPresets && showSliders) {
+      const sliders = getSliderControls(spec);
+      sliders.forEach((slider) => {
+        if (!Number.isFinite(Number(demoParams[slider.key]))) {
+          demoParams[slider.key] = slider.defaultValue;
+        }
+      });
       expressionControls.innerHTML = `
                         <div class="space-y-4">
-                            <div>
+                            ${sliders
+                              .map((slider) => {
+                                const current = Number(demoParams[slider.key]);
+                                return `
+                              <div>
                                 <div class="flex justify-between text-xs text-purple-300 mb-1.5">
-                                    <span>${happyLabel}</span><span id="expressionHappyVal" class="text-white font-bold">${Math.round((demoParams.expressionHappy || 0) * 100)}%</span>
+                                  <span>${slider.label}</span><span id="${slider.key}Val" class="text-white font-bold">${formatSliderValue(current)}</span>
                                 </div>
-                                <input type="range" id="expressionHappy" min="0" max="100" value="${Math.round((demoParams.expressionHappy || 0) * 100)}"
-                                    oninput="updateParam('expressionHappy', this.value)"
-                                    class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 ${happyAccent} cursor-pointer">
+                                <input type="range" id="${slider.key}" min="${slider.min}" max="${slider.max}" step="${slider.step}" value="${current}"
+                                  oninput="updateParam('${slider.key}', this.value)"
+                                  class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 ${slider.accentClass} cursor-pointer">
+                              </div>
+                            `;
+                              })
+                              .join("")}
+                        </div>
+                    `;
+    } else if (showPresets && showSliders) {
+      const expressions = getExpressionButtons(spec);
+      const sliders = getSliderControls(spec);
+      sliders.forEach((slider) => {
+        if (!Number.isFinite(Number(demoParams[slider.key]))) {
+          demoParams[slider.key] = slider.defaultValue;
+        }
+      });
+      expressionControls.innerHTML = `
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                ${expressions
+                                  .map(
+                                    (expression) => {
+                                      const isActive =
+                                        expression.key === activeExpressionKey;
+                                      const buttonClass = isActive
+                                        ? "bg-pink-600/45 text-pink-100 border-pink-400/60"
+                                        : "bg-purple-600/25 hover:bg-purple-600/50 text-purple-200 border-purple-500/30";
+                                      return `
+                                    <button onclick="triggerExpression('${expression.key}')" class="py-2 px-3 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-2 ${buttonClass}">
+                                        <span class="material-symbols-outlined" aria-hidden="true">sentiment_satisfied</span>
+                                        ${expression.label}
+                                    </button>
+                                `;
+                                    },
+                                  )
+                                  .join("")}
                             </div>
-                            <div>
+                            ${sliders
+                              .map((slider) => {
+                                const current = Number(demoParams[slider.key]);
+                                return `
+                              <div>
                                 <div class="flex justify-between text-xs text-purple-300 mb-1.5">
-                                    <span>${surprisedLabel}</span><span id="expressionSurprisedVal" class="text-white font-bold">${Math.round((demoParams.expressionSurprised || 0) * 100)}%</span>
+                                  <span>${slider.label}</span><span id="${slider.key}Val" class="text-white font-bold">${formatSliderValue(current)}</span>
                                 </div>
-                                <input type="range" id="expressionSurprised" min="0" max="100" value="${Math.round((demoParams.expressionSurprised || 0) * 100)}"
-                                    oninput="updateParam('expressionSurprised', this.value)"
-                                    class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 ${surprisedAccent} cursor-pointer">
-                            </div>
+                                <input type="range" id="${slider.key}" min="${slider.min}" max="${slider.max}" step="${slider.step}" value="${current}"
+                                  oninput="updateParam('${slider.key}', this.value)"
+                                  class="w-full h-1.5 rounded-full appearance-none bg-purple-900/60 ${slider.accentClass} cursor-pointer">
+                              </div>
+                            `;
+                              })
+                              .join("")}
                         </div>
                     `;
     }
@@ -217,11 +384,14 @@ function renderModelControls() {
 
 async function loadExpressionPreset(modelKey, expressionKey) {
   const spec = MODEL_SPECS[modelKey];
-  if (!spec || spec.expressionMode !== "presets") return null;
+  if (!spec || !supportsPresetExpressions(spec)) return null;
   const expression = getExpressionButtons(spec).find(
     (entry) => entry.key === expressionKey,
   );
   if (!expression) return null;
+  if (!expression.file) {
+    return buildParamExpressionPreset(expression);
+  }
   if (!expressionPresetCache.has(expression.file)) {
     const response = await fetch(expression.file, { cache: "no-cache" });
     if (!response.ok) throw new Error("無法載入表情檔：" + expression.file);
@@ -271,7 +441,7 @@ async function triggerExpression(expressionKey) {
     alert("請先載入模型！");
     return;
   }
-  if (spec.expressionMode !== "presets") return;
+  if (!supportsPresetExpressions(spec)) return;
   try {
     const preset = await loadExpressionPreset(spec.key, expressionKey);
     const im = live2dModel.internalModel;
@@ -326,6 +496,8 @@ async function loadLive2DModel() {
   activeExpressionKey = null;
   activeExpressionRestore = null;
   renderModelControls();
+
+  let patchedModelJsonUrl = null;
   {
     const _d =
       typeof currentLang !== "undefined" && I18N[currentLang]
@@ -364,10 +536,12 @@ async function loadLive2DModel() {
     );
   }
 
+  patchedModelJsonUrl = await buildPatchedModelJsonUrl(spec);
   const urlsToTry = [
+    patchedModelJsonUrl,
     spec.modelUrl,
     "https://corsproxy.io/?url=" + encodeURIComponent(spec.modelUrl),
-  ];
+  ].filter(Boolean);
 
   try {
     const wrapper = document.getElementById("live2dWrapper");
@@ -439,6 +613,8 @@ async function loadLive2DModel() {
     if (!loadedModel) throw new Error("All URLs failed");
     live2dModel = loadedModel;
 
+    ensureCustomMotionDefinitions(spec, live2dModel.internalModel);
+
     live2dApp.stage.addChild(live2dModel);
 
     live2dModel.anchor.set(0.5, 0.5);
@@ -461,12 +637,22 @@ async function loadLive2DModel() {
 
     bindInteractionEvents();
 
+    breathPhase = 0;
     toggleSwitch("blink", demoParams.blink);
     toggleSwitch("physics", demoParams.physics);
     toggleSwitch("breathAuto", demoParams.breathAuto);
-    if (spec.expressionMode === "sliders") {
-      applyExpression("happy", demoParams.expressionHappy);
-      applyExpression("surprised", demoParams.expressionSurprised);
+    if (supportsSliderExpressions(spec)) {
+      const sliders = getSliderControls(spec);
+      sliders.forEach((slider) => {
+        const min = Math.min(slider.min, slider.max);
+        const max = Math.max(slider.min, slider.max);
+        if (!Number.isFinite(Number(demoParams[slider.key]))) {
+          demoParams[slider.key] = slider.defaultValue;
+        }
+        const value = clamp(Number(demoParams[slider.key]), min, max);
+        demoParams[slider.key] = value;
+        applySliderControlValue(slider, value);
+      });
     }
 
     {
@@ -491,6 +677,12 @@ async function loadLive2DModel() {
     placeholder.style.display = "flex";
     canvasEl.style.display = "none";
     console.error("Live2D load error:", e);
+  } finally {
+    if (patchedModelJsonUrl) {
+      try {
+        URL.revokeObjectURL(patchedModelJsonUrl);
+      } catch (e) {}
+    }
   }
 }
 
@@ -519,33 +711,26 @@ function updatePose() {
   setParamSafe(coreModel, "ParamBodyAngleZ", pose.bodyZ);
 
   const spec = getCurrentModelSpec();
-  if (spec && spec.expressionMode === "sliders") {
-    applyExpression("happy", demoParams.expressionHappy);
-    applyExpression("surprised", demoParams.expressionSurprised);
+  if (supportsSliderExpressions(spec)) {
+    const sliders = getSliderControls(spec);
+    sliders.forEach((slider) => {
+      const value = Number(demoParams[slider.key]);
+      if (Number.isFinite(value)) {
+        applySliderControlValue(slider, clamp(value, Math.min(slider.min, slider.max), Math.max(slider.min, slider.max)));
+      }
+    });
   }
-}
 
-function applyExpression(type, value) {
-  if (!live2dModel) return;
-  const im = live2dModel.internalModel;
-  const coreModel = im && im.coreModel;
-  if (!coreModel) return;
-  const ids = EXPRESSION_PARAMS[type];
-  if (!ids) return;
-
-  const normalized = clamp(Number(value) || 0, 0, 1);
-  const eyeOpen = 1 - normalized * 0.7;
-  const mouthOpen = normalized * 0.8;
-
-  ids.forEach((id) => {
-    if (id === "ParamEyeLOpen" || id === "ParamEyeROpen") {
-      setParamSafe(coreModel, id, eyeOpen);
-    } else if (id === "ParamEyeROpen2") {
-      setParamSafe(coreModel, id, mouthOpen);
-    } else {
-      setParamSafe(coreModel, id, normalized);
-    }
-  });
+  if (demoParams.breathAuto) {
+    const deltaSec =
+      ((live2dApp && live2dApp.ticker && live2dApp.ticker.deltaMS) || 16.6667) /
+      1000;
+    breathPhase += BREATH_ANGULAR_SPEED * deltaSec;
+    const breathValue = (Math.sin(breathPhase) + 1) * 0.5;
+    getRuntimeBreathParamIds().forEach((id) => {
+      setParamSafe(coreModel, id, breathValue);
+    });
+  }
 }
 
 function setParamSafe(coreModel, id, value) {
@@ -829,15 +1014,40 @@ function loadScript(src) {
 
 function normalizeMotionConfig(motion) {
   if (!motion) return null;
+  const configuredPriority = Number.isInteger(motion.priority)
+    ? motion.priority
+    : MOTION_PRIORITY_FORCE;
+  const priority = Math.max(MOTION_PRIORITY_FORCE, configuredPriority);
   return {
     key: motion.key || motion.name || "motion",
     name: motion.name || "",
     label: motion.label || motion.name || motion.key || "motion",
     group: motion.group || motion.name || motion.motionGroup || "",
     index: Number.isInteger(motion.index) ? motion.index : 0,
-    priority: Number.isInteger(motion.priority) ? motion.priority : 3,
+    priority,
     file: motion.file || motion.path || motion.url || "",
   };
+}
+
+async function handleMotionClick(groupName, motionIndex, priority = MOTION_PRIORITY_FORCE) {
+  try {
+    console.log(
+      `[Motion Debug] 準備播放群組: ${groupName}, 索引: ${motionIndex}, 優先級: ${priority}`,
+    );
+    const result = await live2dModel.motion(groupName, motionIndex, priority);
+    if (result === false) {
+      console.warn(
+        `[Motion Debug] 動畫觸發失敗，請確認 ${groupName}[${motionIndex}] 是否存在於模型設定中。`,
+      );
+      return false;
+    }
+    console.log("[Motion Debug] 動畫開始播放...");
+    console.log("[Motion Debug] 動畫播放完畢，恢復預設狀態。");
+    return true;
+  } catch (error) {
+    console.error("[Motion Debug] 播放動畫時發生錯誤:", error);
+    return false;
+  }
 }
 
 function normalizeMotionToken(value) {
@@ -885,6 +1095,185 @@ function getMotionGroups(motionManager, internalModel) {
   }
 
   return Array.from(groups);
+}
+
+function getModelSourceDirectory(spec) {
+  const source = String(spec?.sourceLabel || "");
+  const slash = source.lastIndexOf("/");
+  return slash >= 0 ? source.slice(0, slash + 1) : "";
+}
+
+function getModelUrlDirectory(modelUrl) {
+  const cleanUrl = String(modelUrl || "").split("?")[0];
+  const slash = cleanUrl.lastIndexOf("/");
+  return slash >= 0 ? cleanUrl.slice(0, slash + 1) : "";
+}
+
+function toAbsoluteAssetUrl(baseUrlDir, assetPath) {
+  const raw = String(assetPath || "").trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  if (!baseUrlDir) return raw;
+  return encodeURI(baseUrlDir + raw.replace(/^\.\//, ""));
+}
+
+function normalizeMotionFileForSettings(filePath, spec) {
+  const file = String(filePath || "").trim();
+  if (!file) return "";
+  if (/^https?:\/\//i.test(file)) return file;
+  const sourceDir = getModelSourceDirectory(spec);
+  if (sourceDir && file.startsWith(sourceDir)) {
+    return file.slice(sourceDir.length);
+  }
+  return file;
+}
+
+function ensureMotionGroupsOnModelJson(modelJson) {
+  if (!modelJson.FileReferences) modelJson.FileReferences = {};
+  if (!modelJson.FileReferences.Motions) modelJson.FileReferences.Motions = {};
+  return modelJson.FileReferences.Motions;
+}
+
+function appendMotionDefinition(targetGroups, groupName, index, file) {
+  if (!targetGroups || !groupName || !file) return;
+  if (!Array.isArray(targetGroups[groupName])) targetGroups[groupName] = [];
+  const list = targetGroups[groupName];
+  const wanted = normalizeMotionFileName(file);
+  const exists = list.some((entry) => {
+    const entryFile = entry && (entry.File || entry.file);
+    return normalizeMotionFileName(entryFile) === wanted;
+  });
+  if (exists) return;
+
+  const item = { File: file };
+  if (Number.isInteger(index) && index >= 0 && !list[index]) {
+    list[index] = item;
+  } else {
+    list.push(item);
+  }
+}
+
+function absolutizeModelFileReferences(modelJson, baseUrlDir) {
+  const refs = modelJson && modelJson.FileReferences;
+  if (!refs || !baseUrlDir) return;
+
+  if (typeof refs.Moc === "string") {
+    refs.Moc = toAbsoluteAssetUrl(baseUrlDir, refs.Moc);
+  }
+  if (typeof refs.Physics === "string") {
+    refs.Physics = toAbsoluteAssetUrl(baseUrlDir, refs.Physics);
+  }
+  if (typeof refs.DisplayInfo === "string") {
+    refs.DisplayInfo = toAbsoluteAssetUrl(baseUrlDir, refs.DisplayInfo);
+  }
+  if (Array.isArray(refs.Textures)) {
+    refs.Textures = refs.Textures.map((path) => toAbsoluteAssetUrl(baseUrlDir, path));
+  }
+  if (refs.Motions && typeof refs.Motions === "object") {
+    Object.keys(refs.Motions).forEach((groupName) => {
+      const list = refs.Motions[groupName];
+      if (!Array.isArray(list)) return;
+      list.forEach((entry) => {
+        if (!entry) return;
+        if (typeof entry.File === "string") {
+          entry.File = toAbsoluteAssetUrl(baseUrlDir, entry.File);
+        }
+      });
+    });
+  }
+}
+
+async function buildPatchedModelJsonUrl(spec) {
+  if (!spec || !spec.modelUrl) return null;
+  try {
+    const response = await fetch(spec.modelUrl, { cache: "no-cache" });
+    if (!response.ok) return null;
+    const modelJson = await response.json();
+    const motionGroups = ensureMotionGroupsOnModelJson(modelJson);
+
+    const sourceDir = getModelSourceDirectory(spec);
+    const modelBaseDir = getModelUrlDirectory(spec.modelUrl);
+    const motions = Array.isArray(spec.motions) ? spec.motions : [];
+
+    motions.forEach((motion) => {
+      const cfg = normalizeMotionConfig(motion);
+      if (!cfg || !cfg.file) return;
+      const groupName = cfg.group || cfg.name || cfg.key;
+      if (!groupName) return;
+
+      const relativeFile = normalizeMotionFileForSettings(cfg.file, spec);
+      let motionPath = relativeFile;
+      if (sourceDir && relativeFile.startsWith(sourceDir)) {
+        motionPath = relativeFile.slice(sourceDir.length);
+      }
+      appendMotionDefinition(motionGroups, groupName, cfg.index, motionPath);
+    });
+
+    absolutizeModelFileReferences(modelJson, modelBaseDir);
+
+    const blob = new Blob([JSON.stringify(modelJson)], {
+      type: "application/json",
+    });
+    return URL.createObjectURL(blob);
+  } catch (e) {
+    console.warn("Build patched model json failed:", e);
+    return null;
+  }
+}
+
+function ensureCustomMotionDefinitions(spec, internalModel) {
+  if (!spec || !internalModel || !Array.isArray(spec.motions)) return;
+
+  if (!internalModel.settings) internalModel.settings = {};
+  if (!internalModel.settings.json) internalModel.settings.json = {};
+  if (!internalModel.settings.json.FileReferences) {
+    internalModel.settings.json.FileReferences = {};
+  }
+  if (!internalModel.settings.json.FileReferences.Motions) {
+    internalModel.settings.json.FileReferences.Motions = {};
+  }
+
+  const settingsGroups = internalModel.settings.json.FileReferences.Motions;
+  if (!internalModel.settings.motions) {
+    internalModel.settings.motions = settingsGroups;
+  }
+
+  const motionManager = internalModel.motionManager || internalModel.motion;
+  if (motionManager && !motionManager.definitions) {
+    motionManager.definitions = {};
+  }
+  const managerGroups = motionManager
+    ? motionManager.definitions || motionManager.motionGroups
+    : null;
+
+  const addEntry = (targetGroups, groupName, index, file) => {
+    if (!targetGroups || !groupName || !file) return;
+    if (!Array.isArray(targetGroups[groupName])) targetGroups[groupName] = [];
+    const list = targetGroups[groupName];
+    const wanted = normalizeMotionFileName(file);
+    const existingIndex = list.findIndex((entry) => {
+      const currentFile = entry && (entry.File || entry.file);
+      return normalizeMotionFileName(currentFile) === wanted;
+    });
+    if (existingIndex >= 0) return;
+
+    const entry = { File: file };
+    if (Number.isInteger(index) && index >= 0 && !list[index]) {
+      list[index] = entry;
+    } else {
+      list.push(entry);
+    }
+  };
+
+  spec.motions.forEach((motion) => {
+    const cfg = normalizeMotionConfig(motion);
+    if (!cfg || !cfg.file) return;
+    const groupName = cfg.group || cfg.name || cfg.key;
+    if (!groupName) return;
+    const relativeFile = normalizeMotionFileForSettings(cfg.file, spec);
+    addEntry(settingsGroups, groupName, cfg.index, relativeFile);
+    addEntry(managerGroups, groupName, cfg.index, relativeFile);
+  });
 }
 
 function resolveMotionGroupName(motionCfg, motionManager, internalModel) {
@@ -997,36 +1386,48 @@ async function triggerMotionByConfig(motionCfg) {
   const motionManager = (im && (im.motionManager || im.motion)) || null;
   const availableGroups = getMotionGroups(motionManager, im);
   const target = resolveMotionTarget(motionCfg, motionManager, im);
+  const priority = Math.max(MOTION_PRIORITY_FORCE, motionCfg.priority || 0);
   const tryCalls = [];
 
   if (typeof live2dModel.motion === "function" && target.group) {
     tryCalls.push(async () => {
-      await live2dModel.motion(target.group, target.index, motionCfg.priority);
-      return true;
+      return handleMotionClick(target.group, target.index, priority);
     });
     tryCalls.push(async () => {
-      await live2dModel.motion(target.group);
-      return true;
+      console.log(
+        `[Motion Debug] 使用 fallback：live2dModel.motion(${target.group})`,
+      );
+      const result = await live2dModel.motion(target.group);
+      return result !== false;
     });
   }
 
   if (motionManager && typeof motionManager.startMotion === "function" && target.group) {
     tryCalls.push(async () => {
-      await motionManager.startMotion(target.group, target.index, motionCfg.priority);
+      console.log(
+        `[Motion Debug] 使用 fallback：startMotion(${target.group}, ${target.index}, ${priority})`,
+      );
+      await motionManager.startMotion(target.group, target.index, priority);
       return true;
     });
   }
 
   if (motionManager && typeof motionManager.startRandomMotion === "function" && target.group) {
     tryCalls.push(async () => {
-      await motionManager.startRandomMotion(target.group, motionCfg.priority);
+      console.log(
+        `[Motion Debug] 使用 fallback：startRandomMotion(${target.group}, ${priority})`,
+      );
+      await motionManager.startRandomMotion(target.group, priority);
       return true;
     });
   }
 
   if (motionManager && typeof motionManager.startMotionByName === "function" && motionCfg.file) {
     tryCalls.push(async () => {
-      await motionManager.startMotionByName(motionCfg.file, motionCfg.priority);
+      console.log(
+        `[Motion Debug] 使用 fallback：startMotionByName(${motionCfg.file}, ${priority})`,
+      );
+      await motionManager.startMotionByName(motionCfg.file, priority);
       return true;
     });
   }
@@ -1103,6 +1504,7 @@ async function triggerMotion(name) {
 function switchModel(modelKey) {
   if (!MODEL_SPECS[modelKey]) return;
   currentModelKey = modelKey;
+  breathPhase = 0;
   activeExpressionKey = null;
   activeExpressionRestore = null;
   try {
@@ -1116,26 +1518,56 @@ function switchModel(modelKey) {
 
 function updateParam(type, val) {
   const spec = getCurrentModelSpec();
-  if (!spec || spec.expressionMode !== "sliders") return;
-  const pct = Math.round(val);
-  demoParams[type] = pct / 100;
-  if (type === "expressionHappy") {
-    const el = document.getElementById("expressionHappyVal");
-    if (el) el.textContent = pct + "%";
-  }
-  if (type === "expressionSurprised") {
-    const el = document.getElementById("expressionSurprisedVal");
-    if (el) el.textContent = pct + "%";
+  if (!supportsSliderExpressions(spec)) return;
+  const slider = getSliderControls(spec).find((item) => item.key === type);
+  if (!slider) return;
+  const min = Math.min(slider.min, slider.max);
+  const max = Math.max(slider.min, slider.max);
+  const num = clamp(Number(val) || 0, min, max);
+  demoParams[type] = num;
+  const el = document.getElementById(`${type}Val`);
+  if (el) el.textContent = formatSliderValue(num);
+  try {
+    applySliderControlValue(slider, num);
+  } catch (e) {}
+}
+
+function resetExpressionControls() {
+  const spec = getCurrentModelSpec();
+  if (!spec) return;
+
+  if (supportsPresetExpressions(spec) && activeExpressionKey) {
+    if (live2dModel) {
+      const im = live2dModel.internalModel;
+      const coreModel = im && im.coreModel;
+      if (coreModel) {
+        restoreExpressionValues(coreModel, activeExpressionRestore);
+      }
+    }
+    activeExpressionKey = null;
+    activeExpressionRestore = null;
   }
 
-  if (live2dModel) {
-    try {
-      if (type === "expressionHappy")
-        applyExpression("happy", demoParams.expressionHappy);
-      if (type === "expressionSurprised")
-        applyExpression("surprised", demoParams.expressionSurprised);
-    } catch (e) {}
+  if (supportsSliderExpressions(spec)) {
+    const sliders = getSliderControls(spec);
+    sliders.forEach((slider) => {
+      const min = Math.min(slider.min, slider.max);
+      const max = Math.max(slider.min, slider.max);
+      const value = clamp(Number(slider.defaultValue) || 0, min, max);
+      demoParams[slider.key] = value;
+
+      const input = document.getElementById(slider.key);
+      if (input) input.value = String(value);
+      const valueLabel = document.getElementById(`${slider.key}Val`);
+      if (valueLabel) valueLabel.textContent = formatSliderValue(value);
+
+      if (live2dModel) {
+        applySliderControlValue(slider, value);
+      }
+    });
   }
+
+  renderModelControls();
 }
 
 function toggleSwitch(type, val) {
@@ -1161,11 +1593,11 @@ function toggleSwitch(type, val) {
     if (type === "breathAuto") {
       const im = live2dModel.internalModel;
       const coreModel = im && im.coreModel;
-      if (im._breathBackup === undefined) im._breathBackup = im.breath;
-      im.breath = val ? im._breathBackup : null;
+      im.breath = null;
       if (coreModel && !val) {
-        setParamSafe(coreModel, "ParamBreath", 0);
-        setParamSafe(coreModel, "ParamBreath2", 0);
+        getRuntimeBreathParamIds().forEach((id) => {
+          setParamSafe(coreModel, id, 0);
+        });
       }
     }
   } catch (e) {}

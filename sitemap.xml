@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  阿卡貓 HakkaNeko 網站 — sitemap.xml
-  只列出「有開放、值得被搜尋引擎收錄」的頁面。commission/template（聯名模板）
-  跟 creative/model（模型展示）目前在 nav-config.js 是 enabled:false
-  （功能尚未開放），故不列入，避免使用者從 Google 搜到還沒完成的頁面。
-  之後在 nav-config.js 把某個分頁改回 enabled:true 時，記得同步把它
-  加回這份清單。
--->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hakkanekolive2d.cc/</loc>

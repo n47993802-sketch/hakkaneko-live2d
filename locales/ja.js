@@ -554,6 +554,33 @@
       "「モデルを読み込む」をクリックしてインタラクションを開始",
     demo_input_hint_desc:
       "左クリックを押しながらドラッグすると、視線がマウスに追従します",
+    demo_character_view:
+      '<i class="fa-solid fa-eye text-pink-400"></i> キャラクタービュー',
+    demo_reset_view: "視点をリセット",
+    demo_reset_view_title: "視点をリセット（位置・ズームを初期化）",
+    demo_reset_view_desc: "位置とズームを初期状態に戻す",
+    demo_enlarge_view: "拡大表示",
+    demo_enlarge_view_title: "拡大表示（フルスクリーン）",
+    demo_enlarge_view_desc: "フルスクリーン表示を切り替える",
+    demo_view_help: "視点操作ガイド",
+    demo_view_help_mouse: "左クリックを押したままドラッグ",
+    demo_view_help_mouse_desc: "X・Y 軸に追従",
+    demo_view_help_right: "右クリックを押したままドラッグ",
+    demo_view_help_right_desc: "Z 軸に追従",
+    demo_view_help_middle: "中ボタンで画面をドラッグ",
+    demo_view_help_middle_desc: "位置を手動で移動",
+    demo_view_help_wheel: "マウスホイール",
+    demo_view_help_wheel_desc: "ズームの拡大・縮小",
+    demo_showcase_model:
+      '<i class="fa-solid fa-cat text-pink-400"></i> 展示モデル',
+    demo_load_model: "モデルを読み込む",
+    demo_motion_title:
+      '<i class="fa-solid fa-bolt text-yellow-400"></i> モーション再生',
+    demo_expression_title: "表情パラメータ",
+    demo_reset_expression: "リセット",
+    demo_reset_expression_title: "表情パラメータをリセット",
+    demo_runtime_title:
+      '<i class="fa-solid fa-sliders text-emerald-400"></i> リアルタイム設定',
     demo_interact_mouse: "マウス移動<br>視線が追従",
     demo_interact_head: "頭をクリック<br>表情が変化",
     demo_interact_body: "体をクリック<br>モーション発生",
@@ -561,6 +588,16 @@
     demo_slider_expr: "表情の強さ",
     demo_slider_breath: "呼吸の速さ",
     demo_blink_auto: "自動まばたき",
+    demo_breath_auto: "自動呼吸",
+    demo_physics: "物理演算",
+    demo_display_note_title:
+      '<i class="fa-solid fa-circle-exclamation"></i> 展示に関する案内',
+    demo_display_note_interactions:
+      "視線追従やモーション再生などのインタラクション機能は本サイトが提供し、キャラクターデータはモデラー本人が管理しています。",
+    demo_display_note_quote:
+      "同品質の Live2D モデル制作をご希望の場合は、V皮設計ページで参考見積もりをご確認ください。",
+    demo_display_note_warning:
+      "スクリーンショットや録画を第三者作品として流用したり商用利用することを禁じます。違反時は法的措置を取ります。",
 
     port_work1_title: "「晩餐歌」ミュージックPV Live2Dアニメーション",
     port_work1_desc:

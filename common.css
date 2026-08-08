@@ -151,6 +151,16 @@ option,
   --glass-border: rgba(255, 255, 255, 0.07);
   --text-main: #e9d5ff;
   --panel-bg: rgba(18, 8, 36, 0.75);
+  --btn-soft-bg: rgba(110, 55, 190, 0.22);
+  --btn-soft-hover-bg: rgba(128, 74, 210, 0.32);
+  --btn-soft-border: rgba(192, 132, 252, 0.22);
+  --btn-soft-text: #f3e8ff;
+  --schedule-card-bg: rgba(10, 12, 28, 0.52);
+  --schedule-card-border: rgba(34, 211, 238, 0.18);
+  --schedule-card-item-bg: rgba(255, 255, 255, 0.05);
+  --schedule-card-title: #ffffff;
+  --schedule-card-text: rgba(243, 232, 255, 0.92);
+  --schedule-card-muted: rgba(196, 181, 253, 0.72);
 }
 
 body.light-mode {
@@ -158,6 +168,16 @@ body.light-mode {
   --text-main: #1a1030;
   --panel-bg: rgba(250, 247, 255, 0.95);
   --glass-border: rgba(107, 33, 168, 0.45);
+  --btn-soft-bg: rgba(219, 234, 254, 0.86);
+  --btn-soft-hover-bg: rgba(191, 219, 254, 0.96);
+  --btn-soft-border: rgba(14, 116, 144, 0.18);
+  --btn-soft-text: #1e3a5f;
+  --schedule-card-bg: rgba(243, 248, 255, 0.94);
+  --schedule-card-border: rgba(148, 163, 184, 0.26);
+  --schedule-card-item-bg: rgba(226, 232, 240, 0.72);
+  --schedule-card-title: #0f172a;
+  --schedule-card-text: #223047;
+  --schedule-card-muted: #5f6f86;
   background-image:
     radial-gradient(
       circle at 15% 50%,
@@ -205,25 +225,42 @@ body.light-mode .kofi-btn {
 }
 
 body.light-mode .bg-gradient-to-r.from-purple-600.to-blue-600 {
-  background-image: linear-gradient(135deg, #7c3aed, #2563eb) !important;
+  background-image: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.16) !important;
 }
 
 body.light-mode .bg-gradient-to-r.from-purple-600.to-pink-600 {
-  background-image: linear-gradient(135deg, #9333ea, #ec4899) !important;
+  background-image: linear-gradient(135deg, #dbeafe, #a5f3fc) !important;
+  box-shadow: 0 12px 28px rgba(14, 165, 233, 0.16) !important;
 }
 
 body.light-mode .bg-gradient-to-r.from-pink-600.to-purple-600 {
-  background-image: linear-gradient(135deg, #ec4899, #7c3aed) !important;
+  background-image: linear-gradient(135deg, #a5f3fc, #c7d2fe) !important;
+  box-shadow: 0 12px 28px rgba(56, 189, 248, 0.16) !important;
 }
 
 body.light-mode .bg-gradient-to-r.from-sky-600.to-blue-600 {
   background-image: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.2) !important;
 }
 
 body.light-mode .bg-indigo-600,
 body.light-mode .bg-purple-600 {
+  background-color: #4f46e5 !important;
+  color: #fff !important;
+}
+
+body.light-mode .bg-indigo-500,
+body.light-mode .hover\:bg-indigo-500:hover {
   background-color: #4338ca !important;
   color: #fff !important;
+}
+
+body.light-mode .bg-\[\#10b981\],
+body.light-mode .hover\:bg-\[\#059669\]:hover {
+  background-color: #059669 !important;
+  color: #fff !important;
+  box-shadow: 0 12px 26px rgba(5, 150, 105, 0.22) !important;
 }
 
 body.light-mode .kofi-btn {
@@ -254,13 +291,147 @@ body.light-mode .kofi-btn:hover {
   filter: brightness(1.05);
 }
 
+body.light-mode a[class*="bg-gradient-to-r"],
+body.light-mode button[class*="bg-gradient-to-r"],
+body.light-mode a.bg-indigo-600,
+body.light-mode button.bg-indigo-600,
+body.light-mode a.bg-\[\#10b981\],
+body.light-mode button.bg-\[\#10b981\],
+body.light-mode #scheduleRefreshBtn,
+body.light-mode .kofi-btn,
+body.light-mode .btn-copy-summary,
+body.light-mode .anchor-rules-link {
+  border-width: 1px;
+  border-style: solid;
+}
+
+body.light-mode a[class*="bg-gradient-to-r"],
+body.light-mode button[class*="bg-gradient-to-r"],
+body.light-mode a.bg-indigo-600,
+body.light-mode button.bg-indigo-600,
+body.light-mode a.bg-\[\#10b981\],
+body.light-mode button.bg-\[\#10b981\] {
+  border-color: rgba(125, 211, 252, 0.35) !important;
+  text-shadow: none;
+}
+
+body.light-mode a[class*="bg-gradient-to-r"],
+body.light-mode button[class*="bg-gradient-to-r"] {
+  color: #0f2742 !important;
+}
+
+body.light-mode a.bg-indigo-600,
+body.light-mode button.bg-indigo-600,
+body.light-mode a.bg-\[\#10b981\],
+body.light-mode button.bg-\[\#10b981\] {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.34) !important;
+}
+
+/* Fallback selectors for utility classes with brackets to avoid parser differences */
+body.light-mode a[class~="bg-indigo-600"],
+body.light-mode button[class~="bg-indigo-600"],
+body.light-mode a[class*="bg-[#10b981]"],
+body.light-mode button[class*="bg-[#10b981]"] {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.34) !important;
+}
+
+body.light-mode .bg-indigo-600.text-white,
+body.light-mode .bg-\[\#10b981\].text-white,
+body.light-mode .hover\:bg-indigo-500.text-white:hover,
+body.light-mode .hover\:bg-\[\#059669\].text-white:hover {
+  color: #ffffff !important;
+}
+
+body.light-mode .bg-indigo-600.text-white span,
+body.light-mode .bg-indigo-600.text-white i,
+body.light-mode .bg-\[\#10b981\].text-white span,
+body.light-mode .bg-\[\#10b981\].text-white i {
+  color: #ffffff !important;
+}
+
+body.light-mode a[class~="bg-indigo-600"] span,
+body.light-mode a[class~="bg-indigo-600"] i,
+body.light-mode button[class~="bg-indigo-600"] span,
+body.light-mode button[class~="bg-indigo-600"] i,
+body.light-mode a[class*="bg-[#10b981]"] span,
+body.light-mode a[class*="bg-[#10b981]"] i,
+body.light-mode button[class*="bg-[#10b981]"] span,
+body.light-mode button[class*="bg-[#10b981]"] i {
+  color: #ffffff !important;
+}
+
+body.light-mode a[class*="bg-gradient-to-r"]:hover,
+body.light-mode button[class*="bg-gradient-to-r"]:hover,
+body.light-mode a.bg-indigo-600:hover,
+body.light-mode button.bg-indigo-600:hover,
+body.light-mode a.bg-\[\#10b981\]:hover,
+body.light-mode button.bg-\[\#10b981\]:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+body.light-mode a[class*="bg-gradient-to-r"] span,
+body.light-mode a[class*="bg-gradient-to-r"] i,
+body.light-mode button[class*="bg-gradient-to-r"] span,
+body.light-mode button[class*="bg-gradient-to-r"] i {
+  color: #0f2742 !important;
+}
+
+body.light-mode a.bg-indigo-600 span,
+body.light-mode a.bg-indigo-600 i,
+body.light-mode button.bg-indigo-600 span,
+body.light-mode button.bg-indigo-600 i,
+body.light-mode a.bg-\[\#10b981\] span,
+body.light-mode a.bg-\[\#10b981\] i,
+body.light-mode button.bg-\[\#10b981\] span,
+body.light-mode button.bg-\[\#10b981\] i {
+  color: #ffffff !important;
+}
+
+body.light-mode #commissionBadge {
+  background: rgba(220, 252, 231, 0.96) !important;
+  color: #166534 !important;
+  border: 1px solid rgba(34, 197, 94, 0.28) !important;
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.1);
+}
+
+body.light-mode #commissionBadge .bg-green-500 {
+  background-color: #16a34a !important;
+}
+
+body.light-mode #twitterLiveBadge {
+  background: rgba(226, 232, 240, 0.88) !important;
+  color: #475569 !important;
+  border: 1px solid rgba(148, 163, 184, 0.24) !important;
+}
+
+body.light-mode #scheduleRefreshBtn {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.96), rgba(6, 182, 212, 0.92)) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.32) !important;
+  box-shadow: 0 12px 26px rgba(14, 165, 233, 0.2) !important;
+}
+
+body.light-mode #scheduleRefreshBtn,
+body.light-mode #scheduleRefreshBtn i,
+body.light-mode #scheduleRefreshBtn span {
+  color: #fff !important;
+}
+
+body.light-mode #scheduleRefreshBtn:hover {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.98), rgba(8, 145, 178, 0.94)) !important;
+  transform: translateY(-1px);
+}
+
 body.light-mode .tab-btn {
-  color: #4c1d95 !important;
+  color: #1e3a5f !important;
 }
 body.light-mode .tab-btn.active {
-  color: #1e0b34 !important;
-  background: rgba(235, 224, 255, 0.9) !important;
-  border-color: rgba(124, 58, 237, 0.25) !important;
+  color: #0c4a6e !important;
+  background: rgba(207, 250, 254, 0.72) !important;
+  border-color: rgba(8, 145, 178, 0.22) !important;
 }
 
 body.light-mode .bg-white\/5,
@@ -302,15 +473,17 @@ body.light-mode .bg-black\/60 {
   border-color: rgba(107, 33, 168, 0.4) !important;
 }
 body.light-mode .option-card {
-  background: rgba(248, 244, 253, 0.94);
-  border-color: rgba(107, 33, 168, 0.18) !important;
+  background: rgba(240, 253, 255, 0.94);
+  border-color: rgba(8, 145, 178, 0.2) !important;
 }
 body.light-mode .option-card:hover {
-  box-shadow: 0 0 22px rgba(168, 85, 247, 0.12);
+  border-color: rgba(8, 145, 178, 0.45) !important;
+  box-shadow: 0 0 22px rgba(6, 182, 212, 0.14);
 }
 body.light-mode .option-card:has(input:checked) {
-  background: rgba(221, 214, 255, 0.96);
-  border-color: rgba(107, 33, 168, 0.45) !important;
+  background: rgba(207, 250, 254, 0.96);
+  border-color: rgba(8, 145, 178, 0.5) !important;
+  box-shadow: 0 0 18px rgba(6, 182, 212, 0.18) inset;
 }
 body.light-mode .text-gradient {
   background: linear-gradient(to right, #7b11b8, #d4389a);
@@ -319,6 +492,20 @@ body.light-mode .text-gradient {
 body.light-mode .border-white\/5,
 body.light-mode .border-white\/10 {
   border-color: rgba(107, 33, 168, 0.38) !important;
+}
+/* option-card border must override the border-white utility above */
+body.light-mode .option-card,
+body.light-mode .option-card.border-white\/5,
+body.light-mode .option-card.border-white\/10 {
+  border-color: rgba(8, 145, 178, 0.22) !important;
+}
+body.light-mode .option-card:hover,
+body.light-mode .option-card.border-white\/5:hover,
+body.light-mode .option-card.border-white\/10:hover {
+  border-color: rgba(8, 145, 178, 0.5) !important;
+}
+body.light-mode .option-card:has(input:checked) {
+  border-color: rgba(8, 145, 178, 0.55) !important;
 }
 body.light-mode input,
 body.light-mode textarea,
@@ -337,10 +524,10 @@ body.light-mode nav {
   border-color: rgba(107, 33, 168, 0.35) !important;
 }
 body.light-mode .tab-btn {
-  color: #6b21a8 !important;
+  color: #1e3a5f !important;
 }
 body.light-mode .tab-btn.active {
-  color: #1a1030 !important;
+  color: #0c4a6e !important;
 }
 body.light-mode header p {
   color: #6b21a8 !important;
@@ -498,8 +685,8 @@ body.light-mode a.text-blue-400 {
 }
 
 body.light-mode .tab-btn.active {
-  background: rgba(107, 33, 168, 0.28) !important;
-  color: #1a1030 !important;
+  background: rgba(207, 250, 254, 0.72) !important;
+  color: #0c4a6e !important;
 }
 
 body.light-mode .service-icon {
@@ -507,11 +694,13 @@ body.light-mode .service-icon {
   color: #5b1898 !important;
 }
 
-body.light-mode .text-xs {
-  color: #3a2855 !important;
-}
-body.light-mode .text-sm {
-  color: #2a1a44 !important;
+body.light-mode p.text-xs,
+body.light-mode li.text-xs,
+body.light-mode div.text-xs:not(.btn-status):not(.schedule-card-month):not(.schedule-card-meta),
+body.light-mode p.text-sm,
+body.light-mode li.text-sm,
+body.light-mode div.text-sm {
+  color: #344255 !important;
 }
 
 body {
@@ -688,26 +877,32 @@ body {
   filter: none;
 }
 body.light-mode .btn-copy-summary {
-  color: #3b1f6e;
-  border-color: rgba(100, 60, 150, 0.35);
+  color: #16324f !important;
+  border-color: rgba(14, 116, 144, 0.24);
   background: linear-gradient(
     135deg,
-    rgba(237, 228, 255, 0.95) 0%,
-    rgba(223, 211, 255, 0.85) 100%
-  );
+    rgba(239, 246, 255, 0.98) 0%,
+    rgba(219, 234, 254, 0.92) 100%
+  ) !important;
+  box-shadow: 0 10px 22px rgba(14, 116, 144, 0.12) !important;
 }
 body.light-mode .btn-copy-summary:hover {
   background: linear-gradient(
     135deg,
-    rgba(235, 224, 255, 1) 0%,
-    rgba(211, 187, 255, 0.95) 100%
-  );
-  color: #3b1f6e;
+    rgba(224, 242, 254, 1) 0%,
+    rgba(186, 230, 253, 0.96) 100%
+  ) !important;
+  color: #10243d !important;
 }
 body.light-mode .btn-copy-summary:disabled {
-  background: rgba(238, 233, 255, 0.75);
-  color: #6d5599;
-  border-color: rgba(167, 139, 250, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(241, 245, 249, 0.96) 0%,
+    rgba(226, 232, 240, 0.92) 100%
+  ) !important;
+  color: #64748b !important;
+  border-color: rgba(148, 163, 184, 0.3);
+  box-shadow: none !important;
 }
 
 .anchor-rules-link {
@@ -733,14 +928,26 @@ body.light-mode .btn-copy-summary:disabled {
   color: #e9d5ff;
   background: rgba(139, 92, 246, 0.1);
 }
+body:not(.light-mode) .anchor-rules-link {
+  color: rgba(226, 232, 255, 0.9);
+  background: var(--btn-soft-bg);
+  border: 1px solid var(--btn-soft-border);
+  box-shadow: 0 10px 20px rgba(56, 27, 109, 0.12);
+}
+body:not(.light-mode) .anchor-rules-link:hover {
+  color: #fff;
+  background: var(--btn-soft-hover-bg);
+  border-color: rgba(192, 132, 252, 0.4);
+}
 body.light-mode .anchor-rules-link {
-  color: #6b21a8;
-  background: rgba(251, 243, 255, 0.88);
-  border: 1px solid rgba(107, 33, 168, 0.2);
+  color: var(--btn-soft-text);
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.98), rgba(224, 242, 254, 0.96));
+  border: 1px solid var(--btn-soft-border);
+  box-shadow: 0 10px 22px rgba(14, 116, 144, 0.1);
 }
 body.light-mode .anchor-rules-link:hover {
-  color: #1a1030;
-  background: rgba(230, 220, 255, 0.95);
+  color: #0f172a;
+  background: linear-gradient(135deg, rgba(224, 242, 254, 1), rgba(186, 230, 253, 0.98));
 }
 
 .anchor-rules-link:focus-visible,
@@ -991,22 +1198,22 @@ body.lang-switching {
 
 .option-card:hover {
   transform: translateY(-1px);
-  border-color: rgba(168, 85, 247, 0.45) !important;
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.18);
+  border-color: rgba(34, 211, 238, 0.5) !important;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.18);
 }
 
 .option-card:has(input:checked) {
-  border-color: var(--accent-primary);
-  background: rgba(139, 92, 246, 0.15);
-  box-shadow: 0 0 20px var(--accent-glow) inset;
+  border-color: #22d3ee;
+  background: linear-gradient(145deg, rgba(34, 211, 238, 0.12) 0%, rgba(52, 211, 153, 0.08) 100%);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.25) inset;
 }
 
 .model-card:has(input:checked) {
-  border-color: #a855f7;
+  border-color: #34d399;
   background: linear-gradient(
     145deg,
-    rgba(168, 85, 247, 0.15) 0%,
-    rgba(59, 130, 246, 0.1) 100%
+    rgba(34, 211, 238, 0.14) 0%,
+    rgba(52, 211, 153, 0.1) 100%
   );
 }
 
@@ -1015,11 +1222,11 @@ body.lang-switching {
 }
 
 .option-card:has(input:focus-visible) {
-  outline: 3px solid rgba(168, 85, 247, 0.85);
+  outline: 3px solid rgba(34, 211, 238, 0.85);
   outline-offset: 2px;
 }
 body.light-mode .option-card:has(input:focus-visible) {
-  outline-color: rgba(107, 33, 168, 0.9);
+  outline-color: rgba(8, 145, 178, 0.9);
 }
 
 .option-card:has(input:checked) {
@@ -1079,9 +1286,9 @@ body.light-mode .option-card:has(input:focus-visible) {
   transform: translateX(-50%);
   width: 0;
   height: 2px;
-  background: #a855f7;
+  background: linear-gradient(90deg, #22d3ee, #34d399);
   transition: width 0.3s ease;
-  box-shadow: 0 0 10px #a855f7;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.7);
 }
 .tab-btn.active {
   color: white;
@@ -1090,7 +1297,7 @@ body.light-mode .option-card:has(input:focus-visible) {
   width: 100%;
 }
 body.light-mode .tab-btn.active {
-  color: #000;
+  color: #0c4a6e;
 }
 
 .page-content {
@@ -1591,8 +1798,9 @@ body.light-mode .speech-bubble {
   background: linear-gradient(
     120deg,
     transparent 30%,
-    rgba(168, 85, 247, 0.22) 50%,
-    transparent 70%
+    rgba(34, 211, 238, 0.2) 50%,
+    rgba(52, 211, 153, 0.12) 65%,
+    transparent 80%
   );
   transform: translateX(-120%);
   pointer-events: none;
@@ -1926,6 +2134,7 @@ body.loading {
   color: white;
   font-weight: 700;
   font-size: 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   transition: all 0.2s;
   box-shadow: 0 4px 14px rgba(255, 94, 91, 0.35);
   white-space: nowrap;
@@ -1939,6 +2148,150 @@ body.loading {
   width: 1.1em;
   height: 1.1em;
   flex-shrink: 0;
+}
+
+.schedule-filter-btn,
+.schedule-page-btn {
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+#scheduleRefreshBtn {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.24), rgba(6, 182, 212, 0.18)) !important;
+  color: #ecfeff !important;
+  border-color: rgba(103, 232, 249, 0.22) !important;
+  box-shadow: 0 10px 22px rgba(8, 145, 178, 0.12);
+}
+
+#scheduleRefreshBtn:hover {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.36), rgba(34, 211, 238, 0.24)) !important;
+  color: #fff !important;
+}
+
+body:not(.light-mode) .schedule-filter-btn,
+body:not(.light-mode) .schedule-page-btn {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(243, 232, 255, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body:not(.light-mode) .schedule-filter-btn:hover,
+body:not(.light-mode) .schedule-page-btn:hover {
+  background: rgba(34, 211, 238, 0.14) !important;
+  color: #ecfeff !important;
+  border-color: rgba(103, 232, 249, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+body:not(.light-mode) .schedule-filter-btn.is-active,
+body:not(.light-mode) .schedule-page-btn.is-active {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.34), rgba(34, 211, 238, 0.22)) !important;
+  color: #ecfeff !important;
+  border-color: rgba(103, 232, 249, 0.45) !important;
+  box-shadow: 0 10px 24px rgba(8, 145, 178, 0.22) !important;
+}
+
+body.light-mode .schedule-filter-btn,
+body.light-mode .schedule-page-btn {
+  background: rgba(226, 232, 240, 0.92) !important;
+  color: #334155 !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  box-shadow: 0 8px 18px rgba(71, 85, 105, 0.08);
+}
+
+body.light-mode .schedule-filter-btn:hover,
+body.light-mode .schedule-page-btn:hover {
+  background: rgba(224, 242, 254, 0.98) !important;
+  color: #155e75 !important;
+  border-color: rgba(8, 145, 178, 0.28) !important;
+  transform: translateY(-1px);
+}
+
+body.light-mode .schedule-filter-btn.is-active,
+body.light-mode .schedule-page-btn.is-active {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.98), rgba(6, 182, 212, 0.92)) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.36) !important;
+  box-shadow: 0 12px 26px rgba(14, 165, 233, 0.18) !important;
+}
+
+.schedule-card {
+  background: var(--schedule-card-bg) !important;
+  border-color: var(--schedule-card-border) !important;
+}
+
+.schedule-card-title {
+  color: var(--schedule-card-title) !important;
+}
+
+.schedule-card-list {
+  color: var(--schedule-card-text) !important;
+}
+
+.schedule-card-item {
+  background: var(--schedule-card-item-bg) !important;
+}
+
+.schedule-card-month,
+.schedule-card-meta,
+.schedule-card-muted {
+  color: var(--schedule-card-muted) !important;
+}
+
+body.light-mode #scheduleMeta,
+body.light-mode #scheduleStatus {
+  color: #516276 !important;
+}
+
+body.light-mode #scheduleStatus {
+  background: rgba(226, 232, 240, 0.82) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+body.light-mode .schedule-card {
+  box-shadow: 0 14px 30px rgba(148, 163, 184, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Status badge border & light-mode overrides */
+.schedule-status-pending {
+  border-color: rgba(248, 113, 113, 0.35) !important;
+}
+.schedule-status-done {
+  border-color: rgba(147, 197, 253, 0.35) !important;
+}
+body.light-mode .schedule-status-pending {
+  background: rgba(254, 226, 226, 0.92) !important;
+  color: #991b1b !important;
+  border-color: rgba(252, 165, 165, 0.4) !important;
+}
+body.light-mode .schedule-status-done {
+  background: rgba(219, 234, 254, 0.92) !important;
+  color: #1e40af !important;
+  border-color: rgba(147, 197, 253, 0.4) !important;
+}
+/* Ensure badge text is not overridden by glass-panel span rules */
+body.light-mode span.schedule-status-pending,
+body.light-mode span.schedule-status-done {
+  color: inherit !important;
+}
+body.light-mode span.schedule-status-pending {
+  color: #991b1b !important;
+}
+body.light-mode span.schedule-status-done {
+  color: #1e40af !important;
+}
+
+/* Schedule card frame color */
+body.light-mode .schedule-card {
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+body.light-mode .schedule-card:hover {
+  border-color: rgba(8, 145, 178, 0.28) !important;
 }
 
 .artist-name {

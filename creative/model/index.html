@@ -380,6 +380,28 @@
         </div>
 
         <style>
+          :root {
+            --model-view-shell-bg: #0f052a;
+            --model-view-shell-bg-soft: #06030f;
+            --model-view-surface: rgba(23, 10, 47, 0.95);
+            --model-view-surface-alt: rgba(18, 8, 36, 0.92);
+            --model-view-border: rgba(255, 255, 255, 0.1);
+            --model-view-shadow: rgba(46, 16, 101, 0.34);
+            --model-view-text: rgba(245, 232, 255, 0.98);
+            --model-view-text-soft: rgba(233, 213, 255, 0.78);
+          }
+
+          body.light-mode {
+            --model-view-shell-bg: #f5edff;
+            --model-view-shell-bg-soft: #e6d9fb;
+            --model-view-surface: rgba(255, 250, 255, 0.97);
+            --model-view-surface-alt: rgba(247, 240, 255, 0.95);
+            --model-view-border: rgba(107, 33, 168, 0.24);
+            --model-view-shadow: rgba(107, 33, 168, 0.14);
+            --model-view-text: #24133f;
+            --model-view-text-soft: rgba(58, 40, 85, 0.82);
+          }
+
           #characterViewPanel {
             overflow: visible;
             isolation: isolate;
@@ -412,7 +434,11 @@
             max-width: none;
             padding: 24px;
             overflow-y: auto;
-            background: #0f052a;
+            background: linear-gradient(
+              180deg,
+              var(--model-view-shell-bg),
+              var(--model-view-shell-bg-soft)
+            );
             align-content: center;
           }
           #modelShowcaseGrid:fullscreen #live2dWrapper,
@@ -427,7 +453,11 @@
             height: 100vh;
             padding: 24px;
             overflow-y: auto;
-            background: #0f052a;
+            background: linear-gradient(
+              180deg,
+              var(--model-view-shell-bg),
+              var(--model-view-shell-bg-soft)
+            );
             display: grid;
             grid-template-columns: minmax(420px, 1fr) 360px;
             gap: 24px;
@@ -443,6 +473,60 @@
           }
           body.model-enlarged #modelShowcaseGrid #live2dWrapper {
             height: min(84vh, 920px) !important;
+          }
+
+          #characterViewPanel #live2dWrapper {
+            background: linear-gradient(
+              180deg,
+              var(--model-view-shell-bg),
+              var(--model-view-shell-bg-soft)
+            ) !important;
+            border-color: var(--model-view-border) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04),
+              0 16px 40px var(--model-view-shadow);
+          }
+
+          #characterViewPanel .view-help-popover {
+            background: var(--model-view-surface) !important;
+            border-color: var(--model-view-border) !important;
+            box-shadow: 0 20px 42px var(--model-view-shadow) !important;
+          }
+
+          #characterViewPanel .view-help-popover,
+          #characterViewPanel .view-help-popover div,
+          #characterViewPanel .view-help-popover i {
+            color: var(--model-view-text) !important;
+          }
+
+          #characterViewPanel .view-help-popover .text-purple-200\/80,
+          #characterViewPanel .view-help-popover .text-purple-100\/95 {
+            color: var(--model-view-text-soft) !important;
+          }
+
+          .model-action-btn {
+            background: rgba(168, 85, 247, 0.16);
+            border: 1px solid rgba(168, 85, 247, 0.24);
+          }
+
+          body.light-mode .model-action-btn {
+            background: rgba(255, 255, 255, 0.78) !important;
+            border-color: rgba(107, 33, 168, 0.22) !important;
+            color: #3b1f6e !important;
+          }
+
+          body.light-mode .model-action-btn:hover {
+            background: rgba(245, 236, 255, 0.95) !important;
+          }
+
+          body.light-mode .model-control-panel select {
+            background: var(--model-view-surface-alt) !important;
+            border-color: rgba(107, 33, 168, 0.28) !important;
+          }
+
+          body.light-mode #live2dPlaceholder,
+          body.light-mode #live2dPlaceholder p,
+          body.light-mode #live2dPlaceholder i {
+            color: rgba(91, 24, 152, 0.7) !important;
           }
 
           .model-control-panel,
@@ -469,6 +553,7 @@
                 <div class="flex items-center gap-2 flex-wrap">
                   <span
                     class="text-sm font-bold text-purple-300 flex items-center gap-2"
+                    data-i18n="demo_character_view"
                   >
                     <i class="fa-solid fa-eye text-pink-400"></i> 角色視窗
                   </span>
@@ -483,75 +568,79 @@
                   <button
                     onclick="resetView()"
                     title="重置視角（還原位置/縮放）"
-                    class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                    data-i18n-title="demo_reset_view_title"
+                    class="model-action-btn text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
                   >
-                    <i class="fa-solid fa-arrows-rotate"></i> 重置視角
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span data-i18n="demo_reset_view">重置視角</span>
                   </button>
                   <button
                     id="enlargeViewBtn"
                     onclick="toggleEnlargeView()"
                     title="放大檢視（全螢幕）"
-                    class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                    data-i18n-title="demo_enlarge_view_title"
+                    class="model-action-btn text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
                   >
                     <i class="fa-solid fa-expand" id="enlargeViewIcon"></i>
-                    <span id="enlargeViewLabel">放大檢視</span>
+                    <span id="enlargeViewLabel" data-i18n="demo_enlarge_view">放大檢視</span>
                   </button>
                   <div class="relative overflow-visible">
                     <button
                       type="button"
                       title="視角操作說明"
-                      class="view-help-trigger text-xs bg-cyan-500/15 hover:bg-cyan-500/30 text-cyan-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                      data-i18n-title="demo_view_help"
+                      class="model-action-btn view-help-trigger text-xs bg-cyan-500/15 hover:bg-cyan-500/30 text-cyan-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
                     >
                       <i class="fa-solid fa-circle-question"></i>
-                      視角操作說明
+                      <span data-i18n="demo_view_help">視角操作說明</span>
                     </button>
                     <div
                       class="view-help-popover pointer-events-none absolute right-0 top-[calc(100%+8px)] w-52 rounded-xl border border-purple-400/35 bg-[#170a2f]/95 backdrop-blur-md px-3 py-2.5 text-[10px] leading-4 text-purple-100 opacity-0 invisible translate-y-1 transition-all z-[120] shadow-xl shadow-purple-950/45"
                     >
-                      <div class="text-[11px] font-bold text-white mb-2">
+                      <div class="text-[11px] font-bold text-white mb-2" data-i18n="demo_view_help">
                         視角操作說明
                       </div>
                       <div class="space-y-1.5 leading-relaxed text-purple-100/95">
                         <div class="flex items-start gap-2">
                           <i class="fa-solid fa-arrows-up-down-left-right text-[10px] text-purple-300 mt-0.5"></i>
                           <div>
-                            <div>按住左鍵拖曳</div>
-                            <div class="text-purple-200/80">X、Y軸跟隨</div>
+                            <div data-i18n="demo_view_help_mouse">按住左鍵拖曳</div>
+                            <div class="text-purple-200/80" data-i18n="demo_view_help_mouse_desc">X、Y軸跟隨</div>
                           </div>
                         </div>
                         <div class="flex items-start gap-2">
                           <i class="fa-solid fa-computer-mouse text-[10px] text-purple-300 mt-0.5"></i>
                           <div>
-                            <div>按住右鍵拖曳</div>
-                            <div class="text-purple-200/80">Z軸跟隨</div>
+                            <div data-i18n="demo_view_help_right">按住右鍵拖曳</div>
+                            <div class="text-purple-200/80" data-i18n="demo_view_help_right_desc">Z軸跟隨</div>
                           </div>
                         </div>
                         <div class="flex items-start gap-2">
                           <i class="fa-solid fa-hand text-[10px] text-purple-300 mt-0.5"></i>
                           <div>
-                            <div>中鍵拖曳畫面</div>
-                            <div class="text-purple-200/80">手動搬位置</div>
+                            <div data-i18n="demo_view_help_middle">中鍵拖曳畫面</div>
+                            <div class="text-purple-200/80" data-i18n="demo_view_help_middle_desc">手動搬位置</div>
                           </div>
                         </div>
                         <div class="flex items-start gap-2">
                           <i class="fa-solid fa-up-down text-[10px] text-purple-300 mt-0.5"></i>
                           <div>
-                            <div>滑鼠滾輪</div>
-                            <div class="text-purple-200/80">縮放大小</div>
+                            <div data-i18n="demo_view_help_wheel">滑鼠滾輪</div>
+                            <div class="text-purple-200/80" data-i18n="demo_view_help_wheel_desc">縮放大小</div>
                           </div>
                         </div>
                         <div class="flex items-start gap-2">
                           <i class="fa-solid fa-arrows-rotate text-[10px] text-purple-300 mt-0.5"></i>
                           <div>
-                            <div>重製視角</div>
-                            <div class="text-purple-200/80">還原位置與縮放</div>
+                            <div data-i18n="demo_reset_view">重製視角</div>
+                            <div class="text-purple-200/80" data-i18n="demo_reset_view_desc">還原位置與縮放</div>
                           </div>
                         </div>
                         <div class="flex items-start gap-2">
                           <i class="fa-solid fa-expand text-[10px] text-purple-300 mt-0.5"></i>
                           <div>
-                            <div>放大檢視</div>
-                            <div class="text-purple-200/80">切換全螢幕檢視</div>
+                            <div data-i18n="demo_enlarge_view">放大檢視</div>
+                            <div class="text-purple-200/80" data-i18n="demo_enlarge_view_desc">切換全螢幕檢視</div>
                           </div>
                         </div>
                       </div>
@@ -594,6 +683,7 @@
             <div class="glass-panel p-5 model-control-panel">
               <h3
                 class="text-sm font-bold text-white mb-3 flex items-center gap-2"
+                data-i18n="demo_showcase_model"
               >
                 <i class="fa-solid fa-cat text-pink-400"></i> 展示模型
               </h3>
@@ -609,13 +699,14 @@
                 onclick="loadLive2DModel()"
                 class="w-full py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white transition-all flex items-center justify-center gap-2"
               >
-                <i class="fa-solid fa-rotate"></i> 載入模型
+                <i class="fa-solid fa-rotate"></i> <span data-i18n="demo_load_model">載入模型</span>
               </button>
             </div>
 
             <div class="glass-panel p-5 model-control-panel">
               <h3
                 class="text-sm font-bold text-white mb-3 flex items-center gap-2"
+                data-i18n="demo_motion_title"
               >
                 <i class="fa-solid fa-bolt text-yellow-400"></i> 觸發動畫
               </h3>
@@ -644,15 +735,16 @@
             <div class="glass-panel p-5 model-control-panel">
               <div class="mb-4 flex items-center justify-between gap-2">
                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                  <i class="fa-solid fa-face-smile text-pink-400"></i> 表情參數
+                  <i class="fa-solid fa-face-smile text-pink-400"></i> <span data-i18n="demo_expression_title">表情參數</span>
                 </h3>
                 <button
                   type="button"
                   onclick="resetExpressionControls()"
-                  class="text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
+                  class="model-action-btn text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-200 px-2.5 py-1 rounded-full transition-colors flex items-center gap-1"
                   title="重製表情參數"
+                  data-i18n-title="demo_reset_expression_title"
                 >
-                  <i class="fa-solid fa-rotate-left"></i> 重製
+                  <i class="fa-solid fa-rotate-left"></i> <span data-i18n="demo_reset_expression">重製</span>
                 </button>
               </div>
               <div id="expressionControls" class="space-y-4">
@@ -702,6 +794,7 @@
             <div class="glass-panel p-5 model-control-panel">
               <h3
                 class="text-sm font-bold text-white mb-4 flex items-center gap-2"
+                data-i18n="demo_runtime_title"
               >
                 <i class="fa-solid fa-sliders text-emerald-400"></i> 即時參數
               </h3>
@@ -732,7 +825,7 @@
                   </label>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-xs text-purple-300">呼吸自動</span>
+                  <span class="text-xs text-purple-300" data-i18n="demo_breath_auto">呼吸自動</span>
                   <label
                     class="relative inline-flex items-center cursor-pointer"
                   >
@@ -752,7 +845,7 @@
                   </label>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-xs text-purple-300">物理演算</span>
+                  <span class="text-xs text-purple-300" data-i18n="demo_physics">物理演算</span>
                   <label
                     class="relative inline-flex items-center cursor-pointer"
                   >
@@ -780,6 +873,7 @@
         <div class="glass-panel p-5 mt-6 border-purple-400/20 bg-purple-400/5">
           <h3
             class="text-sm font-bold text-purple-300 mb-3 flex items-center gap-2"
+            data-i18n="demo_display_note_title"
           >
             <i class="fa-solid fa-circle-exclamation"></i> 展示說明
           </h3>
@@ -798,18 +892,17 @@
               <i
                 class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"
               ></i
-              >所有互動功能（視線追蹤、動畫觸發）均由本站提供，角色資料由建模師本人管理。
+              ><span data-i18n="demo_display_note_interactions">所有互動功能（視線追蹤、動畫觸發）均由本站提供，角色資料由建模師本人管理。</span>
             </li>
             <li>
               <i
                 class="fa-solid fa-circle text-purple-500/50 text-[6px] mr-2"
               ></i
-              >若您也有意委託製作同等品質的 Live2D 模型，歡迎至 V皮設計
-              分頁試算報價。
+              ><span data-i18n="demo_display_note_quote">若您也有意委託製作同等品質的 Live2D 模型，歡迎至 V皮設計 分頁試算報價。</span>
             </li>
             <li>
               <i class="fa-solid fa-circle text-red-400/60 text-[6px] mr-2"></i
-              >嚴禁截圖、錄影後冒用為他人作品或商業使用，違者將依著作權法追究。
+              ><span data-i18n="demo_display_note_warning">嚴禁截圖、錄影後冒用為他人作品或商業使用，違者將依著作權法追究。</span>
             </li>
           </ul>
         </div>

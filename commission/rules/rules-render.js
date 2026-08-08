@@ -566,18 +566,18 @@ function toggleFaq(btn) {
   function statusStyles(status) {
     const key = normalizeStatusKey(status);
     if (key === "notStarted") {
-      return "bg-red-500/20 text-red-200 border-red-400/30";
+      return "schedule-status-pending bg-red-500/20 text-red-200";
     }
     if (key === "inProgress") {
-      return "bg-orange-500/20 text-orange-200 border-orange-400/30";
+      return "schedule-status-pending bg-orange-500/20 text-red-200";
     }
     if (key === "done") {
-      return "bg-emerald-500/20 text-emerald-200 border-emerald-400/30";
+      return "schedule-status-done bg-blue-500/20 text-blue-200";
     }
     if (key === "queued") {
-      return "bg-purple-500/20 text-purple-200 border-purple-400/30";
+      return "schedule-status-pending bg-purple-500/20 text-red-200";
     }
-    return "bg-sky-500/20 text-sky-100 border-sky-400/30";
+    return "schedule-status-pending bg-red-500/20 text-red-200";
   }
 
   function statusLabel(status) {
@@ -642,9 +642,9 @@ function toggleFaq(btn) {
           <button
             type="button"
             data-schedule-filter="${tab.key}"
-            class="px-4 py-2 rounded-xl text-sm font-bold border transition-colors ${
+            class="schedule-filter-btn px-4 py-2 rounded-xl text-sm font-bold border transition-colors ${
               active
-                ? "bg-cyan-500/20 text-cyan-100 border-cyan-300/40 shadow-lg shadow-cyan-900/20"
+                ? "is-active bg-cyan-500/20 text-cyan-100 border-cyan-300/40 shadow-lg shadow-cyan-900/20"
                 : "bg-white/5 text-purple-200/80 border-white/10 hover:bg-white/10 hover:text-white"
             }"
           >
@@ -680,9 +680,9 @@ function toggleFaq(btn) {
         <button
           type="button"
           data-schedule-page="${index}"
-          class="min-w-8 h-8 px-2 rounded-full text-xs font-bold border transition-colors ${
+          class="schedule-page-btn min-w-8 h-8 px-2 rounded-full text-xs font-bold border transition-colors ${
             active
-              ? "bg-cyan-500/25 text-cyan-100 border-cyan-300/40 shadow-lg shadow-cyan-900/20"
+              ? "is-active bg-cyan-500/25 text-cyan-100 border-cyan-300/40 shadow-lg shadow-cyan-900/20"
               : "bg-white/5 text-purple-200/80 border-white/10 hover:bg-white/10 hover:text-white"
           }"
           aria-label="第 ${index} 頁"
@@ -741,9 +741,9 @@ function toggleFaq(btn) {
     const overdue = isOverdue(row);
     const dueSoon = !overdue && isDueSoon(row);
     const articlePadding = "p-3";
-    const titleClass = "mt-1 text-base font-black text-white leading-snug";
-    const listClass = "mt-2 space-y-1.5 text-xs text-purple-100/90";
-    const itemClass = "flex items-start gap-2 rounded-xl bg-white/5 px-2.5 py-1.5";
+    const titleClass = "schedule-card-title mt-1 text-base font-black text-white leading-snug";
+    const listClass = "schedule-card-list mt-2 space-y-1.5 text-xs text-purple-100/90";
+    const itemClass = "schedule-card-item flex items-start gap-2 rounded-xl bg-white/5 px-2.5 py-1.5";
     const deadlineToneClass = overdue
       ? "text-red-300"
       : dueSoon
@@ -756,10 +756,10 @@ function toggleFaq(btn) {
         : "";
 
     return `
-      <article class="rounded-2xl border border-white/10 bg-black/25 ${articlePadding} shadow-xl shadow-cyan-950/10 backdrop-blur-sm hover:border-cyan-400/30 transition-colors">
+      <article class="schedule-card rounded-2xl border border-white/10 bg-black/25 ${articlePadding} shadow-xl shadow-cyan-950/10 backdrop-blur-sm hover:border-cyan-400/30 transition-colors">
         <div class="flex items-start justify-between gap-3 mb-4">
           <div>
-            <div class="text-xs font-bold tracking-[0.2em] text-cyan-300/75 uppercase">${escapeHtml(month)}</div>
+            <div class="schedule-card-month text-xs font-bold tracking-[0.2em] text-cyan-300/75 uppercase">${escapeHtml(month)}</div>
             <h3 class="${titleClass}">${escapeHtml(
               commissionNumber,
             )}</h3>
@@ -772,23 +772,23 @@ function toggleFaq(btn) {
         <ul class="${listClass}">
           <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
-            <span><span class="text-purple-300/60">${escapeHtml(copy.clientLabel)}：</span>${escapeHtml(row.client || copy.notFilled)}</span>
+            <span><span class="schedule-card-muted text-purple-300/60">${escapeHtml(copy.clientLabel)}：</span>${escapeHtml(row.client || copy.notFilled)}</span>
           </li>
           <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
-            <span><span class="text-purple-300/60">${escapeHtml(copy.itemLabel || "委託品項")}：</span>${escapeHtml(row.item || copy.notFilled)}</span>
+            <span><span class="schedule-card-muted text-purple-300/60">${escapeHtml(copy.itemLabel || "委託品項")}：</span>${escapeHtml(row.item || copy.notFilled)}</span>
           </li>
           <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
-            <span><span class="text-purple-300/60">${escapeHtml(copy.deadlineLabel)}：</span><span class="${deadlineToneClass}">${escapeHtml(deadline)}${deadlineBadge ? ` ${deadlineBadge}` : ""}</span></span>
+            <span><span class="schedule-card-muted text-purple-300/60">${escapeHtml(copy.deadlineLabel)}：</span><span class="${deadlineToneClass}">${escapeHtml(deadline)}${deadlineBadge ? ` ${deadlineBadge}` : ""}</span></span>
           </li>
           <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
-            <span><span class="text-purple-300/60">${escapeHtml(copy.finishLabel)}：</span>${escapeHtml(finishDate)}</span>
+            <span><span class="schedule-card-muted text-purple-300/60">${escapeHtml(copy.finishLabel)}：</span>${escapeHtml(finishDate)}</span>
           </li>
           <li class="${itemClass}">
             <span class="mt-1 text-cyan-300">•</span>
-            <span><span class="text-purple-300/60">${escapeHtml(copy.noteLabel)}：</span>${escapeHtml(row.note || copy.notFilled)}</span>
+            <span><span class="schedule-card-muted text-purple-300/60">${escapeHtml(copy.noteLabel)}：</span>${escapeHtml(row.note || copy.notFilled)}</span>
           </li>
         </ul>
 
@@ -826,7 +826,7 @@ function toggleFaq(btn) {
 
     if (!totalRows.length) {
       cardsEl.innerHTML = `
-        <div class="rounded-2xl border border-white/10 bg-black/25 px-4 py-5 text-sm text-purple-200/80">
+        <div class="schedule-card rounded-2xl border border-white/10 bg-black/25 px-4 py-5 text-sm text-purple-200/80">
           ${escapeHtml(copy.empty)}
         </div>
       `;
@@ -835,7 +835,7 @@ function toggleFaq(btn) {
 
     if (!visibleRows.length) {
       cardsEl.innerHTML = `
-        <div class="rounded-2xl border border-white/10 bg-black/25 px-4 py-5 text-sm text-purple-200/80">
+        <div class="schedule-card rounded-2xl border border-white/10 bg-black/25 px-4 py-5 text-sm text-purple-200/80">
           ${escapeHtml(copy.emptyFilter)}
         </div>
       `;

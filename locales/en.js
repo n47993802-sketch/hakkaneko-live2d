@@ -553,6 +553,33 @@
     demo_input_hint_title: 'Click "Load Model" to start interacting',
     demo_input_hint_desc:
       "Hold the left mouse button and drag to make the character's gaze follow.",
+    demo_character_view:
+      '<i class="fa-solid fa-eye text-pink-400"></i> Character View',
+    demo_reset_view: "Reset View",
+    demo_reset_view_title: "Reset view (restore position and zoom)",
+    demo_reset_view_desc: "Restore the original position and zoom",
+    demo_enlarge_view: "Enlarge View",
+    demo_enlarge_view_title: "Enlarge view (fullscreen)",
+    demo_enlarge_view_desc: "Toggle fullscreen view",
+    demo_view_help: "View Controls",
+    demo_view_help_mouse: "Drag with the left mouse button",
+    demo_view_help_mouse_desc: "Follow the X and Y axes",
+    demo_view_help_right: "Drag with the right mouse button",
+    demo_view_help_right_desc: "Follow the Z axis",
+    demo_view_help_middle: "Drag the scene with the middle button",
+    demo_view_help_middle_desc: "Move the view manually",
+    demo_view_help_wheel: "Mouse wheel",
+    demo_view_help_wheel_desc: "Zoom in and out",
+    demo_showcase_model:
+      '<i class="fa-solid fa-cat text-pink-400"></i> Model Showcase',
+    demo_load_model: "Load Model",
+    demo_motion_title:
+      '<i class="fa-solid fa-bolt text-yellow-400"></i> Trigger Motion',
+    demo_expression_title: "Expression Controls",
+    demo_reset_expression: "Reset",
+    demo_reset_expression_title: "Reset expression controls",
+    demo_runtime_title:
+      '<i class="fa-solid fa-sliders text-emerald-400"></i> Runtime Settings',
     demo_interact_mouse: "Move mouse<br>Gaze follows",
     demo_interact_head: "Click head<br>Trigger expression",
     demo_interact_body: "Click body<br>Trigger motion",
@@ -560,6 +587,16 @@
     demo_slider_expr: "Expression intensity",
     demo_slider_breath: "Breathing speed",
     demo_blink_auto: "Auto blink",
+    demo_breath_auto: "Auto breathing",
+    demo_physics: "Physics",
+    demo_display_note_title:
+      '<i class="fa-solid fa-circle-exclamation"></i> Demo Notes',
+    demo_display_note_interactions:
+      "All interaction features here, including gaze tracking and motion triggers, are provided by this site, and the character data is managed directly by the rigger.",
+    demo_display_note_quote:
+      "If you want a Live2D model with similar quality, you can check the V-Skin Design page for a rough quote.",
+    demo_display_note_warning:
+      "Do not reuse screenshots or recordings as someone else's work or for commercial use. Copyright violations will be pursued.",
 
     port_work1_title: '"Dinner Song" — Music PV Live2D Animation',
     port_work1_desc:

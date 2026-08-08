@@ -756,6 +756,12 @@ function toggleTheme() {
   try {
     localStorage.setItem("hakka_theme", isLight ? "light" : "dark");
   } catch (e) {}
+
+  document.dispatchEvent(
+    new CustomEvent("hakka:themechange", {
+      detail: { isLight },
+    }),
+  );
 }
 
 (function () {
@@ -792,6 +798,11 @@ function toggleTheme() {
           if (icon) icon.className = "fa-solid fa-sun text-yellow-400";
           if (window.setMeteorMode) window.setMeteorMode(false);
         }
+        document.dispatchEvent(
+          new CustomEvent("hakka:themechange", {
+            detail: { isLight: e.matches },
+          }),
+        );
       });
   } catch (e) {}
 })();
@@ -1639,6 +1650,16 @@ function _applyLang(lang) {
   document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
     const key = el.getAttribute("data-i18n-ph");
     if (dict[key] !== undefined) el.placeholder = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+    if (dict[key] !== undefined) el.title = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria-label");
+    if (dict[key] !== undefined) el.setAttribute("aria-label", dict[key]);
   });
 
   document.querySelectorAll("option[data-i18n]").forEach((el) => {

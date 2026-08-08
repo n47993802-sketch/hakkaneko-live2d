@@ -90,6 +90,130 @@ const RUNTIME_PARAMS = MODEL_CONFIG.runtimeParams || {};
 const expressionPresetCache = new Map();
 let activeExpressionKey = null;
 let activeExpressionRestore = null;
+let activeMotionRunId = 0;
+
+function getCoreModelParameterIds(coreModel) {
+  if (!coreModel) return [];
+
+  const directIds = [
+    coreModel.parameterIds,
+    coreModel._parameterIds,
+    coreModel.ids,
+    coreModel.parameters && coreModel.parameters.ids,
+  ];
+
+  for (const source of directIds) {
+    if (Array.isArray(source) && source.length) {
+      return source.filter(Boolean);
+    }
+  }
+
+  if (typeof coreModel.getParameterCount === "function") {
+    const count = Number(coreModel.getParameterCount()) || 0;
+    if (count > 0) {
+      const ids = [];
+      for (let index = 0; index < count; index += 1) {
+        try {
+          const id =
+            typeof coreModel.getParameterId === "function"
+              ? coreModel.getParameterId(index)
+              : typeof coreModel.getParameterIds === "function"
+                ? coreModel.getParameterIds(index)
+                : null;
+          if (id) ids.push(id);
+        } catch (e) {}
+      }
+      if (ids.length) return ids;
+    }
+  }
+
+  return [];
+}
+
+function captureCoreModelState(coreModel) {
+  return getCoreModelParameterIds(coreModel).map((id) => ({
+    id,
+    value: getParamSafe(coreModel, id),
+  }));
+}
+
+function restoreCoreModelState(coreModel, snapshot) {
+  if (!coreModel || !Array.isArray(snapshot)) return;
+  snapshot.forEach((entry) => {
+    if (!entry || !entry.id) return;
+    setParamSafe(coreModel, entry.id, entry.value);
+  });
+}
+
+function createMotionFinishWaiter(motionManager) {
+  if (!motionManager || typeof motionManager.once !== "function") {
+    return {
+      wait: async () => false,
+      dispose: () => {},
+    };
+  }
+
+  let cleanup = () => {};
+  const wait = new Promise((resolve) => {
+    const handleFinish = () => {
+      cleanup();
+      resolve(true);
+    };
+    const handleDestroy = () => {
+      cleanup();
+      resolve(false);
+    };
+
+    cleanup = () => {
+      if (typeof motionManager.off === "function") {
+        motionManager.off("motionFinish", handleFinish);
+        motionManager.off("destroy", handleDestroy);
+      } else if (typeof motionManager.removeListener === "function") {
+        motionManager.removeListener("motionFinish", handleFinish);
+        motionManager.removeListener("destroy", handleDestroy);
+      }
+    };
+
+    motionManager.once("motionFinish", handleFinish);
+    motionManager.once("destroy", handleDestroy);
+  });
+
+  return {
+    wait: () => wait,
+    dispose: cleanup,
+  };
+}
+
+async function runMotionWithRestore(startMotion) {
+  if (!live2dModel || typeof startMotion !== "function") return false;
+  const im = live2dModel.internalModel;
+  const coreModel = im && im.coreModel;
+  const motionManager = (im && (im.motionManager || im.motion)) || null;
+  const motionRunId = ++activeMotionRunId;
+  const snapshot = captureCoreModelState(coreModel);
+  const finishWaiter = createMotionFinishWaiter(motionManager);
+
+  let result;
+  try {
+    result = await startMotion();
+  } catch (error) {
+    finishWaiter.dispose();
+    throw error;
+  }
+
+  if (result === false) {
+    finishWaiter.dispose();
+    return false;
+  }
+
+  const finished = await finishWaiter.wait();
+
+  if (finished && coreModel && snapshot.length && motionRunId === activeMotionRunId) {
+    restoreCoreModelState(coreModel, snapshot);
+  }
+
+  return true;
+}
 
 function getCurrentModelSpec() {
   if (MODEL_SPECS[currentModelKey]) return MODEL_SPECS[currentModelKey];
@@ -1034,7 +1158,9 @@ async function handleMotionClick(groupName, motionIndex, priority = MOTION_PRIOR
     console.log(
       `[Motion Debug] 準備播放群組: ${groupName}, 索引: ${motionIndex}, 優先級: ${priority}`,
     );
-    const result = await live2dModel.motion(groupName, motionIndex, priority);
+    const result = await runMotionWithRestore(async () => {
+      return live2dModel.motion(groupName, motionIndex, priority);
+    });
     if (result === false) {
       console.warn(
         `[Motion Debug] 動畫觸發失敗，請確認 ${groupName}[${motionIndex}] 是否存在於模型設定中。`,
@@ -1397,8 +1523,9 @@ async function triggerMotionByConfig(motionCfg) {
       console.log(
         `[Motion Debug] 使用 fallback：live2dModel.motion(${target.group})`,
       );
-      const result = await live2dModel.motion(target.group);
-      return result !== false;
+      return runMotionWithRestore(async () => {
+        return live2dModel.motion(target.group);
+      });
     });
   }
 
@@ -1407,8 +1534,10 @@ async function triggerMotionByConfig(motionCfg) {
       console.log(
         `[Motion Debug] 使用 fallback：startMotion(${target.group}, ${target.index}, ${priority})`,
       );
-      await motionManager.startMotion(target.group, target.index, priority);
-      return true;
+      return runMotionWithRestore(async () => {
+        await motionManager.startMotion(target.group, target.index, priority);
+        return true;
+      });
     });
   }
 
@@ -1417,8 +1546,10 @@ async function triggerMotionByConfig(motionCfg) {
       console.log(
         `[Motion Debug] 使用 fallback：startRandomMotion(${target.group}, ${priority})`,
       );
-      await motionManager.startRandomMotion(target.group, priority);
-      return true;
+      return runMotionWithRestore(async () => {
+        await motionManager.startRandomMotion(target.group, priority);
+        return true;
+      });
     });
   }
 
@@ -1427,8 +1558,10 @@ async function triggerMotionByConfig(motionCfg) {
       console.log(
         `[Motion Debug] 使用 fallback：startMotionByName(${motionCfg.file}, ${priority})`,
       );
-      await motionManager.startMotionByName(motionCfg.file, priority);
-      return true;
+      return runMotionWithRestore(async () => {
+        await motionManager.startMotionByName(motionCfg.file, priority);
+        return true;
+      });
     });
   }
 
@@ -1436,8 +1569,10 @@ async function triggerMotionByConfig(motionCfg) {
     const fallbackNames = [motionCfg.name, motionCfg.group, motionCfg.key].filter(Boolean);
     fallbackNames.forEach((candidate) => {
       tryCalls.push(async () => {
-        await live2dModel.motion(candidate);
-        return true;
+        return runMotionWithRestore(async () => {
+          await live2dModel.motion(candidate);
+          return true;
+        });
       });
     });
   }
@@ -1494,7 +1629,10 @@ async function triggerMotion(name) {
   }
   try {
     if (typeof live2dModel.motion === "function") {
-      await live2dModel.motion(name);
+      await runMotionWithRestore(async () => {
+        await live2dModel.motion(name);
+        return true;
+      });
     }
   } catch (e) {
     console.warn("Motion trigger failed (legacy):", name, e);

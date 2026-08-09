@@ -101,6 +101,12 @@
       sub: "",
       tags: ["動態 Logo", "標準方案"],
     },
+    {
+      file: "e1heu-thpzs",
+      label: "諾倫用 Logo",
+      sub: "",
+      tags: ["動態 Logo", "標準方案"],
+    },
   ];
 
   function toItem(folder) {

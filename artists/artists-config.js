@@ -39,7 +39,7 @@ window.ARTISTS_CONFIG = [
     handle: "FCerror93131",
     profileUrl: "https://x.com/FCerror93131",
     avatar:
-      "https://pbs.twimg.com/profile_images/2065094092112236544/xC9wtHxL_400x400.jpg",
+      "https://pbs.twimg.com/profile_images/2083961446518648832/akJN0pjU_400x400.jpg",
   },
   {
     name: "Chiyo ch.千代剎那",

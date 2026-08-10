@@ -35,7 +35,7 @@ window.NAV_CONFIG = [
       {
         id: "schedule",
         href: "commission/schedule/",
-        icon: "fa-calendar-days",
+        icon: "fa-layer-group",
         color: "text-cyan-400",
         label: "nav_schedule",
         text: "排程卡片",

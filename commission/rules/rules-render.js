@@ -52,6 +52,9 @@ function toggleFaq(btn) {
       tabAll: "全部",
       tabPending: "未完成",
       tabDone: "已完成",
+      pagerPrev: "上一頁",
+      pagerNext: "下一頁",
+      pagerInfo: "第 {page} / {totalPages} 頁（共 {total} 筆）",
       monthsLabel: "月份",
       clientLabel: "委託者",
       itemLabel: "委託品項",
@@ -85,6 +88,9 @@ function toggleFaq(btn) {
       tabAll: "全部",
       tabPending: "未完成",
       tabDone: "已完成",
+      pagerPrev: "上一页",
+      pagerNext: "下一页",
+      pagerInfo: "第 {page} / {totalPages} 页（共 {total} 笔）",
       monthsLabel: "月份",
       clientLabel: "委托者",
       itemLabel: "委托品项",
@@ -119,6 +125,9 @@ function toggleFaq(btn) {
       tabAll: "All",
       tabPending: "Incomplete",
       tabDone: "Completed",
+      pagerPrev: "Previous",
+      pagerNext: "Next",
+      pagerInfo: "Page {page} / {totalPages} ({total} items)",
       monthsLabel: "Month",
       clientLabel: "Client",
       itemLabel: "Item",
@@ -153,6 +162,9 @@ function toggleFaq(btn) {
       tabAll: "すべて",
       tabPending: "未完了",
       tabDone: "完了済み",
+      pagerPrev: "前へ",
+      pagerNext: "次へ",
+      pagerInfo: "{page} / {totalPages} ページ（全 {total} 件）",
       monthsLabel: "月",
       clientLabel: "依頼者",
       itemLabel: "依頼項目",
@@ -666,45 +678,67 @@ function toggleFaq(btn) {
   function renderPager(totalRows) {
     const pagerEl = document.getElementById("schedulePager");
     if (!pagerEl) return;
+    const copy = getCopy();
+    const totalCount = totalRows.length;
 
-    const pageCount = Math.max(1, Math.ceil(totalRows.length / PAGE_SIZE));
+    const pageCount = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
     if (pageCount <= 1) {
       pagerEl.innerHTML = "";
       return;
     }
 
-    const buttons = [];
-    for (let index = 1; index <= pageCount; index += 1) {
-      const active = scheduleState.page === index;
-      buttons.push(`
-        <button
-          type="button"
-          data-schedule-page="${index}"
-          class="schedule-page-btn min-w-8 h-8 px-2 rounded-full text-xs font-bold border transition-colors ${
-            active
-              ? "is-active bg-cyan-500/25 text-cyan-100 border-cyan-300/40 shadow-lg shadow-cyan-900/20"
-              : "bg-white/5 text-purple-200/80 border-white/10 hover:bg-white/10 hover:text-white"
-          }"
-          aria-label="第 ${index} 頁"
-        >
-          ${index}
-        </button>
-      `);
-    }
+    if (scheduleState.page < 1) scheduleState.page = 1;
+    if (scheduleState.page > pageCount) scheduleState.page = pageCount;
+
+    const prevDisabled = scheduleState.page <= 1;
+    const nextDisabled = scheduleState.page >= pageCount;
+    const infoText = (copy.pagerInfo || "第 {page} / {totalPages} 頁（共 {total} 筆）")
+      .replace("{page}", String(scheduleState.page))
+      .replace("{totalPages}", String(pageCount))
+      .replace("{total}", String(totalCount));
 
     pagerEl.innerHTML = `
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        ${buttons.join("")}
+      <div class="schedule-pager-wrap">
+        <span class="schedule-pager-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
+        <button
+          type="button"
+          id="schedulePagePrev"
+          class="schedule-page-btn schedule-page-nav rounded-full border transition-colors"
+          ${prevDisabled ? "disabled" : ""}
+        >
+          ${escapeHtml(copy.pagerPrev || "上一頁")}
+        </button>
+        <p class="schedule-page-info">${escapeHtml(infoText)}</p>
+        <button
+          type="button"
+          id="schedulePageNext"
+          class="schedule-page-btn schedule-page-nav rounded-full border transition-colors"
+          ${nextDisabled ? "disabled" : ""}
+        >
+          ${escapeHtml(copy.pagerNext || "下一頁")}
+        </button>
       </div>
     `;
 
-    pagerEl.querySelectorAll("[data-schedule-page]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        scheduleState.page = Number(button.getAttribute("data-schedule-page")) || 1;
+    const prevBtn = document.getElementById("schedulePagePrev");
+    if (prevBtn) {
+      prevBtn.addEventListener("click", function () {
+        if (scheduleState.page <= 1) return;
+        scheduleState.page -= 1;
         renderSchedule();
         scrollScheduleToTop();
       });
-    });
+    }
+
+    const nextBtn = document.getElementById("schedulePageNext");
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        if (scheduleState.page >= pageCount) return;
+        scheduleState.page += 1;
+        renderSchedule();
+        scrollScheduleToTop();
+      });
+    }
   }
 
   function scrollScheduleToTop() {

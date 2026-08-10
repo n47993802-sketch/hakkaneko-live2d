@@ -95,7 +95,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
-    <link rel="stylesheet" href="../../common.css?v=20260805d" />
+    <link rel="stylesheet" href="../../common.css?v=20260810i" />
   </head>
   <body class="antialiased min-h-screen pb-12 loading">
     <script>
@@ -176,7 +176,7 @@
         ></nav>
 
         <script src="../../site-config.js?v=20260807c"></script>
-        <script src="../../nav-config.js?v=20260805d"></script>
+        <script src="../../nav-config.js?v=20260810a"></script>
         <script src="../../nav-render.js?v=20260805d"></script>
       </div>
     </header>
@@ -261,33 +261,33 @@
 
     <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
       <div id="page-schedule" class="page-content block max-w-5xl mx-auto space-y-8">
-        <section class="glass-panel rounded-3xl p-6 md:p-8 border border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 via-transparent to-fuchsia-500/10 scroll-mt-24">
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-            <div>
-              <div class="flex items-center gap-2 mb-2">
-                <i class="fa-solid fa-layer-group text-cyan-300"></i>
-                <h2 class="text-2xl font-bold text-white">排程卡片</h2>
+        <section class="schedule-shell glass-panel rounded-3xl p-5 md:p-6 border border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-transparent to-indigo-500/10 scroll-mt-24">
+          <div class="schedule-toolbar">
+            <div class="schedule-toolbar-head">
+              <p class="schedule-toolbar-title">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>排程卡片</span>
+              </p>
+              <div id="scheduleMeta" class="schedule-meta-text">
+                讀取中...
               </div>
             </div>
-            <div id="scheduleMeta" class="text-xs text-purple-300/60 md:text-right leading-relaxed">
-              讀取中...
+
+            <div class="schedule-filter-row">
+              <div id="scheduleTabs" class="flex flex-wrap gap-2"></div>
+              <button
+                type="button"
+                id="scheduleRefreshBtn"
+                class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/20 transition-colors"
+              >
+                <i class="fa-solid fa-rotate-right"></i>
+                重新整理
+              </button>
             </div>
-          </div>
 
-          <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <div id="scheduleTabs" class="flex flex-wrap gap-2"></div>
-            <button
-              type="button"
-              id="scheduleRefreshBtn"
-              class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/20 transition-colors"
-            >
-              <i class="fa-solid fa-rotate-right"></i>
-              重新整理
-            </button>
-          </div>
-
-          <div id="scheduleStatus" class="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-purple-200/80">
-            正在載入排程資料...
+            <div id="scheduleStatus" class="schedule-status-box">
+              正在載入排程資料...
+            </div>
           </div>
 
           <div id="scheduleCards" class="mt-6 space-y-8"></div>
@@ -383,12 +383,12 @@
       </footer>
     </main>
 
-    <script src="../../locales/zh-TW.js?v=20260806a"></script>
-    <script src="../../locales/zh-CN.js?v=20260806a"></script>
-    <script src="../../locales/en.js?v=20260806a"></script>
-    <script src="../../locales/ja.js?v=20260806a"></script>
-    <script src="../../effects/meteor-bg.js?v=20260806a"></script>
-    <script src="../../common.js?v=20260806a"></script>
-    <script src="../rules/rules-render.js?v=20260807b"></script>
+    <script src="../../locales/zh-TW.js?v=20260810a"></script>
+    <script src="../../locales/zh-CN.js?v=20260810a"></script>
+    <script src="../../locales/en.js?v=20260810a"></script>
+    <script src="../../locales/ja.js?v=20260810a"></script>
+    <script src="../../effects/meteor-bg.js?v=20260810a"></script>
+    <script src="../../common.js?v=20260810a"></script>
+    <script src="../rules/rules-render.js?v=20260810b"></script>
   </body>
 </html>

@@ -98,7 +98,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
-    <link rel="stylesheet" href="../../common.css?v=20260805d" />
+    <link rel="stylesheet" href="../../common.css?v=20260810h" />
   </head>
   <body class="antialiased min-h-screen pb-12 loading">
     <script>
@@ -179,7 +179,7 @@
         ></nav>
 
         <script src="../../site-config.js?v=20260805d"></script>
-        <script src="../../nav-config.js?v=20260805d"></script>
+        <script src="../../nav-config.js?v=20260810a"></script>
         <script src="../../nav-render.js?v=20260805d"></script>
       </div>
     </header>
@@ -279,340 +279,85 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div
-            class="glass-panel p-5 rounded-2xl border border-purple-500/20 ch-card"
-          >
-            <div class="ch-card-body">
-              <div
-                class="ch-avatar-wrap border-2 border-[#9146ff]/40 bg-[#9146ff]/10"
-              >
-                <img
-                  loading="lazy"
-                  src="https://static-cdn.jtvnw.net/jtv_user_pictures/2443b19c-5ac9-4ac2-aa19-fdd984fc211a-profile_image-70x70.png"
-                  alt="bunny0422"
-                  class="w-full h-full object-cover"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<i class=\'fa-brands fa-twitch text-[#9146ff] text-2xl\'></i>';
-                  "
-                />
-              </div>
-              <div class="ch-info">
-                <p class="ch-name">ぴょんちゃん兔兔</p>
-                <p class="ch-bio">
-                  呀齁⸜🤍⸝～～我是一隻愛笑的兔子! 可以叫我兔兔ヽ(´∇`)ˇノ
-                  ⭐最愛APEＸ！萬年手把仔🎮
-                  只希望在這裡兔兔可以給大家一點點的小快樂還有一點點的溫暖！喔耶～🫶💜
-                </p>
-              </div>
+        <section class="channels-shell channels-shell-lift glass-panel rounded-3xl p-5 md:p-6 border border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-transparent to-indigo-500/10 scroll-mt-24">
+          <div class="channels-toolbar">
+            <div class="channels-filter-buttons" role="tablist" aria-label="頻道篩選">
+            <button
+              type="button"
+              class="channels-filter-btn active"
+              data-channel-filter="all"
+              data-i18n="channels_filter_all"
+              aria-pressed="true"
+            >
+              全部
+            </button>
+            <button
+              type="button"
+              class="channels-filter-btn"
+              data-channel-filter="live"
+              data-i18n="channels_filter_live"
+              aria-pressed="false"
+            >
+              直播中
+            </button>
+            <button
+              type="button"
+              class="channels-filter-btn"
+              data-channel-filter="offline"
+              data-i18n="channels_filter_offline"
+              aria-pressed="false"
+            >
+              離線中
+            </button>
+            <button
+              type="button"
+              class="channels-refresh-btn"
+              id="channelsRefreshBtn"
+              data-i18n="channels_filter_refresh"
+              title="重新偵測直播狀態"
+            >
+              重新整理狀態
+            </button>
+            <p id="channelsLastUpdated" class="channels-last-updated channels-last-updated-inline">
+              更新時間：--
+            </p>
             </div>
-            <div class="ch-links">
-              <a
-                href="https://www.twitch.tv/bunny0422"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn twitch"
-                id="btn-bunny0422"
-              >
-                <i class="fa-brands fa-twitch btn-platform-icon"></i>
-                <span class="btn-label">bunny0422</span>
-                <span class="btn-status offline" id="live-bunny0422">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
+
+            <div
+              id="channelsFilterSummary"
+              class="channels-status"
+              data-i18n="channels_filter_summary_all"
+            >
+              顯示 0 / 0 個頻道
             </div>
           </div>
 
-          <div
-            class="glass-panel p-5 rounded-2xl border border-purple-500/20 ch-card"
-          >
-            <div class="ch-card-body">
-              <div
-                class="ch-avatar-wrap border-2 border-[#9146ff]/40 bg-[#9146ff]/10"
-              >
-                <img
-                  loading="lazy"
-                  src="https://static-cdn.jtvnw.net/jtv_user_pictures/d2f1d767-7327-4896-bae3-71f0009baae8-profile_image-70x70.png"
-                  alt="yazawaribii"
-                  class="w-full h-full object-cover"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<i class=\'fa-brands fa-twitch text-[#9146ff] text-2xl\'></i>';
-                  "
-                />
-              </div>
-              <div class="ch-info">
-                <p class="ch-name">魔法少女莉比醬</p>
-                <p class="ch-bio">
-                  我是繪師莉比Ribi～大家可以叫我莉比或是莉比醬～是一個從童話星球來的小紅帽魔法少女～
-                  今後也請多多指教吧！(°" ° ) ☆
-                </p>
-              </div>
-            </div>
-            <div class="ch-links">
-              <a
-                href="https://www.twitch.tv/yazawaribii"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn twitch"
-                id="btn-yazawaribii"
-              >
-                <i class="fa-brands fa-twitch btn-platform-icon"></i>
-                <span class="btn-label">yazawaribii</span>
-                <span class="btn-status offline" id="live-yazawaribii">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
-            </div>
-          </div>
+          <div id="channelsGrid" class="channels-grid grid grid-cols-1 md:grid-cols-2 gap-5"></div>
 
-          <div
-            class="glass-panel p-5 rounded-2xl border border-purple-500/20 ch-card"
-          >
-            <div class="ch-card-body">
-              <div
-                class="ch-avatar-wrap border-2 border-[#9146ff]/40 bg-[#9146ff]/10"
-              >
-                <img
-                  loading="lazy"
-                  src="https://static-cdn.jtvnw.net/jtv_user_pictures/54218d3a-b5f4-4f4e-bbe2-3980ca661f0e-profile_image-70x70.png"
-                  alt="shinyuki2511"
-                  class="w-full h-full object-cover"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<i class=\'fa-brands fa-twitch text-[#9146ff] text-2xl\'></i>';
-                  "
-                />
-              </div>
-              <div class="ch-info">
-                <p class="ch-name">雪寶うさぎ</p>
-                <p class="ch-bio">
-                  ᕱ⑅ᕱ
-                  冰霜凝結而成的寶藏❄️操縱冰雪的天災級魔物，最凶萌雪兔女王來襲🐰
-                </p>
-              </div>
-            </div>
-            <div class="ch-links">
-              <a
-                href="https://www.twitch.tv/shinyuki2511"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn twitch"
-                id="btn-shinyuki2511"
-              >
-                <i class="fa-brands fa-twitch btn-platform-icon"></i>
-                <span class="btn-label">shinyuki2511</span>
-                <span class="btn-status offline" id="live-shinyuki2511">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
-            </div>
-          </div>
+          <p id="channelsEmptyState" class="channels-empty hidden" data-i18n="channels_filter_empty">
+            目前沒有符合條件的頻道
+          </p>
 
-          <div
-            class="glass-panel p-5 rounded-2xl border border-purple-500/20 ch-card"
-          >
-            <div class="ch-card-body">
-              <div
-                class="ch-avatar-wrap border-2 border-[#9146ff]/40 bg-[#9146ff]/10"
-              >
-                <img
-                  loading="lazy"
-                  src="https://static-cdn.jtvnw.net/jtv_user_pictures/a41c738d-5524-4396-83ae-0c27284742a9-profile_image-70x70.png"
-                  alt="yukina_nya_026"
-                  class="w-full h-full object-cover"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<i class=\'fa-brands fa-twitch text-[#9146ff] text-2xl\'></i>';
-                  "
-                />
-              </div>
-              <div class="ch-info">
-                <p class="ch-name">雪奈喵</p>
-                <p class="ch-bio">
-                  👋 嗨嗨大家好 我是個人勢𝗩𝘁𝘂𝗯𝗲𝗿 直播時間通常都是晚上8點或8點半
-                  沒開就是休息拉~
-                  觀看我直播的朋友們要注意音量呦，因為我玩遊戲時可能會發出尖叫聲或是爆音
-                </p>
-              </div>
-            </div>
-            <div class="ch-links">
-              <a
-                href="https://www.twitch.tv/yukina_nya_026"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn twitch"
-                id="btn-yukina_nya_026"
-              >
-                <i class="fa-brands fa-twitch btn-platform-icon"></i>
-                <span class="btn-label">yukina_nya_026</span>
-                <span class="btn-status offline" id="live-yukina_nya_026">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
-            </div>
+          <div id="channelsPager" class="channels-pager hidden" aria-label="頻道分頁">
+            <button
+              type="button"
+              class="channels-page-btn"
+              id="channelsPagePrev"
+              data-i18n="channels_pager_prev"
+            >
+              上一頁
+            </button>
+            <p id="channelsPageInfo" class="channels-page-info">第 1 / 1 頁（共 0 個）</p>
+            <button
+              type="button"
+              class="channels-page-btn"
+              id="channelsPageNext"
+              data-i18n="channels_pager_next"
+            >
+              下一頁
+            </button>
           </div>
-
-          <div
-            class="glass-panel p-5 rounded-2xl border border-purple-500/20 ch-card"
-          >
-            <div class="ch-card-body">
-              <div
-                class="ch-avatar-wrap border-2 border-[#9146ff]/40 bg-[#9146ff]/10"
-              >
-                <img
-                  loading="lazy"
-                  src="https://static-cdn.jtvnw.net/jtv_user_pictures/9050baa4-3c98-433c-9266-760af9318402-profile_image-70x70.png"
-                  alt="DongLing"
-                  class="w-full h-full object-cover"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<i class=\'fa-brands fa-twitch text-[#9146ff] text-2xl\'></i>';
-                  "
-                />
-              </div>
-              <div class="ch-info">
-                <p class="ch-name">冬鈴DongLing</p>
-                <p class="ch-bio">
-                  ᕱ⑅ᕱ
-                  大家好，我是銀喉長尾山雀_冬鈴DongLing，個人勢vtuber，開台時間可以關注X，歡迎來聽我唱歌 ⁽⁽ଘ( ˙꒳˙ )ଓ⁾⁾❆
-                </p>
-              </div>
-            </div>
-            <div class="ch-links">
-              <a
-                href="https://www.twitch.tv/dongling_vtuber"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn twitch"
-                id="btn-dongling_vtuber"
-              >
-                <i class="fa-brands fa-twitch btn-platform-icon"></i>
-                <span class="btn-label">DongLing</span>
-                <span class="btn-status offline" id="live-dongling_vtuber">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
-            </div>
-          </div>
-          
-          <div
-            class="glass-panel p-5 rounded-2xl border border-purple-500/20 ch-card"
-          >
-            <div class="ch-card-body">
-              <div
-                class="ch-avatar-wrap border-2 border-red-500/30 bg-red-600/10"
-              >
-                <img
-                  loading="lazy"
-                  src="https://unavatar.io/youtube/MurichanChannel"
-                  alt="MurichanChannel"
-                  class="w-full h-full object-cover"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<i class=\'fa-brands fa-youtube text-red-500 text-2xl\'></i>';
-                  "
-                />
-              </div>
-              <div class="ch-info">
-                <p class="ch-name">MuriChan Ch. 姆莉醬</p>
-                <p class="ch-bio">
-                  生日6月9日、身高6.9公分的個人勢牡蠣Vtuber🦪
-                  喜歡諧音梗～連自己的名字都諧音（？講話直爽節奏快、偶爾會開點小車（？非常喜歡開玩笑、愛鬧又愛惡作劇(ゝ∀･)⌒☆
-                </p>
-              </div>
-            </div>
-            <div class="ch-links">
-              <a
-                href="https://www.youtube.com/@MurichanChannel"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn youtube"
-                id="btn-yt-MurichanChannel"
-              >
-                <i class="fa-brands fa-youtube btn-platform-icon"></i>
-                <span class="btn-label">MurichanChannel</span>
-                <span class="btn-status offline" id="yt-live-MurichanChannel">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
-            </div>
-          </div>
-
-          <div
-            class="glass-panel p-5 rounded-2xl border border-purple-500/20 ch-card"
-          >
-            <div class="ch-card-body">
-              <div
-                class="ch-avatar-wrap border-2 border-[#9146ff]/40 bg-[#9146ff]/10"
-              >
-                <img
-                  loading="lazy"
-                  src="https://static-cdn.jtvnw.net/jtv_user_pictures/da2134f3-42a8-42ef-96cf-9f33fe37a0cd-profile_image-70x70.png"
-                  alt="darkmeyaya"
-                  class="w-full h-full object-cover"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<i class=\'fa-brands fa-twitch text-[#9146ff] text-2xl\'></i>';
-                  "
-                />
-              </div>
-              <div class="ch-info">
-                <p class="ch-name">司徒雅雅</p>
-                <p class="ch-bio">
-                  大家好~這裡是雅雅~
-                  是個什麼類型都有碰又好像什麼遊戲都沒玩明白的雜魚型主播
-                  希望能跟大家一起快樂遊戲 討論 互動 一起成為好朋友!!
-                  大尺度聊天ww只有你不敢聊的 沒有我不敢回的～♡
-                </p>
-              </div>
-            </div>
-            <div class="ch-links">
-              <a
-                href="https://www.twitch.tv/darkmeyaya"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn twitch"
-                id="btn-darkmeyaya"
-              >
-                <i class="fa-brands fa-twitch btn-platform-icon"></i>
-                <span class="btn-label">darkmeyaya</span>
-                <span class="btn-status offline" id="live-darkmeyaya">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
-              <a
-                href="https://www.youtube.com/@darkmeyaya"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ch-platform-btn youtube"
-                id="btn-yt-darkmeyaya"
-              >
-                <i class="fa-brands fa-youtube btn-platform-icon"></i>
-                <span class="btn-label">darkmeyaya</span>
-                <span class="btn-status offline" id="yt-live-darkmeyaya">
-                  <span class="status-dot"></span
-                  ><span data-i18n="ch_offline">離線</span>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
+        </section>
 
         <div class="flex items-center gap-4 my-4">
           <div
@@ -814,7 +559,7 @@
     <script src="../../effects/meteor-bg.js?v=20260805d"></script>
     <script src="../../common.js?v=20260805d"></script>
 
-    <script src="channels-config.js?v=20260805d"></script>
-    <script src="channels-render.js?v=20260805d"></script>
+    <script src="channels-config.js?v=20260810g"></script>
+    <script src="channels-render.js?v=20260810j"></script>
   </body>
 </html>

@@ -1,6 +1,7 @@
 let live2dApp = null;
 let live2dModel = null;
 let live2dInited = false;
+let live2dLoadToken = 0;
 let interactionBound = false;
 let tickerBound = false;
 let breathPhase = 0;
@@ -605,6 +606,8 @@ function initLive2DDemo() {
 }
 
 async function loadLive2DModel() {
+  const loadToken = ++live2dLoadToken;
+  const isStaleLoad = () => loadToken !== live2dLoadToken;
   const badge = document.getElementById("demoStatusBadge");
   const placeholder = document.getElementById("live2dPlaceholder");
   const canvasEl = document.getElementById("live2dCanvas");
@@ -636,18 +639,21 @@ async function loadLive2DModel() {
     await loadScript(
       "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.10/browser/pixi.min.js",
     );
+    if (isStaleLoad()) return false;
   }
 
   if (!window.Live2DCubismCore) {
     await loadScript(
       "https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js",
     );
+    if (isStaleLoad()) return false;
   }
 
   if (!(window.PIXI && window.PIXI.live2d && window.PIXI.live2d.Live2DModel)) {
     await loadScript(
       "https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js",
     );
+    if (isStaleLoad()) return false;
     if (window.PIXI && window.PIXI.live2d && window.PIXI.live2d.Live2DModel) {
       window.PIXI.live2d.Live2DModel.registerTicker(PIXI.Ticker);
     }
@@ -661,6 +667,7 @@ async function loadLive2DModel() {
   }
 
   patchedModelJsonUrl = await buildPatchedModelJsonUrl(spec);
+  if (isStaleLoad()) return false;
   const urlsToTry = [
     patchedModelJsonUrl,
     spec.modelUrl,
@@ -728,6 +735,16 @@ async function loadLive2DModel() {
     for (const url of urlsToTry) {
       try {
         loadedModel = await Live2DModelCtor.from(url, { autoInteract: false });
+        if (isStaleLoad()) {
+          try {
+            loadedModel.destroy({
+              children: true,
+              texture: true,
+              baseTexture: true,
+            });
+          } catch (e) {}
+          return false;
+        }
         break;
       } catch (e) {
         console.warn("Live2D model load attempt failed for", url, e);
@@ -735,6 +752,16 @@ async function loadLive2DModel() {
       }
     }
     if (!loadedModel) throw new Error("All URLs failed");
+    if (isStaleLoad()) {
+      try {
+        loadedModel.destroy({
+          children: true,
+          texture: true,
+          baseTexture: true,
+        });
+      } catch (e) {}
+      return false;
+    }
     live2dModel = loadedModel;
 
     ensureCustomMotionDefinitions(spec, live2dModel.internalModel);

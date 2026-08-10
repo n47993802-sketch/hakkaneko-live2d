@@ -1,6 +1,6 @@
 window.MODEL_RENDER_CONFIG = {
   defaultModelKey: "hakkanekoqq",
-  modelOrder: ["hakkanekoqq", "test"],
+  modelOrder: ["hakkanekoqq", "test", "LEMarns"],
   models: {
     hakkanekoqq: {
       key: "hakkanekoqq",
@@ -125,6 +125,28 @@ window.MODEL_RENDER_CONFIG = {
           label: "歪嘴",
           paramIds: ["Param40"],
           min: -1,
+          max: 1,
+          step: 0.01,
+          defaultValue: 0,
+          accentClass: "accent-blue-500",
+        },
+      ],
+    },
+    LEMarns: {
+      key: "LEMarns",
+      label: "LEMarns",
+      displayName: "LEMarns",
+      sourceLabel: "models/LEMarns/LEMarns.model3.json",
+      modelUrl: encodeURI(
+        "https://raw.githubusercontent.com/n47993802-sketch/Live2D-/main/models/LEMarns/LEMarns.model3.json?v=20260807a",
+      ),
+      expressionMode: "sliders",
+      sliderControls: [
+        {
+          key: "expressionHappy",
+          label: "開口",
+          paramIds: ["ParamMouthOpenY"],
+          min: 0,
           max: 1,
           step: 0.01,
           defaultValue: 0,

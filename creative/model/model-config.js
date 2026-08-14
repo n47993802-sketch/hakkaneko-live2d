@@ -40,16 +40,6 @@ window.MODEL_RENDER_CONFIG = {
           defaultValue: 0,
           accentClass: "accent-blue-500",
         },
-        {
-          key: "expressionSurprised",
-          label: "右眼",
-          paramIds: ["ParamEyeROpen"],
-          min: 0,
-          max: 1,
-          step: 0.01,
-          defaultValue: 0,
-          accentClass: "accent-indigo-500",
-        },
       ],
       sliderLabels: {
         expressionHappy: "開心",

@@ -50,7 +50,7 @@ window.MODEL_RENDER_CONFIG = {
         expressionSurprised: "accent-indigo-500",
       },
     },
-    test: {
+    /* test: {
       key: "test",
       label: "Test",
       displayName: "Test",
@@ -121,7 +121,7 @@ window.MODEL_RENDER_CONFIG = {
           accentClass: "accent-blue-500",
         },
       ],
-    },
+    }, */
     LEMarns: {
       key: "LEMarns",
       label: "LEMarns",

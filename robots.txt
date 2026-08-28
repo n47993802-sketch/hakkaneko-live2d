@@ -6,4 +6,7 @@ Allow: /
 Disallow: /commission/template/
 Disallow: /creative/model/
 
+# Cloudflare Email Obfuscation 自動產生的假路徑，避免被誤爬成 404
+Disallow: /cdn-cgi/
+
 Sitemap: https://hakkanekolive2d.cc/sitemap.xml

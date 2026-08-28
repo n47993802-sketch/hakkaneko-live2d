@@ -32,7 +32,7 @@ window.ARTISTS_CONFIG = [
     handle: "Bai35461097",
     profileUrl: "https://x.com/Bai35461097",
     avatar:
-      "https://pbs.twimg.com/profile_images/2077305339054346240/2Zmmw8kg_400x400.jpg",
+      "https://pbs.twimg.com/profile_images/2092286581680025604/jCetBn3k_400x400.jpg",
   },
   {
     name: "FcError",
@@ -67,7 +67,7 @@ window.ARTISTS_CONFIG = [
     handle: "BT871213",
     profileUrl: "https://x.com/BT871213",
     avatar:
-      "https://pbs.twimg.com/profile_images/2067551197129830400/TjXrA3J6_400x400.jpg",
+      "https://pbs.twimg.com/profile_images/2088457047998337024/HemChW_0_400x400.jpg",
   },
   {
     name: "Xamo傻嗼",
@@ -95,7 +95,7 @@ window.ARTISTS_CONFIG = [
     handle: "Zoe_work",
     profileUrl: "https://x.com/Zoe_work",
     avatar:
-      "https://pbs.twimg.com/profile_images/1943494719532859392/kmHrHsTo_400x400.jpg",
+      "https://pbs.twimg.com/profile_images/2089407887961677824/JjgH4k3p_400x400.jpg",
   },
   {
     name: "摩茨Mochi",

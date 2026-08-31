@@ -1,9 +1,9 @@
-const FANART_MANIFEST_API =
-  "https://data.jsdelivr.com/v1/package/gh/n47993802-sketch/Live2D-@main/flat";
 const FANART_GITHUB_API =
   "https://api.github.com/repos/n47993802-sketch/Live2D-/contents/fanart";
+
 const FANART_RAW =
   "https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/fanart/";
+
 let fanartLoaded = false;
 
 function isImageName(name) {
@@ -29,6 +29,26 @@ function normalizeFanartFromGithub(payload) {
 
 async function fetchFanartList() {
   try {
+    const ghRes = await fetch(FANART_GITHUB_API, { cache: "no-store" });
+    if (ghRes.ok) {
+      const ghJson = await ghRes.json();
+      const ghFiles = normalizeFanartFromGithub(ghJson);
+      if (ghFiles.length) return ghFiles;
+    } else if (ghRes.status === 403 || ghRes.status === 429) {
+      const _d =
+        typeof currentLang !== "undefined" && I18N[currentLang]
+          ? I18N[currentLang]
+          : I18N["zh-TW"];
+      throw new Error(
+        (_d.github_rate || "GitHub API 速率限制，請稍後再試") +
+          " (Rate limit)",
+      );
+    }
+  } catch (e) {
+    if (e.message.includes("Rate limit")) throw e;
+  }
+
+  try {
     const manifestRes = await fetch(FANART_MANIFEST_API, { cache: "default" });
     if (manifestRes.ok) {
       const manifestJson = await manifestRes.json();
@@ -37,23 +57,7 @@ async function fetchFanartList() {
     }
   } catch (e) {}
 
-  const ghRes = await fetch(FANART_GITHUB_API, { cache: "default" });
-  if (ghRes.status === 403 || ghRes.status === 429) {
-    const _d =
-      typeof currentLang !== "undefined" && I18N[currentLang]
-        ? I18N[currentLang]
-        : I18N["zh-TW"];
-    throw new Error(
-      (_d.github_rate || "GitHub API 速率限制，請稍後再試") +
-        " (Rate limit)",
-    );
-  }
-  if (!ghRes.ok) throw new Error("HTTP " + ghRes.status);
-
-  const ghJson = await ghRes.json();
-  const ghFiles = normalizeFanartFromGithub(ghJson);
-  if (!ghFiles.length) throw new Error("資料夾內沒有圖片");
-  return ghFiles;
+  throw new Error("資料夾內沒有圖片或載入失敗");
 }
 
 async function loadFanart() {

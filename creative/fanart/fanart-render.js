@@ -1,13 +1,19 @@
 const FANART_GITHUB_API =
   "https://api.github.com/repos/n47993802-sketch/Live2D-/contents/fanart";
 
+const FANART_MANIFEST_API =
+  "https://data.jsdelivr.com/v1/package/gh/n47993802-sketch/Live2D-@main";
+
 const FANART_RAW =
   "https://cdn.jsdelivr.net/gh/n47993802-sketch/Live2D-@main/fanart/";
 
+const isMediaName = (name) =>
+  /\.(avif|gif|jpe?g|png|webp|mp4|webm)$/i.test(String(name || ""));
+
 let fanartLoaded = false;
 
-function isImageName(name) {
-  return /\.(png|jpg|jpeg|gif|webp)$/i.test(name || "");
+function openFanartMedia(index) {
+  if (typeof window.ulbOpen === "function") window.ulbOpen("fanart", index);
 }
 
 function normalizeFanartFromManifest(payload) {
@@ -16,14 +22,14 @@ function normalizeFanartFromManifest(payload) {
     .map((entry) => String(entry && entry.name ? entry.name : ""))
     .filter((name) => name.indexOf("/fanart/") !== -1)
     .map((name) => name.split("/").pop())
-    .filter((name) => !!name && isImageName(name))
+    .filter((name) => !!name && isMediaName(name))
     .map((name) => ({ name }));
 }
 
 function normalizeFanartFromGithub(payload) {
   if (!Array.isArray(payload)) return [];
   return payload
-    .filter((entry) => entry && isImageName(entry.name))
+    .filter((entry) => entry && isMediaName(entry.name))
     .map((entry) => ({ name: entry.name }));
 }
 
@@ -69,28 +75,61 @@ async function loadFanart() {
     if (!imgs.length) throw new Error("資料夾內沒有圖片");
     fanartLoaded = true;
 
-    ulbGroups.fanart = imgs.map((f) => FANART_RAW + encodeURIComponent(f.name));
+    // 圖片排在前、影片排在後，方便中間插入分隔線
+    const sortedImgs = imgs
+      .map((f, i) => ({ f, i, isVideo: /\.(webm|mp4)$/i.test(f.name) }))
+      .sort((a, b) => (a.isVideo ? 1 : 0) - (b.isVideo ? 1 : 0) || a.i - b.i)
+      .map((x) => x.f);
 
-    grid.innerHTML =
-      imgs
-        .map((f, idx) => {
-          const url = FANART_RAW + encodeURIComponent(f.name);
-          const label = f.name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
-          return `<div onclick="ulbOpen('fanart',${idx})"
-                class="glass-panel overflow-hidden rounded-2xl border border-pink-500/20 hover:border-pink-400/50 hover:scale-[1.02] transition-all duration-300 cursor-pointer group">
-                <div class="aspect-square bg-black/30 overflow-hidden flex items-center justify-center">
-                    <img src="${url}" alt="${label}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                         loading="lazy"
-                         onerror="this.parentElement.innerHTML='<i class=\\'fa-solid fa-image-slash text-3xl text-purple-400/20\\'></i>'">
-                </div>
-            </div>`;
-        })
-        .join("") +
-      `<div class="glass-panel overflow-hidden rounded-2xl border border-dashed border-purple-500/20 flex flex-col items-center justify-center aspect-square opacity-40">
-            <i class="fa-solid fa-plus text-3xl text-purple-400/50 mb-2"></i>
-            <p class="text-xs font-bold text-purple-200">等待更多寶物</p>
+    ulbGroups.fanart = sortedImgs.map((f) => ({
+      src: FANART_RAW + encodeURIComponent(f.name),
+      isVideo: /\.(webm|mp4)$/i.test(f.name),
+    }));
+
+    const firstVideoIdx = sortedImgs.findIndex((f) =>
+      /\.(webm|mp4)$/i.test(f.name),
+    );
+
+    const dividerHtml = `<div class="col-span-full flex items-center gap-3 my-2">
+        <span class="h-px flex-1 bg-gradient-to-r from-transparent via-purple-400/40 to-transparent"></span>
+        <span class="text-xs font-bold text-purple-300/70 flex items-center gap-1.5 whitespace-nowrap">
+            <i class="fa-solid fa-clapperboard"></i> 動態影片
+        </span>
+        <span class="h-px flex-1 bg-gradient-to-r from-transparent via-purple-400/40 to-transparent"></span>
+    </div>`;
+
+    const cardHtml = sortedImgs
+    .map((f, idx) => {
+      const url = FANART_RAW + encodeURIComponent(f.name);
+      const label = f.name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
+      const isVideo = /\.(webm|mp4)$/i.test(f.name);
+
+      // 根據檔案格式選擇標籤
+      const mediaHtml = isVideo
+        ? `<video src="${url}" 
+                  autoplay loop muted playsinline 
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></video>`
+        : `<img src="${url}" alt="${label}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                onerror="this.parentElement.innerHTML='<i class=\\'fa-solid fa-image-slash text-3xl text-purple-400/20\\'></i>'">`;
+
+      const card = `<div onclick="openFanartMedia(${idx})"
+            class="glass-panel overflow-hidden rounded-2xl border border-pink-500/20 hover:border-pink-400/50 hover:scale-[1.02] transition-all duration-300 cursor-pointer group">
+            <div class="aspect-square bg-black/30 overflow-hidden flex items-center justify-center">
+                ${mediaHtml}
+            </div>
         </div>`;
+
+      return idx === firstVideoIdx ? dividerHtml + card : card;
+    })
+    .join("") +
+  `<div class="glass-panel overflow-hidden rounded-2xl border border-dashed border-purple-500/20 flex flex-col items-center justify-center aspect-square opacity-40">
+        <i class="fa-solid fa-plus text-3xl text-purple-400/50 mb-2"></i>
+        <p class="text-xs font-bold text-purple-200">等待更多寶物</p>
+    </div>`;
+
+    grid.innerHTML = cardHtml;
 
     if (typeof window.attachReveal === "function") window.attachReveal(grid);
   } catch (e) {

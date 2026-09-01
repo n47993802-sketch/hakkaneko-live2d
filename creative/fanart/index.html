@@ -670,6 +670,21 @@
               ulbClose();
           "
         />
+        <video
+          id="ulbVideo"
+          muted
+          loop
+          playsinline
+          autoplay
+          style="display: none"
+          onclick="
+            if (
+              ulbCurrent &&
+              (ulbCurrent.group === 'stickers' || ulbCurrent.group === 'logos')
+            )
+              ulbClose();
+          "
+        ></video>
         <p id="ulbLabel">點圖或旁邊關閉 ／ ESC</p>
         <div id="ulbDots"></div>
       </div>

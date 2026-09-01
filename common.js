@@ -551,17 +551,23 @@ function ulbNav(dir) {
 function ulbRender() {
   const items = ulbGroups[ulbCurrent.group];
   const idx = ulbCurrent.idx;
-  const isVideo = ULB_VIDEO_GROUPS.indexOf(ulbCurrent.group) !== -1;
   const item = items[idx];
+  // stickers/logos 整組都是影片；其他群組（如 fanart）依單一項目判斷是否為影片
+  const isVideo =
+    ULB_VIDEO_GROUPS.indexOf(ulbCurrent.group) !== -1 ||
+    (item && typeof item === "object" && !!item.isVideo) ||
+    (typeof item === "string" && /\.(webm|mp4)(?:\?.*)?$/i.test(item));
+  const src = item && typeof item === "object" ? item.src : item;
+  const poster = item && typeof item === "object" ? item.poster || "" : "";
   const imgEl = document.getElementById("ulbImg");
   const videoEl = document.getElementById("ulbVideo");
 
   if (isVideo && videoEl) {
     if (imgEl) imgEl.style.display = "none";
     videoEl.style.display = "block";
-    videoEl.poster = item.poster || "";
+    videoEl.poster = poster;
     videoEl.style.opacity = "0";
-    videoEl.src = item.src;
+    videoEl.src = src;
     videoEl.oncanplay = () => {
       videoEl.style.transition = "opacity 0.2s";
       videoEl.style.opacity = "1";
@@ -577,7 +583,7 @@ function ulbRender() {
     if (imgEl) {
       imgEl.style.display = "block";
       imgEl.style.opacity = "0";
-      imgEl.src = item;
+      imgEl.src = src;
       imgEl.onload = () => {
         imgEl.style.transition = "opacity 0.2s";
         imgEl.style.opacity = "1";

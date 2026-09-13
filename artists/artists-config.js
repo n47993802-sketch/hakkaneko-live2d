@@ -102,7 +102,7 @@ window.ARTISTS_CONFIG = [
     handle: "Mochiillus",
     profileUrl: "https://x.com/Mochiillus",
     avatar:
-      "https://pbs.twimg.com/profile_images/2064386302397788161/fBqmUYPV_400x400.jpg",
+      "https://pbs.twimg.com/profile_images/2096930961594490880/zTAk0hsB_400x400.jpg",
   },
   {
     name: "迪亞雜藝舖",

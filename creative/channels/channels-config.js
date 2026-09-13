@@ -117,6 +117,22 @@ window.CHANNELS_CONFIG = {
         },
       ],
     },
+    {
+      key: "emotvvv",
+      name: "emoTV永不普及",
+      bio: "河童、倉鼠、貓貓的垃圾話避難所，用最 real 的靠北，陪伴你每一個 emo 時刻 ",
+      avatar: {
+        src: "https://unavatar.io/youtube/emotvvv",
+        alt: "emotvvv",
+      },
+      platforms: [
+        {
+          type: "youtube",
+          url: "https://www.youtube.com/@emotvvv",
+          label: "emotvvv",
+        },
+      ],
+    },
   ],
 
   // Optional probe overrides for special cases where display URL and detection login differ.
@@ -127,5 +143,6 @@ window.CHANNELS_CONFIG = {
     "yukina_nya_026",
     "dongling_vtuber",
     "darkmeyaya",
+    "emotvvv",
   ],
 };

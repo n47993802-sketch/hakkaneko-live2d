@@ -123,6 +123,13 @@ window.ARTISTS_CONFIG = [
     handle: "potachi1069",
     profileUrl: "https://x.com/potachi1069",
     avatar:
-      "https://pbs.twimg.com/profile_images/2065267959858348032/OW8cPFen_400x400.jpg",
+      "https://pbs.twimg.com/profile_images/2098931916766650368/BtX6fSZt_400x400.jpg",
+  },
+  {
+    name: "NN",
+    handle: "nnnnwait_",
+    profileUrl: "https://x.com/nnnnwait_",
+    avatar:
+      "https://pbs.twimg.com/profile_images/2008357888281227264/m5iGJDAJ_400x400.jpg",
   },
 ];
